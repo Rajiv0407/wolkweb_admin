@@ -68,10 +68,10 @@ Route::post('/delete_customer',[CustomerController::class,'delete_customer']);
 Route::post('/changePassword',[CustomerController::class,'changePassword']);
 Route::post('/changeAdminPassword',[CustomerController::class,'changeAdminPassword']);
 
-// /* Contact Support */
-// Route::post('/contactSupport','admin\ratingController@contactSupport');
-// Route::get('/contactUs_datatable','admin\ratingController@contactUs_datatable');
-// Route::post('/delete_contactus','admin\ratingController@delete_contactus');
+/* Contact Support */
+Route::post('/contactSupport',[RatingController::class,'contactSupport']);
+Route::get('/contactUs_datatable',[RatingController::class,'contactUs_datatable']);
+Route::post('/delete_contactus',[RatingController::class,'delete_contactus']);
 
 Auth::routes();
 

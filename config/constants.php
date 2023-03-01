@@ -13,6 +13,18 @@
  //     ];
 
 
+ return [
+          'user_image' => env('USER_IMAGE', url('/').'/storage/app/public/profile_image/'),
+          'advertisement_image'=> env('ADVERTISEMENT_IMAGE', url('/').'/storage/app/public/sponser_image/'),
+          'post_image' => env('POST_IMAGE',url('/').'/storage/app/public/post_image/'),
+          'sponser_image' => env('POST_IMAGE',url('/').'/storage/app/public/sponser_img/'),
+          'star_image' => env('POST_IMAGE',url('/').'/storage/app/public/star_type_img/'),
+          'user_qrimage' => env('POST_IMAGE',url('/').'/storage/app/public/user_qrcode/'),
+          'imagick'=> env('IMAGICK',0),
+          'profile_video' => env('POST_IMAGE',url('/').'/storage/app/public/profile_video/'),
+          'cover_image' => env('POST_IMAGE',url('/').'/storage/app/public/cover_image/'),
+     ];
+
 
 
 

@@ -6,15 +6,15 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\Datatables\Datatables;
 use Illuminate\Pagination\Paginator ;
+use App\Models\Contactus;
 use DB ;
-use App\model\contacts;
-use App\model\ratings;
+
 
 class ratingController extends Controller
 {
       public function index(Request $request){
 
-    	$data['title']='LesGo';
+    	$data['title']='Walkofweb';
          $cond='' ;
          $vehicleId = isset($request->vehicleId)?$request->vehicleId:0 ;
       if($vehicleId > 0){
@@ -27,7 +27,7 @@ class ratingController extends Controller
         $ratingReview = DB::table("vehicle_review")->select('id','userId','review','rating','status',DB::raw("case when status=0 then 'Pending' when status=1 then 'Approve' when status=2 then 'Rejected' else '' end as reviewStatus"),DB::raw("(select concat(manufacturer,' ',model) as vehicleModal from vehicle where id=vehicleId) as vehicleName"),DB::raw("(select name from users where id=userId) as userName "),DB::raw("case when (select concat('".$profileImgPath."',App_Image) from users where id=userId) is null then '' else (select concat('".$profileImgPath."',App_Image) from users where id=userId) end as userImg"),DB::raw("date_format(createdOn,'%b %d,%Y') as reviewDate"))->where('vehicleId','<>','0')->paginate(10);
 
          $data['ratingReview']=$ratingReview ;
-        //paginate(2,['*'],'page',1);
+        ///paginate(2,['*'],'page',1);
         
            
         if ($request->ajax()) {
@@ -56,17 +56,17 @@ class ratingController extends Controller
     }
 
     public function contactSupport(Request $request){
-        $data['title']='LesGo' ;
+        $data['title']='Walkofweb' ;
         echo view('admin/contactSupport/index',$data);
 
     }
 
     public function contactUs_datatable(){
 
-        $data['title']='LesGo';
+        $data['title']='Walkofweb';
 
 
-        $contactQry="select id,email,subject,message from contactus" ;
+        $contactQry="select id,name,phone_number,email,subject,message from contactus" ;
 
         $contactus = DB::select($contactQry); 
         $tableData = Datatables::of($contactus)->make(true);  
@@ -78,7 +78,7 @@ class ratingController extends Controller
 
           $id=isset($request->id)?$request->id:'' ;
         try{
-                contacts::where('id', $id)->firstorfail()->delete();
+                contactus::where('id', $id)->firstorfail()->delete();
               echo successResponse([],'deleted successfully'); 
         }
          catch(\Exception $e){
@@ -89,7 +89,7 @@ class ratingController extends Controller
 
     public function productList(Request $request){
 
-         $products = contacts::paginate(5);
+         $products = contactus::paginate(5);
         if ($request->ajax()) {
             return view('presult', compact('products'));
         }
