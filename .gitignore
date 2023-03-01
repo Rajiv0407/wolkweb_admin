@@ -49,11 +49,12 @@ Thumbs.db
 *.wmv
 
 
-/public/hot
-/public/storage
-/storage/*.key
+
+
+/node_modules
 /vendor
-.env
+/tiktok_code
+
 .env.backup
 .phpunit.result.cache
 Homestead.json
