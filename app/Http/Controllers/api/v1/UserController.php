@@ -130,7 +130,7 @@ class UserController extends Controller
           }
 
       
-        $user = User::where($param)->first();
+        $user = User::where($param)->where('user_type', '!=' , 1)->first();
 
          if ($user) {
             if (Hash::check($request->password, $user->password)) {
@@ -642,7 +642,7 @@ public function resetPassword(Request $request){
       }
             
       $countryCode = DB::raw('case when country_code is null then "" else country_code end as country_code');
-      $list=DB::select("select id,name,rank_,rank_type,case when image is null then '' else concat('".$filePath."',image) end as image,countryId,$countryCode from users where id!=".$userId." and isTrash=0 and isFeatured=0".$filter.$searchKeyword);
+      $list=DB::select("select id,name,rank_,rank_type,case when image is null then '' else concat('".$filePath."',image) end as image,countryId,$countryCode from users where id!=".$userId." and isTrash=0 and user_type!=1 and isFeatured=0".$filter.$searchKeyword);
 
       $image = DB::raw('case when concat("'.$filePath.'",image) is null then "" else concat("'.$filePath.'",image) end as image') ;
       $featureUser = DB::table('users')->select('id','name','rank_','rank_type',$image)->Where('isFeatured',1)->where('isTrash',0)->get() ;

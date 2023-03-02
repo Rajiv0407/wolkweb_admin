@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\CustomerController;
 use App\Http\Controllers\admin\RatingController;
 use App\Http\Middleware\PreventBackHistory;
+use App\Http\Controllers\admin\NotificationController;
 /*FacebookSocialiteController
 |--------------------------------------------------------------------------
 | Web Routes
@@ -63,7 +64,7 @@ Route::group(['middleware'=>'PreventBackHistory'],function(){
 Route::post('/customerManagement',[CustomerController::class,'index']);
 Route::get('customer_datatable',[CustomerController::class,'customerlist']);
 Route::post('userManagement/changeStatus',[CustomerController::class,'changeStatus']);
-Route::post('/customerDetail',[CustomerController::class,'detail']);
+// Route::post('/customerDetail',[CustomerController::class,'detail']);
 Route::post('/delete_customer',[CustomerController::class,'delete_customer']);
 Route::post('/changePassword',[CustomerController::class,'changePassword']);
 Route::post('/changeAdminPassword',[CustomerController::class,'changeAdminPassword']);
@@ -72,6 +73,34 @@ Route::post('/changeAdminPassword',[CustomerController::class,'changeAdminPasswo
 Route::post('/contactSupport',[RatingController::class,'contactSupport']);
 Route::get('/contactUs_datatable',[RatingController::class,'contactUs_datatable']);
 Route::post('/delete_contactus',[RatingController::class,'delete_contactus']);
+
+/* Notification Controller */
+Route::post('/notification',[NotificationController::class,'index']);
+Route::get('notify_datatable',[NotificationController::class,'notify_datatable']);
+
+Route::post('addNotify',[NotificationController::class,'addNotify']);
+Route::post('saveNotify',[NotificationController::class,'saveNotify']);
+Route::post('editNotify',[NotificationController::class,'editNotify']);
+Route::post('updateNotify',[NotificationController::class,'updateNotify']);
+Route::post('delete_announced_list',[NotificationController::class,'delete_aNList']);
+Route::post('announce_Status',[NotificationController::class,'announce_Status']);
+Route::post('announce_detail',[NotificationController::class,'announce_detail']);
+Route::post('/create_notification',[NotificationController::class,'detail']);
+// Route::post('/notificationFor',[NotificationController::class,'notifyFor']);
+// Route::get('masterController/notificationFor_datatable',[NotificationController::class,'notificationFor_datatable']);
+// Route::post('saveNotifyFor',[NotificationController::class,'saveNotifyFor']);
+// Route::post('editNFor',[NotificationController::class,'editNFor']);
+// Route::post('updateNFor',[NotificationController::class,'updateNFor']);
+// Route::post('deleteNFor',[NotificationController::class,'deleteNFor']);
+// Route::post('nforStatus',[NotificationController::class,'nforStatus']);
+
+/* CMS Controller */
+Route::post('/termCondition',[NotificationController::class,'termCondition']);
+Route::post('/saveTermCondition',[NotificationController::class,'saveTermCondition']);
+
+Route::post('/privacyPolicy',[NotificationController::class,'privacyPolicy']);
+Route::post('/savePrivacyPolicy',[NotificationController::class,'savePrivacyPolicy']);
+
 
 Auth::routes();
 

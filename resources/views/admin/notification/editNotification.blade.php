@@ -12,7 +12,7 @@
     <div class="form-group">
         <label for="">Device For <?php echo $announceInfo->deviceType ; ?></label>       
         <select class="form-control" name="deviceType" id="deviceType">
-           <option value="android" <?php echo ($announceInfo->deviceType=='android')?'select':'' ; ?>>Android</option><option value="ios" <?php echo ($announceInfo->deviceType=="ios")?'selected':'' ; ?>>IOS</option>
+           <option value="android" <?php echo ($announceInfo->deviceType=='android')?'select':'' ; ?>>Android</option><option value="ios" <?php echo ($announceInfo->deviceType=="ios")?'selected':'' ; ?>>IOS</option><option value="both" <?php echo ($announceInfo->deviceType=="both")?'selected':'' ; ?>>Both</option>
         </select>
         <span id="err_deviceType" class="err" style="color:red"></span>
     </div>
@@ -32,6 +32,7 @@
         </select>
         <span id="err_nType" class="err" style="color:red"></span>
     </div>
+    <?php /*  
     <div class="form-group">
         <label for="">Notification For</label>
         
@@ -46,6 +47,8 @@
         </select>
         <span id="err_nFor" class="err" style="color:red"></span>
     </div>
+    
+    */ ?>
 
     <div class="form-group">
         <label for="">Description</label>

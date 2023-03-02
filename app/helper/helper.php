@@ -131,5 +131,7 @@ function errorResponse($data,$msg=''){
     echo json_encode($response);
 }
 
-
+function siteTitle(){
+  return 'Walkofweb';
+}
  ?>
