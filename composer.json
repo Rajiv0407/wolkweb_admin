@@ -20,7 +20,8 @@
         "laravel/ui": "^3.4",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "werneckbh/qr-code": "^2.1",
-        "yajra/laravel-datatables-oracle": "~9.0"
+        "yajra/laravel-datatables-oracle": "~9.0",
+        "unisharp/laravel-ckeditor": "^4.7"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",

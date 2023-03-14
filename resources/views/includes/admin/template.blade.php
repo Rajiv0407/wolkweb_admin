@@ -53,7 +53,7 @@
     </div>
     <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
   
-    <script src="{{URL::to('/public/admin')}}/js/bootstrap.min.js?v={{ config('app.version') }}" type="text/javascript"></script>
+    <!-- <script src="{{URL::to('/public/admin')}}/js/bootstrap.min.js?v={{ config('app.version') }}" type="text/javascript"></script> -->
     
     <script src="{{URL::to('/public/admin')}}/js/bootstrap.bundle.min.js?v={{ config('app.version') }}"></script>
     

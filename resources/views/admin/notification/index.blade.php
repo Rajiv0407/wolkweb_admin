@@ -25,6 +25,7 @@
                                 <option value="">Select</option>
                                 <option value="android">Android</option>
                                 <option value="ios">Ios</option>
+                                <option value="both">Both</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -67,7 +68,7 @@
                             <th>Title</th>
                             <th>Description</th>
                             <th>Device For</th>
-                            <th>Notification For</th>
+                            <th>Notification Type</th>
                             <th>Status</th>
                             <th>Action</th>
                             <th>Action</th>
@@ -162,15 +163,22 @@
                       return action ;
                      }
                 },
-                 {
-                     "aTargets": [1],
+                //  {
+                //      "aTargets": [1],
+                //     "mRender": function(data, type, full){
+                  
+                //         return '<div> <p class="mb-1">'+full["title"]+'</p> <span class="bg_an">'+full["nType"]+'</span> </div> ';
+                //     }
+
+                // },
+                {
+                     "aTargets": [4],
                     "mRender": function(data, type, full){
                   
-                        return '<div> <p class="mb-1">'+full["title"]+'</p> <span class="bg_an">'+full["nType"]+'</span> </div> ';
+                        return full['nType'];
                     }
 
                 },
-
                 {
                      "aTargets": [6],
                     "visible": false
@@ -212,8 +220,7 @@
                         { data: 'id' },
                         { data: 'title' },
                          { data: 'content'},
-                          { data: 'deviceType' },
-                          { data: 'nFor' },
+                          { data: 'deviceType' },                         
                         { data: 'status_' },
                         { data: 'status'} ,  
                         { data: 'nType' }                
@@ -251,7 +258,7 @@ function saveNotification(){
     
     var title = $('#notify_title').val();
     var nType = $('#nType').val(); 
-    var nFor = $('#nFor').val(); 
+    //var nFor = $('#nFor').val(); 
     var nDesc = $('#nDescription').val(); 
 
     $('.err').html('');
@@ -260,9 +267,11 @@ function saveNotification(){
         $('#err_notify_title').html("Please enter title");
      }else if(nType==''){
         $('#err_nType').html("Please select notification type.");
-     }else if(nFor==''){
-        $('#err_nFor').html("Please select notification for.");
-     }else if(nDesc==''){
+     }
+    //  else if(nFor==''){
+    //     $('#err_nFor').html("Please select notification for.");
+    //  }
+     else if(nDesc==''){
          $('#err_nDescription').html("Please enter description .");
      } else {
 
@@ -468,7 +477,7 @@ function resetSearchForm(){
 
      if(status){
    
-          $('#dataTable').DataTable().column(6).search(status).draw();
+          $('#dataTable').DataTable().column(5).search(status).draw();
     }
    
      if(title){
@@ -478,7 +487,7 @@ function resetSearchForm(){
 
      if(nType){
    
-          $('#dataTable').DataTable().column(7).search(nType).draw();
+          $('#dataTable').DataTable().column(6).search(nType).draw();
     }
 
    

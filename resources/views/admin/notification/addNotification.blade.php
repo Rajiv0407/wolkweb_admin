@@ -13,6 +13,7 @@
         <select class="form-control" name="deviceType" id="deviceType">
            <option value="android" selected>Android</option>
            <option value="ios">IOS</option>
+           <option value="both">Both</option>
         </select>
         <span id="err_deviceType" class="err" style="color:red"></span>
     </div>
@@ -31,7 +32,7 @@
         </select>
         <span id="err_nType" class="err" style="color:red"></span>
     </div>
-    <div class="form-group">
+    <?php /* <div class="form-group">
         <label for="">Notification For</label>
         
         <select class="form-control" name="nFor" id="nFor">
@@ -44,7 +45,7 @@
             <?php } ?>
         </select>
         <span id="err_nFor" class="err" style="color:red"></span>
-    </div>
+    </div> */ ?>
 
     <div class="form-group">
         <label for="">Description</label>

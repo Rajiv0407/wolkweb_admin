@@ -5,7 +5,7 @@ namespace App\Http\Controllers\admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\Datatables\Datatables;
-use App\User ;
+use App\Models\User;
 use DB;
 use Hash ;
 use Session ;
@@ -15,7 +15,7 @@ class customerController extends Controller
     
     public function index(Request $request){
 
-    	$data['title']='LesGo';
+    	$data['title']=siteTitle();
 
     	echo view('admin/customerManagement/index',$data);
 
@@ -23,7 +23,7 @@ class customerController extends Controller
 
     public function customerData(Request $request){
 
-    	$data['title']='LesGo';
+    	$data['title']=siteTitle();
 
     	echo view('admin/customerManagement/index',$data);
 
@@ -31,7 +31,7 @@ class customerController extends Controller
 
     public function detail(Request $request){
 
-    	$data['title']='LesGo';
+    	$data['title']=siteTitle();
         $userId = isset($request->userId)?$request->userId:'' ;
 
         $userInfo = user::find($userId) ;
@@ -42,11 +42,14 @@ class customerController extends Controller
     }
 
     public function customerlist(Request $request){
-    	$data['title']='LesGo';
+    	$data['title']=siteTitle();
 
-    	$usrQry = "select id,name,image,username,registration_from,email,
-phoneNumber,8 as followers,rank_,created_at,countryId,status from users where isTrash=0" ; 
-    	$usrData = DB::select($usrQry); 
+      $imgPath = config('constants.user_image');
+
+    	$usrQry = "select id,name,case when image is null then '' else concat('".$imgPath."',image) end as image,case when username is null then '' else concat('@',username) end as username,case when registration_from=1 then 'Android' when registration_from=2 then 'IOS' else 'Admin' end as registration_from,email, phoneNumber,case when (select sum(followers_count) as totalFollowers from social_info where status=1 and user_id=users.id) is null then 0 else (select sum(followers_count) as totalFollowers from social_info where status=1 and user_id=users.id) end as followers,rank_,Date_Format(created_at,'%Y-%m-%d') as created_at,case when (select v_title from pe_countries where i_id=users.countryId and i_status=1) is null then '' else (select v_title from pe_countries where i_id=users.countryId and i_status=1) end as countryId,status from users where isTrash=0 and user_type!=1" ; 
+
+     
+      $usrData = DB::select($usrQry);
         $tableData = Datatables::of($usrData)->make(true);  
         return $tableData; 
     	
@@ -62,12 +65,12 @@ phoneNumber,8 as followers,rank_,created_at,countryId,status from users where is
     	try{
 
            DB::select($qry);	
-            echo successResponse([],'changed status successfully'); 
+            return $this->successResponse([],'changed status successfully'); 
          
     	}
     	 catch(\Exception $e)
         {
-          echo errorResponse('error occurred'); 
+          return $this->errorResponse('error occurred'); 
          
         }
 
@@ -79,10 +82,10 @@ phoneNumber,8 as followers,rank_,created_at,countryId,status from users where is
         try{
                user::where('id',$id)->update(array('isTrash'=>1));
                 
-              echo successResponse([],'delete notification type successfully'); 
+              return $this->successResponse([],'This user has deactivated successfully'); 
         }
          catch(\Exception $e){
-             echo errorResponse('error occurred'); 
+             return $this->errorResponse('error occurred'); 
          }
     }
 

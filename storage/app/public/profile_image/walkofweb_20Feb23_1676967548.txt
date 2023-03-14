@@ -1,0 +1,7 @@
+>> We are getting Instagram follows and followers for business accounts 
+   and creator accounts only and that account should be connected on 
+   facebook page.
+   Document URL : https://developers.facebook.com/docs/instagram-api/reference/ig-user/
+
+>> We are not getting facebook profile follows and followers from Facebook API but we are 
+   getting followers and likes from Facebook page. 

@@ -111,5 +111,27 @@ function auth_check(){
 
 }
 
+function successResponse($data,$msg=''){
+    $response = array(
+      "status"=>1,
+      "data"=>$data,
+      "message"=>$msg
+    );
 
+    echo json_encode($response);
+}
+
+
+function errorResponse($data,$msg=''){
+    $response = array(
+      "status"=>0,
+      "message"=>$msg
+    );
+
+    echo json_encode($response);
+}
+
+function siteTitle(){
+  return 'Walkofweb';
+}
  ?>

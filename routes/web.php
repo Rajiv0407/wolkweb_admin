@@ -7,6 +7,12 @@ use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\CustomerController;
 use App\Http\Controllers\admin\RatingController;
 use App\Http\Middleware\PreventBackHistory;
+use App\Http\Controllers\admin\NotificationController;
+use App\Http\Controllers\admin\CmsController;
+use App\Http\Controllers\admin\MasterController;
+use App\Http\Controllers\admin\PostController;
+use App\Http\Controllers\admin\AdsController;
+
 /*FacebookSocialiteController
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,8 +27,6 @@ use App\Http\Middleware\PreventBackHistory;
 Route::get('/', function () {
     return view('welcome');
 });
-
-
 
 // Route::get('auth/facebook', [FacebookSocialiteController::class,'redirectToFB']);
 // Route::get('callback/facebook', [FacebookSocialiteController::class,'handleCallback']);
@@ -63,15 +67,95 @@ Route::group(['middleware'=>'PreventBackHistory'],function(){
 Route::post('/customerManagement',[CustomerController::class,'index']);
 Route::get('customer_datatable',[CustomerController::class,'customerlist']);
 Route::post('userManagement/changeStatus',[CustomerController::class,'changeStatus']);
-Route::post('/customerDetail',[CustomerController::class,'detail']);
+// Route::post('/customerDetail',[CustomerController::class,'detail']);
 Route::post('/delete_customer',[CustomerController::class,'delete_customer']);
 Route::post('/changePassword',[CustomerController::class,'changePassword']);
 Route::post('/changeAdminPassword',[CustomerController::class,'changeAdminPassword']);
 
-// /* Contact Support */
-// Route::post('/contactSupport','admin\ratingController@contactSupport');
-// Route::get('/contactUs_datatable','admin\ratingController@contactUs_datatable');
-// Route::post('/delete_contactus','admin\ratingController@delete_contactus');
+/* Contact Support */
+Route::post('/contactSupport',[RatingController::class,'contactSupport']);
+Route::get('/contactUs_datatable',[RatingController::class,'contactUs_datatable']);
+Route::post('/delete_contactus',[RatingController::class,'delete_contactus']);
+
+/* Notification Controller */
+Route::post('/notification',[NotificationController::class,'index']);
+Route::get('notify_datatable',[NotificationController::class,'notify_datatable']);
+
+Route::post('addNotify',[NotificationController::class,'addNotify']);
+Route::post('saveNotify',[NotificationController::class,'saveNotify']);
+Route::post('editNotify',[NotificationController::class,'editNotify']);
+Route::post('updateNotify',[NotificationController::class,'updateNotify']);
+Route::post('delete_announced_list',[NotificationController::class,'delete_aNList']);
+Route::post('announce_Status',[NotificationController::class,'announce_Status']);
+Route::post('announce_detail',[NotificationController::class,'announce_detail']);
+Route::post('/create_notification',[NotificationController::class,'detail']);
+// Notification Type
+Route::post('/notificationFor',[NotificationController::class,'notifyFor']);
+Route::get('masterController/notificationFor_datatable',[MasterController::class,'notificationFor_datatable']);
+Route::post('saveNotifyFor',[NotificationController::class,'saveNotifyFor']);
+Route::post('editNFor',[NotificationController::class,'editNFor']);
+Route::post('updateNFor',[NotificationController::class,'updateNFor']);
+Route::post('deleteNFor',[NotificationController::class,'deleteNFor']);
+Route::post('nforStatus',[NotificationController::class,'nforStatus']);
+
+// Rank Type
+Route::post('/rankType',[NotificationController::class,'rankType']);
+Route::get('rankType_datatable',[MasterController::class,'rankType_datatable']);
+Route::post('saveRankType',[NotificationController::class,'save_rankType']);
+Route::post('editRankType',[NotificationController::class,'edit_rankType']);
+Route::post('updateRank',[NotificationController::class,'updateRank']);
+Route::post('deleteRank',[NotificationController::class,'delete_rank']);
+Route::post('rankStatus',[NotificationController::class,'rankStatus']);
+
+/* CMS Controller */
+Route::post('/termCondition',[CmsController::class,'termCondition']);
+Route::post('/saveTermCondition',[CmsController::class,'saveTermCondition']);
+
+Route::post('/privacyPolicy',[CmsController::class,'privacyPolicy']);
+Route::post('/savePrivacyPolicy',[CmsController::class,'savePrivacyPolicy']);
+
+/* country , state and city */
+Route::post('/countryList',[MasterController::class,'countryList']);
+Route::get('country_datatable',[MasterController::class,'country_datatable']);
+Route::post('/saveCountry',[MasterController::class,'saveCountry']);
+Route::post('/deleteCountry',[MasterController::class,'deleteCountry']);
+Route::post('/editCountry',[MasterController::class,'editCountry']);
+Route::post('/updateCountry',[MasterController::class,'updateCountry']);
+Route::post('/countryStatus',[MasterController::class,'countryStatus']);
+
+/* interestList */
+Route::post('/interestList',[MasterController::class,'interestList']);
+Route::get('interest_datatable',[MasterController::class,'interest_datatable']);
+Route::post('/saveInterest',[MasterController::class,'saveInterest']);
+Route::post('/deleteInterest',[MasterController::class,'deleteInterest']);
+Route::post('/editInterest',[MasterController::class,'editInterest']);
+Route::post('/updateInterest',[MasterController::class,'updateInterest']);
+Route::post('/interestStatus',[MasterController::class,'interestStatus']);
+
+/* sponser */
+Route::post('/sponserList',[MasterController::class,'sponserList']);
+Route::get('sponser_datatable',[MasterController::class,'sponser_datatable']);
+Route::post('/saveSponser',[MasterController::class,'save_sponser']);
+Route::post('/sponserDelete',[MasterController::class,'sponserDelete']);
+Route::post('/editSponser',[MasterController::class,'editSponser']);
+Route::post('/updateSponser',[MasterController::class,'updateSponser']);
+Route::post('/sponserStatus',[MasterController::class,'sponserStatus']);
+
+/* post management */
+Route::post('/postList',[PostController::class,'postList']);
+Route::get('postDatatable',[PostController::class,'post_datatable']);
+Route::post('/postStatus',[PostController::class,'postStatus']);
+
+/* Ads management */
+Route::post('/adsList',[AdsController::class,'adsList']);
+Route::get('adsDatatable',[AdsController::class,'ads_datatable']);
+Route::post('/adsStatus',[AdsController::class,'adsStatus']);
+Route::post('/adsDelete',[AdsController::class,'adsDelete']);
+Route::post('/editAds',[AdsController::class,'editAds']);
+Route::post('/updateAds',[AdsController::class,'updateAds']);
+Route::post('/SaveAdvertisement',[AdsController::class,'SaveAdvertisement']);
+
+Route::post('/advertisementDetail',[AdsController::class,'advertisementDetail']); 
 
 Auth::routes();
 

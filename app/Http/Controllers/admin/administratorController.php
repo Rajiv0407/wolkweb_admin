@@ -18,7 +18,10 @@ use Cookie;
 class administratorController extends Controller
 {
     public function login(Request $request){
-
+     // User::where('id',32)->update(['password'=>'123456']); exit ;
+      //echo $password =  Hash::make(123456) ; exit ;
+      // $password = '12345' ;
+      // echo    Hash::make($password) ;exit;
     	$data['title']='LesGo' ;
 
       if($request->hasCookie('userName') != false){
@@ -44,7 +47,8 @@ class administratorController extends Controller
             'email' => $request->txtUserName,
             'password' => $request->txtPassword,
             'user_type' => 1,
-            'isTrash' => 0
+            'isTrash' => 0,
+            'status' => 1
         ];
 
        if (auth()->attempt($credentials)) {
@@ -83,7 +87,7 @@ class administratorController extends Controller
       return redirect('/administrator');
     }
 
-    public function adminSignup___(Request $request){
+    public function adminSignup(Request $request){
          
          $request['name']='walkofweb' ;
          $request['email']='amit.intigate@gmail.com' ;
@@ -92,6 +96,10 @@ class administratorController extends Controller
          $request['password_confirmation']='Intigate@123' ;
          $request['user_type']=1 ;
          $request['countryId']=91 ;
+
+         echo Hash::make($request['password']); exit ;
+         $request['password']=Hash::make($request['password']); exit ;
+
 
          try
         {         

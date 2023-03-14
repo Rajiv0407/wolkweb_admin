@@ -47,7 +47,12 @@ class User extends Authenticatable
     public static function getFollowers($userId){
 
       $socialInfo = DB::table('social_info')->select('type','social_type','followers_count')->where('user_id',$userId)->get();
-      $response=array();
+      $response=array(
+        'facebook_followers'=>0,
+        'insta_followers'=>0,
+        'tiktok_followers'=>0,
+        'walkofweb_followers'=>0
+      );
       if(!empty($socialInfo)){
         foreach ($socialInfo as $key => $value) {
           if($value->social_type==2){

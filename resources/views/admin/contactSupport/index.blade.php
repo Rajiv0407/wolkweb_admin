@@ -15,7 +15,14 @@
                 <div class="filterWrapper">
 
                     <div class="form filterWrapper__l">
-                        
+                         <div class="form-group">
+                            <label for="Manufacture">Name</label>
+                            <input type="text" name="name" id="name" class="form-control" placeholder="Name">
+                        </div>
+                         <div class="form-group">
+                            <label for="Manufacture">Phone Number</label>
+                            <input type="text" name="phoneNumber" id="phoneNumber" class="form-control" placeholder="Phone Number">
+                        </div>
                         <div class="form-group">
                             <label for="Manufacture">Email</label>
                             <input type="text" name="email" id="email" class="form-control" placeholder="Email">
@@ -46,6 +53,8 @@
                     <table class="table" id="dataTable">
                         <thead>
                             <th>#</th>
+                            <th>Name</th>
+                            <th>Phone Number</th>
                             <th>Email</th>
                             <th>Subject</th>
                             <th>Message</th>
@@ -86,7 +95,7 @@
                },
                
                {
-                    "aTargets": [4],
+                    "aTargets": [6],
                     "mRender": function(data, type, full){
 
                         var action = '<td> <div class="align-items-center d-flex"> <div class="more_n"><i class="bi bi-three-dots-vertical show" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="true"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" data-popper-placement="top-end" style="position: absolute; left: 0px; top: auto; margin: 0px; right: auto; bottom: 0px; transform: translate(1066px, -38px);"><li><a class="dropdown-item" onclick="ConfirmDelete('+full['id']+')" href="javascript:void(0);">Delete</a></li> </ul></div> ' ;
@@ -113,6 +122,8 @@
                     },
              columns : [            
                         { data: 'id' },
+                        { data: 'name' },
+                        { data: 'phone_number' },
                         { data: 'email' },
                          { data: 'subject'},
                           { data: 'message' },
@@ -174,25 +185,36 @@ function resetSearchForm(){
 
 
   function searchNType(){
-
+        var name=$('#name').val();
+        var phoneNumber=$('#phoneNumber').val();
         var email=$("#email").val();
         var subject=$("#subject").val();
         var message=$("#message").val();
        
+
+       if(name){
+     
+          $('#dataTable').DataTable().column(1).search(name).draw();
+    }
+
+    if(phoneNumber){
+     
+          $('#dataTable').DataTable().column(2).search(phoneNumber).draw();
+    }
     
      if(email){
      
-          $('#dataTable').DataTable().column(1).search(email).draw();
+          $('#dataTable').DataTable().column(3).search(email).draw();
     }
 
      if(subject){
    
-          $('#dataTable').DataTable().column(2).search(subject).draw();
+          $('#dataTable').DataTable().column(4).search(subject).draw();
     }
    
      if(message){
    
-          $('#dataTable').DataTable().column(3).search(message).draw();
+          $('#dataTable').DataTable().column(5).search(message).draw();
     }
   
 }

@@ -25,7 +25,7 @@
 
         });
     }
-
+//
     function notificationFor(){
       
         ajaxCsrf();
@@ -69,12 +69,12 @@ function countryList(){
         });
     }
 
-    function stateList(){
+    function rankTypeList(){
 
         ajaxCsrf();
         $.ajax({
         type: "POST",
-        url: baseUrl+'/stateList',
+        url: baseUrl+'/rankType',
         cache: 'FALSE',
         beforeSend: function () {
         ajax_before();
@@ -83,18 +83,18 @@ function countryList(){
         ajax_success() ;
         $('.main_site_data').html(html);
 
-        }
+        } 
 
         });
     }
 
- function cityList(stateId=0){
+ function interestList(){
 
         ajaxCsrf();
         $.ajax({
         type: "POST",
-        url: baseUrl+'/cityList',
-        data:{'stateId':stateId},
+        url: baseUrl+'/interestList',
+        data:{},
         cache: 'FALSE',
         beforeSend: function () {
         ajax_before();
@@ -502,14 +502,14 @@ function vehicleBookingDetail(bookingId,type=1){
     }
 
 
- function customerDetail(userId){
+ function advertisementDetail(Id){
         
         ajaxCsrf();
 
         $.ajax({
         type: "POST",
-        url: baseUrl+'/customerDetail',
-        data:{'userId':userId},
+        url: baseUrl+'/advertisementDetail',
+        data:{'id':Id},
         cache: 'FALSE',
         beforeSend: function () {
         ajax_before();
@@ -522,12 +522,12 @@ function vehicleBookingDetail(bookingId,type=1){
         });
     }
  
- function carBookingManagement(){
+ function postManagement(){
 
         ajaxCsrf();
         $.ajax({
         type: "POST",
-        url: baseUrl+'/carBooking',
+        url: baseUrl+'/postList',
         cache: 'FALSE',
         beforeSend: function () {
         ajax_before();
@@ -626,12 +626,12 @@ function contactSupport(){
 
 }
 
- function ratingList(){
+ function adsManagement(){
 
         ajaxCsrf();
         $.ajax({
         type: "POST",
-        url: baseUrl+'/rating',
+        url: baseUrl+'/adsList',
         cache: 'FALSE',
         beforeSend: function () {
         ajax_before();
@@ -778,12 +778,12 @@ function contactSupport(){
         });
     }
 
-function vehicleFeatures(){
+function sponserList(){
 
         ajaxCsrf();
         $.ajax({
         type: "POST",
-        url: baseUrl+'/vehicleFeatures',
+        url: baseUrl+'/sponserList',
         cache: 'FALSE',
         beforeSend: function () {
         ajax_before();
@@ -797,25 +797,7 @@ function vehicleFeatures(){
         });
     }
 
-     function transmissionTypeList(){
-
-        ajaxCsrf();
-        $.ajax({
-        type: "POST",
-        url: baseUrl+'/transmissionType',
-        cache: 'FALSE',
-        beforeSend: function () {
-        ajax_before();
-        },
-        success: function(html){
-        ajax_success() ;
-        $('.main_site_data').html(html);
-
-        }
-
-        });
-    }
-
+    
     
     function onlyNumbers(event) {
       
@@ -862,110 +844,3 @@ function dashboard(){
         });
  }
 
-function updateCar(){
- 
-     ajaxCsrf();
-            var carManufacture=$('#car_manufacture').val() ;
-       var carModel = $('#car_model').val() ;
-       var carSeats = $('#car_seats').val() ;
-       var carDoors = $('#car_doors').val() ;
-       var carFuleType = $('#car_fuleType').val() ;
-       var carTransType = $('#car_transmissionType').val() ;
-       var carBodyType = $('#car_bodyType').val() ;
-       var carPrice = $('#car_price').val() ;
-       var updatedId  = $('#updatedId').val() ;
-       removeError();
-       if(carManufacture==''){
-         $('#err_manufacture').html('Please enter manufacturer');
-       }else if(carModel==''){
-        $('#err_car_model').html('Please enter model');
-       }else if(carSeats==''){
-        $('#err_car_seats').html('Please enter number of seats');
-       }else if(carDoors==''){
-        $('#err_car_doors').html('Please enter number of doors');
-       }else if(carFuleType==''){
-        $('#err_fuel_type').html('Please select fuel type');
-       }else if(carTransType==''){
-        $('#err_trans_type').html('Please select transmission type');
-       }else if(carBodyType==''){
-         $('#err_body_type').html('Please select vehilce body type');
-       }else if(carPrice==''){
-         $('#err_price').html('Please enter price');
-       }else{
-
-         var formData = $('#editCarForm').serialize() ;
-
-         $.ajax({
-            type:"POST",
-            url:baseUrl+'/carManagement/updateVehicle',
-            data:formData ,
-            dataType:'json',
-            beforeSend:function()
-            {
-            ajax_before();
-            },
-            success:function(html)
-            {
-              ajax_success() ;
-            if(html.status==1){
-                
-                $('#editVehicle').modal('hide');  
-                $('.modal-backdrop').hide();            
-                $('#dataTable').DataTable().ajax.reload();
-                
-                statusMesage('updated successfully','success');
-               
-             }else{
-                 statusMesage('something went wrong','error') ;
-             }
-            
-            }
-            });
-   }
-}
-
-function carDetail(id){
-   
-    ajaxCsrf();
-
-    $.ajax({type:"POST",
-    url:baseUrl+'/carManagement/detail',
-    data:{"id":id},
-   
-    beforeSend:function()
-    {
-        ajax_before();
-    },
-    success:function(html)
-    {
-        ajax_success() ;
-        $('.main_site_data').html(html);
-    
-    }
-    });
-
-}
-
-
-    function carBasicDetail(id){
-         ajaxCsrf();
-
-        $.ajax({type:"POST",
-        url:baseUrl+'/carManagement/basicDetail',
-        data:{"vehicleId":id},
-
-        beforeSend:function()
-        {
-            ajax_before();
-        },
-        success:function(html)
-        {
-            ajax_success() ;
-            $('#Details').html(html);
-          
-
-        }
-        });
-    }
-
-           

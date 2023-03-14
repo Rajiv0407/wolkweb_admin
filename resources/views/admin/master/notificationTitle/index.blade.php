@@ -6,14 +6,14 @@
                         <ol class="breadcrumb">
                          <li class="breadcrumb-item"><a href="{{URL::to('/')}}/administrator/dashboard#index" onclick="dashboard()" >Home</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Master</li>
-                            <li class="breadcrumb-item active" aria-current="page">Notification For</li>.
+                            <li class="breadcrumb-item active" aria-current="page">Notification Type</li>.
 
                         </ol>
                     </nav>
 
                     <!---== data-bs-toggle="modal" data-bs-target="#add_body" ==-->
                     <div class="rightButton">
-                        <a href="javascript:void(0);" onclick="showModal('add_body456')" class="border-btn d-flax" ><i class="bi bi-plus"></i><span>Add Notification For</span></a>
+                        <a href="javascript:void(0);" onclick="showModal('add_body456')" class="border-btn d-flax" ><i class="bi bi-plus"></i><span>Add Notification Type</span></a>
                     </div>
                 </div>
                 <form action="javascript:void(0);" method="post" id="featureSearchForm">
@@ -69,7 +69,7 @@
     <div class="modal-dialog modal-dialog-slideout add_motification_modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Notification For</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Add Notification Type</h5>
                 <div class="cross-btn">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -100,7 +100,7 @@
     <div class="modal-dialog modal-dialog-slideout edit_body_typ">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Body Type</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit Notification Type</h5>
                 <div class="cross-btn">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>

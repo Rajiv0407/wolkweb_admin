@@ -58,43 +58,25 @@ $('#letsgo_sidebar').find('li a').click(function(){
             countryList();
         }    
         
-        if(res[0]=='#state_list'){
-            stateList();
+        if(res[0]=='#rankType'){
+            rankTypeList();
         }    
         
-        if(res[0]=='#city'){
-            cityList(res[1]);
+        if(res[0]=='#interest'){
+            interestList();
         }    
 
 
-        if(res[0]=='#vehicle_features'){
-            vehicleFeatures();
+        if(res[0]=='#sponser'){
+            sponserList();
         }            
 
-        if(res[0]=='#mailboxDetail'){
-            mailBoxDetail(res[1]);
-        }
 
-
-
-        if(res[0]=='#car_detail'){
-            carDetail(res[1]);
-        }
-
-        if(res[0]=='#vehicle_booking_detail'){
-            vehicleBookingDetail(res[1],1);
-        }
        
-        if(res[0]=='#customer_detail'){
-            customerDetail(res[1]);
+        if(res[0]=='#advertisement_detail'){
+            advertisementDetail(res[1]);
         }
-        if(res[0]=='#customer_booking_detail'){
-            vehicleBookingDetail(res[1],2);
-        }
-
-        if(res[0]=='#car_booking_detail'){
-            vehicleBookingDetail(res[1],3);
-        }
+        
 
         if(res[0]=='#contactSupport'){
             contactSupport();
@@ -116,49 +98,21 @@ $('#letsgo_sidebar').find('li a').click(function(){
             privacyPolicy();
         }
 
-        if(res[0]=='#help'){
-            helpSupport();
-        }
-
-        if(res[0]=='#fule_type'){
-            fuleTypeList();
-        }
-
-        if(res[0]=='#transmission_type'){
-            transmissionTypeList();
-        }
-
-        if(res[0]=='#body_type'){
-            bodyTypeList();
-        }
-
-        if(res[0]=='#body_type'){
-            bodyTypeList();
-        }
-
-        if(res[0]=='#customer_management'){
-            customerManagement();
-        }
-
-      
-
-
+       
         if(res[0]=='#notification'){
             notificationList();
         }
 
-        if(res[0]=='#mailbox'){
-            mailBoxList();
-        }   
+       
         
-        if(res[0]=='#car_booking'){
-            carBookingManagement();
+        if(res[0]=='#post_management'){
+        
+            postManagement();
         }
         
-        if(res[0]=='#rating'){
-            //ratingList();
+        if(res[0]=='#adsManagement'){
+            adsManagement();
         }
-   
        
    
 });
@@ -182,15 +136,17 @@ $('#letsgo_sidebar').find('li a').click(function(){
            <span class="tooltip_nav">
         Customer Management
     </span></a></li>
-
-       
-
-    
-
+    <li><a href="{{URL::to('/')}}/administrator/dashboard#post_management" onclick="postManagement()"><i class="ri-user-settings-line"></i>
+           <span class="tooltip_nav">
+        Post Management
+    </span></a></li>
+    <li><a href="{{URL::to('/')}}/administrator/dashboard#adsManagement" onclick="adsManagement()"><i class="ri-user-settings-line"></i>
+           <span class="tooltip_nav">
+        Ads Management
+    </span></a></li>
         <li><a href="{{URL::to('/')}}/administrator/dashboard#contactSupport" onclick="contactSupport()"><i class="ri-customer-service-2-line"></i>
          
     <span class="tooltip_nav">Contact Support</span></a></li>
-
         <li><a href="{{URL::to('/')}}/administrator/dashboard#notification" onclick="notificationList()"><i class="ri-notification-3-line"></i>
         <span class="too ltip_nav">
  Notification Management
@@ -226,18 +182,33 @@ $('#letsgo_sidebar').find('li a').click(function(){
                 <a class="" id="master_n"><span><i class="ri-sound-module-line"></i>
                      <span class="tooltip_nav">Master</span>
                 </span> <span class="dropdown_tog"><i class="ri-arrow-drop-down-line"></i></span></a>
-                <ul class="dropdown-menu" id="drop_content_m">
-                  
-                   
+                <ul class="dropdown-menu" id="drop_content_m"> 
+                <li><a href="{{URL::to('/')}}/administrator/dashboard#country_list" onclick="countryList()">
+                <i class="ri-arrow-right-s-line"></i>
+                <span class="tooltip_nav">Country</span>
+                </a></li>
 
+                <li><a href="{{URL::to('/')}}/administrator/dashboard#notification_for" onclick="notificationFor()">
+                <i class="ri-arrow-right-s-line"></i>
+                <span class="tooltip_nav">Notification Type</span>
+                </a></li>   
 
-<li><a href="{{URL::to('/')}}/administrator/dashboard#country_list" onclick="countryList()">
-<i class="ri-arrow-right-s-line"></i>
-<span class="tooltip_nav">Country</span>
-</a></li>
+                <li><a href="{{URL::to('/')}}/administrator/dashboard#rankType" onclick="rankTypeList()">
+                <i class="ri-arrow-right-s-line"></i>
+                <span class="tooltip_nav">Rank Type</span>
+                </a></li>
 
+                <li><a href="{{URL::to('/')}}/administrator/dashboard#sponser" onclick="sponserList()">
+                <i class="ri-arrow-right-s-line"></i>
+                <span class="tooltip_nav">Sponser</span>
+                </a></li>
 
-                                                       
+                 <li><a href="{{URL::to('/')}}/administrator/dashboard#interest" onclick="interestList()">
+                <i class="ri-arrow-right-s-line"></i>
+                <span class="tooltip_nav">Interest</span>
+                </a></li> 
+
+                                        
                 </ul>
             </div>
         </li>

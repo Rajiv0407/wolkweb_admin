@@ -33,6 +33,7 @@
                             <option value="">-Select-</option>
                             <option value="android" <?php echo ($deviceType=='android')?'selected':'' ; ?>>Android</option>
                             <option value="ios" <?php echo ($deviceType=='ios')?'selected':'' ; ?>>IOS</option>
+                            <option value="both" <?php echo ($deviceType=='both')?'selected':'' ; ?>>Both</option>
                         </select>
                     </div>
                 </div>
@@ -56,6 +57,8 @@
         <div class="col-md-12">
             <div class="form-group mb-3">
                 <label for="cms_type">Title</label>
+                <input type="text" class="form-control" name="cms_type" id="cms_type" placeholder="Enter Title" value="<?php echo $title ; ?>">
+                <?php /*
                 <select name="" id="cms_type" class="form-control">
                     <option value="">-Select-</option>
                     <?php if(!empty($nForList)): ?>
@@ -63,7 +66,7 @@
                        <option value="<?php echo $value->id ; ?>" <?php echo ($nFor==$value->id)?'selected':'' ; ?>><?php echo $value->title ; ?></option>
                    <?php endforeach ?>
                <?php endif  ?>
-                </select>
+                </select>  */ ?>
             </div>
         </div>
     </div>

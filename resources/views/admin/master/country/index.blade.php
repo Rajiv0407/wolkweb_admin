@@ -1,15 +1,17 @@
+          
           <div class="carManagement__wrapper">
                 <div class="breadcrumbWrapper d-flex align-items-center justify-content-between ">
                     <nav aria-label="breadcrumb">
                         <h3 class="fs-5 m-0 fw-500">Master</h3>
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{URL::to('/')}}/administrator/dashboard#index" onclick="dashboard()" >Home</a></li>
+                         <li class="breadcrumb-item"><a href="{{URL::to('/')}}/administrator/dashboard#index" onclick="dashboard()" >Home</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Master</li>
                             <li class="breadcrumb-item active" aria-current="page">Country</li>
+
                         </ol>
                     </nav>
 
-                    <!---data-bs-toggle="modal" data-bs-target="#add_body"   -->
+                    <!---== data-bs-toggle="modal" data-bs-target="#add_body" ==-->
                     <div class="rightButton">
                         <a href="javascript:void(0);" onclick="showModal('add_body456')" class="border-btn d-flax" ><i class="bi bi-plus"></i><span>Add Country</span></a>
                     </div>
@@ -20,8 +22,9 @@
                        
                          <div class="form-group">
                             <label for="Manufacture">Title</label>
-                            <input type="text" class="form-control" id="fTitleS" placeholder="Title">
+                            <input type="text" class="form-control" id="fState_Search" placeholder="Title">
                         </div> 
+                        
                         <div class="form-group">
                             <label for="status">Status</label>
                             <select name="fStatus_S" id="fStatus_S" class="form-control">
@@ -30,10 +33,10 @@
                             </select>
                         </div>
                         <div class="d-flex">
-                            <a href="javascript:void(0);" onclick="searchFeatures();"  class="search-btn">
+                            <a href="javascript:void(0);" onclick="searchNFor();"  class="search-btn">
                                 <i class="bi bi-search"></i><span>Search</span>
                             </a>
-                            <a href="javascript:void(0);" class="search-btn clear-btn ml-5px" onclick="clearCountry()">
+                            <a href="javascript:void(0);" class="search-btn clear-btn ml-5px" onclick="clearNFor()">
                                 <i class="bi bi-eraser-fill"></i><span>Clear</span>
                             </a>
                         </div>
@@ -41,18 +44,18 @@
                     </div>
                 </div>
                        </form>
-                <div class="table-area Country_tble">
+                <div class="table-area notification_table">
                     <table class="table" id="dataTable">
                         <thead>
                             <tr>
-                                <th scope="col">Id </th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Action</th>
+                                <th scope="col" width="10px">#</th>
+                                <th scope="col ">Title</th> 
+                                <th scope="col ">Country Code</th> 
+                                <th scope="col" >Status</th>
+                                <th scope="col" >Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                           
+                        <tbody>                         
                         </tbody>
                     </table>
                     <!-- <div class="table-footer">
@@ -63,7 +66,7 @@
 
 
 <div class="modal fade right_side" id="add_body456" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-slideout add_country_modal">
+    <div class="modal-dialog modal-dialog-slideout add_motification_modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Add Country</h5>
@@ -73,17 +76,24 @@
             </div>
             <div class="modal-body">
                 <form action="javascript:void(0);" method="post" id="fuelTypeForm">
-           
+         
                 <div class="form modal-form">
                     <div class="form-group">
                         <label for="Manufacture">Title</label>
-                         <input type="text" name="cTitle" id="cTitle"  class="form-control" placeholder="Title">
-                         <span id="err_cTitle" class="err" style="color:red"></span>
+                         <input type="text" name="sTitle" id="sTitle"  class="form-control" placeholder="Title">
+                         <span id="err_sTitle" class="err" style="color:red"></span>
                     </div>
                 </div>
-                
+                <div class="form modal-form">
+                    <div class="form-group">
+                        <label for="Manufacture">Country Code</label>
+                         <input type="text" name="apiCode" id="apiCode"  class="form-control" placeholder="Country Code">
+                         <span id="err_apiCode" class="err" style="color:red"></span>
+                    </div>
+                </div>
+             	
                 <div class="mt-4">
-                    <a href="javascript:void(0);"  onclick="submitCountry()" class="search-btn">Submit</a>
+                    <a href="javascript:void(0);"  onclick="submitNotifyFor()" class="search-btn">Submit</a>
                     <a href="javascript:void(0);" id="cancelBType" onclick="cancelFeature()" class="search-btn clear-btn" data-bs-dismiss="modal">Cancel</a>
                 </div>
 
@@ -97,7 +107,7 @@
     <div class="modal-dialog modal-dialog-slideout edit_body_typ">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Body Type</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit Country</h5>
                 <div class="cross-btn">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -124,19 +134,20 @@
               sPaginationType: "bootstrap",
               "aaSorting": [[ 0, 'desc' ]],   
               columnDefs: [  
-                        {
-                            "aTargets": [0],
-                            "visible": false
-                        } ,{
-                            "aTargets": [2],
+                  {
+                      "aTargets": [0],
+                      "visible":false
+                  } ,
+                       {
+                            "aTargets": [3],
                             "mRender" : function(data, type, full){ 
                               var action='' ;
                                var className='' ;
 
                             if(full['status']==1){
-                              className='activeCountry' ;
+                              className='activeNFor' ;
                             }else{
-                              className='inactiveCountry' ;
+                              className='inactiveNFor' ;
                             }
 
                             action+='<span class="'+className+'">'+full['status_']+'</span>';
@@ -146,18 +157,19 @@
                         } ,
 
 
+                        
                           {
-                            "aTargets": [3],
+                            "aTargets": [4],
                             "mRender" : function(data, type, full){
 
                                 // data-bs-toggle="modal" data-bs-target="#edit_body"
 
-                                var action = '<div class="align-items-center d-flex"> <div class="more_n"> <i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"> <li><a class="dropdown-item" href="javascript:void(0);"  onclick="editCountry('+full["id"]+')" >Edit</a></li> <li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')" >Delete</a></li> </ul> </div> <div> <label class="switch">  ' ;
+                                var action = '<div class="align-items-center d-flex"> <div class="more_n"> <i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"> <li><a class="dropdown-item" href="javascript:void(0);"  onclick="editNFor('+full["id"]+')" >Edit</a></li> <li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')" >Delete</a></li> </ul> </div> <div> <label class="switch">  ' ;
 
                             if(full['status']==1){
-                                 action +='<input type="checkbox" onclick="changeCountryStatus('+full['id']+')" checked>' ;
+                                 action +='<input type="checkbox" onclick="changeStateStatus('+full['id']+')" checked>' ;
                              }else{
-                                action +='<input type="checkbox" onclick="changeCountryStatus('+full['id']+')" >' ;
+                                action +='<input type="checkbox" onclick="changeStateStatus('+full['id']+')" >' ;
                              }
 
                               action+='<span class="slider"></span> </label> </div> </div> '  ;
@@ -171,15 +183,16 @@
                         ],
 
                     ajax: {
-                              url: '{!! URL::asset('masterController/country_datatable') !!}',
+                              url: '{!! URL::asset('country_datatable') !!}',
                             },
                      columns : [            
                                 { data:'id' },
                                 { data:'title' },
+                                { data:'api_code' },
                                 { data:'status_' },
                                 { data:'status' }
                   ],
-
+                 
                 });
 
               $k('.input-group-addon').click(function() {
@@ -191,11 +204,11 @@
     function ConfirmDelete(id) {
         
         if(confirm("Are you sure ?")) {
-            delete_country(id);
+            delete_nfor(id);
         }
     }
 
-    function delete_country(id){
+    function delete_nfor(id){
 
              ajaxCsrf();
 
@@ -229,20 +242,23 @@
 
 
 
-    function submitCountry(){
+    function submitNotifyFor(){
 
          ajaxCsrf();
-        var cTitle=$('#cTitle').val();
+       
+        var sTitle=$('#sTitle').val();
+        var apiCode=$('#apiCode').val();
+        
 
         $('.err').html('');
 
-        if(cTitle==''){
-            $('#err_cTitle').html('Please enter title.')
+       if(sTitle==''){
+          $('#err_sTitle').html('Please enter title.');
+        }else if(apiCode==''){
+           $('#err_apiCode').html('Please enter country code.');
         } else {
 
-            
             var formData=new FormData($('#fuelTypeForm')[0]);
-
 
               $.ajax({
                 type: "POST",
@@ -257,7 +273,7 @@
                 },
                 success: function(html){
                  ajax_success() ;
-                 // console.log(html);
+
                     if(html.status==1){
                         $('#fuelTypeForm')[0].reset();  
                         $('#add_body456').modal('hide'); 
@@ -265,7 +281,7 @@
                          removeModelOpen();
                         $('#dataTable').DataTable().ajax.reload();
 
-                          statusMesage('Save country successfully','success');
+                          statusMesage('Save successfully','success');
                       }else{
                           statusMesage(html.message,'error');
                       }
@@ -282,7 +298,7 @@
         $('#featureIcon').val('');
     }
 
-    function editCountry(updatedId){   
+    function editNFor(updatedId){   
 
         ajaxCsrf();
         $('#edit_body').modal('show') ;
@@ -301,15 +317,24 @@
             });   
     }
 
-    function updateCountry(){
-      var editFTitle= $('#editCTitle').val() ;
+    function updateNFor(){
+
+      var editSTitle= $('#editSTitle').val() ;
+      var editApiCode = $('#edit_apiCode').val() ;
+    
+      
+
       ajaxCsrf();
+
       $('.err').html('');
-      if(editFTitle==''){
-          $('#err_editCTitle').html("Please enter title");
-      }else{
+
+      if(editSTitle==''){
+         $('#err_editSTitle').html("Please enter title");
+      }  if(editApiCode==''){
+         $('#err_editAPICODE').html("Please enter country code");
+      } else{
         $('.err').html('');
-        var formData=new FormData($('#editCountryForm')[0]);
+        var formData=new FormData($('#editFeatureForm')[0]);
         
 
         $.ajax({
@@ -330,7 +355,7 @@
                  modalHide_('edit_body'); 
                 // $('.modal-backdrop').hide();   
                 $('#dataTable').DataTable().ajax.reload();
-                statusMesage('Successfully updated','success');
+                statusMesage('Update successfully','success');
                 // $('#edit_fuel').modal('hide');  
                            
              }else{
@@ -349,7 +374,7 @@
         
     }
 
-function changeCountryStatus(id){
+function changeStateStatus(id){
 
     ajaxCsrf();
 
@@ -368,7 +393,7 @@ success:function(res)
 if(res.status==1){
    var table = $('#dataTable').DataTable();
     table.draw( false );
-     statusMesage('Shanged status successfully','success');
+     statusMesage('Changed status successfully','success');
   }else{
      statusMesage('Something went wrong','success');
   }
@@ -378,29 +403,29 @@ if(res.status==1){
 }
 
 
-function clearCountry(){
+function clearNFor(){
 
     var table = $('#dataTable').DataTable();
     document.getElementById("featureSearchForm").reset();
-  countryList();
+      countryList();
      //$('#dataTable').DataTable().ajax.reload();        
   
 }
 
 
 
-   function searchFeatures(){
+   function searchNFor(){
 
-        var fTitleS=$("#fTitleS").val();
+        var fTitleS=$("#fState_Search").val();
         var fStatus_S=$("#fStatus_S").val();
-  
+       
+
      if(fTitleS){
-     
-          $('#dataTable').DataTable().column(1).search(fTitleS).draw();
+         $('#dataTable').DataTable().column(1).search(fTitleS).draw();
     }
+
      if(fStatus_S){
-   
-          $('#dataTable').DataTable().column(3).search(fStatus_S).draw();
+              $('#dataTable').DataTable().column(4).search(fStatus_S).draw();
     }
    
   }

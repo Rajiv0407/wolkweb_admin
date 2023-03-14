@@ -37,6 +37,6 @@ class post_image extends Model
     {    
         //$baseUrl = URL::to('/') ;
         $imagePath=config('constants.post_image').$postId.'/';
-        return DB::table('post_images')->select('id',DB::raw('CONCAT("'.$imagePath.'",image) as image'))->where('postId',$postId)->get() ;  
+        return DB::table('post_images')->select('id',DB::raw('CONCAT("'.$imagePath.'",image) as image','file_type'))->where('postId',$postId)->get() ;  
     }
 }
