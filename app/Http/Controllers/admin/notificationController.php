@@ -8,6 +8,8 @@ use Yajra\Datatables\Datatables;
 use App\Models\Notification_types;
 use App\models\announcement_lists ;
 use DB ;
+use Image ;
+use File ;
 
 class notificationController extends Controller
 {
@@ -201,7 +203,7 @@ class notificationController extends Controller
 
          try{
 
-           DB::table('pe_announcement_for')->insert($insertData);
+           DB::table('notification_type')->insert($insertData);
             echo successResponse([],'saved successfully'); 
          
         }
@@ -214,7 +216,7 @@ class notificationController extends Controller
 
     public function editNFor(Request $request){
         $updatedId = isset($request->updatedId)?$request->updatedId:0 ;
-        $nFor = notification_fors::find($updatedId) ;
+        $nFor = notification_types::find($updatedId) ;
 
         $data['nFor'] = $nFor ;
         $data['updatedId']=$updatedId ;
@@ -232,7 +234,7 @@ class notificationController extends Controller
 
         try{
 
-            DB::table('pe_announcement_for')->where('id',$updateId)->update($updateData);
+            DB::table('notification_type')->where('id',$updateId)->update($updateData);
             echo successResponse([],'saved successfully'); 
         } catch(\Exception $e) {
           echo errorResponse('error occurred'); 
@@ -246,7 +248,7 @@ class notificationController extends Controller
          $id=isset($request->id)?$request->id:'' ;
 
         try{
-                notification_fors::where('id', $id)->firstorfail()->delete();
+            notification_types::where('id', $id)->firstorfail()->delete();
               echo successResponse([],'delete notification for successfully'); 
         }
          catch(\Exception $e){
@@ -258,7 +260,7 @@ class notificationController extends Controller
 
         $id=isset($request->id)?$request->id:'' ;
 
-        $qry="update pe_announcement_for  set status=(case when status=1 then 0 else 1 end) where id=".$id;
+        $qry="update notification_type  set status=(case when status=1 then 0 else 1 end) where id=".$id;
 
         try{
 
@@ -273,4 +275,181 @@ class notificationController extends Controller
         }
 
     }
+
+    public function rankType(Request $request){
+
+        $data['title']=siteTitle();
+        
+        echo view('admin/master/rankType/index',$data);
+
+    }
+    
+    public function save_rankType(Request $request){
+        $data['title']=siteTitle();
+        $title=isset($request->sTitle)?$request->sTitle:'' ;
+        $rangeFrom = isset($request->range_from)?$request->range_from:'' ;
+        $rangeTo = isset($request->rangeTo)?$request->rangeTo:'' ;
+        $filenametostore='';
+        try{
+            
+            if($request->hasFile('sImage')) {
+        
+       
+                $imgPath='app/public/star_type_img/' ;
+                
+              
+                 $filenamewithextension = $request->file('sImage')->getClientOriginalName();
+           
+                 //get filename without extension
+                 $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
+           
+                 //get file extension
+                 $extension = $request->file('sImage')->getClientOriginalExtension();
+           
+                 $filename=str_replace(' ', '_', $filename);
+                 $filenametostore = $filename.'_'.time().'.'.$extension;       
+                 $smallthumbnail = $filename.'_100_100_'.time().'.'.$extension;    
+                
+                 //Upload File
+                 $request->file('sImage')->storeAs('public/star_type_img', $filenametostore);
+                // $request->file('sImage')->storeAs('public/star_type_img/thumb', $smallthumbnail);
+                
+                  
+                 //create small thumbnail
+                // $smallthumbnailpath = public_path('storage/star_type_img/thumb/'.$smallthumbnail);
+                // $this->createThumbnail($smallthumbnailpath, 100, 100);                 
+                   
+          
+                }
+
+                $insertData=array(
+                    'rank_title'=>$title ,
+                    'range_from'=>$rangeFrom,
+                    'range_to'=>$rangeTo,  
+                    'star_img'=>$filenametostore,
+                    'status'=>1
+                );
+             
+            DB::table('rank_types')->insert($insertData);
+           echo successResponse([],'saved successfully'); 
+
+        }
+         catch(\Exception $e)
+        {
+          echo errorResponse('error occurred'); 
+         
+        }
+    }
+
+    public function createThumbnail($path, $width, $height)
+    {
+        
+      $img = Image::make($path)->resize($width, $height)->save($path);
+    }
+
+    public function rankStatus(Request $request){
+
+        $id=isset($request->id)?$request->id:'' ;
+
+        $qry="update rank_types set status=(case when status=1 then 0 else 1 end) where id=".$id;
+
+        try{
+
+           DB::select($qry);    
+            echo successResponse([],'changed status successfully'); 
+         
+        }
+         catch(\Exception $e)
+        {
+          echo errorResponse('error occurred'); 
+         
+        }
+
+    }
+
+        
+    public function delete_rank(Request $request){
+         
+        $id=isset($request->id)?$request->id:'' ;
+
+       try{
+           DB::table('rank_types')->where('id', $id)->delete();
+             echo successResponse([],'delete notification for successfully'); 
+       }
+        catch(\Exception $e){
+            echo errorResponse('error occurred'); 
+        }        
+   }
+
+   public function edit_rankType(Request $request){
+    $updatedId = isset($request->updatedId)?$request->updatedId:0 ;
+    $nFor = DB::table('rank_types')->where('id',$updatedId)->first() ;
+
+    $data['nFor'] = $nFor ;
+    $data['updatedId']=$updatedId ;
+    echo view('admin/master/rankType/editNFor',$data);
+
+   }
+   
+
+   public function updateRank(Request $request){
+    $data['title']=siteTitle();
+    $title=isset($request->editSTitle)?$request->editSTitle:'' ;
+    $rangeFrom = isset($request->edit_rangFrom)?$request->edit_rangFrom:'' ;
+    $rangeTo = isset($request->editRangeTo)?$request->editRangeTo:'' ;
+    $updatedId = isset($request->updatedId)?$request->updatedId:'' ;
+    $filenametostore='';
+    try{
+          
+        $insertData=array(
+            'rank_title'=>$title ,
+            'range_from'=>$rangeFrom,
+            'range_to'=>$rangeTo
+        );
+       
+       
+        if($request->hasFile('editSImage')) {
+    
+   
+            $imgPath='app/public/star_type_img/' ;
+            
+          
+             $filenamewithextension = $request->file('editSImage')->getClientOriginalName();
+       
+             //get filename without extension
+             $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
+       
+             //get file extension
+             $extension = $request->file('editSImage')->getClientOriginalExtension();
+       
+             $filename=str_replace(' ', '_', $filename);
+             $filenametostore = $filename.'_'.time().'.'.$extension;       
+             $smallthumbnail = $filename.'_100_100_'.time().'.'.$extension;    
+            
+             //Upload File
+             $request->file('editSImage')->storeAs('public/star_type_img', $filenametostore);
+            // $request->file('sImage')->storeAs('public/star_type_img/thumb', $smallthumbnail);
+            
+              
+             //create small thumbnail
+            // $smallthumbnailpath = public_path('storage/star_type_img/thumb/'.$smallthumbnail);
+            // $this->createThumbnail($smallthumbnailpath, 100, 100);                 
+               
+            $insertData['star_img']=$filenametostore ;
+            }
+
+           
+         
+        DB::table('rank_types')->where('id',$updatedId)->update($insertData);
+       echo successResponse([],'saved successfully'); 
+
+    }
+     catch(\Exception $e)
+    {
+      echo errorResponse('error occurred'); 
+     
+    }
+}
+
+
 }

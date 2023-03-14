@@ -23,7 +23,7 @@
           'user_qrimage' => env('USER_QRIMAGE',url('/').'/storage/app/public/user_qrcode/'),
           'imagick'=> env('IMAGICK',0),
           'profile_video' => env('PROFILE_VIDEO',url('/').'/storage/app/public/profile_video/'),
-          'cover_image' => env('COVER_IMAGE',url('/').'/storage/app/public/cover_image/'),
+          'cover_image' => env('COVER_IMAGE',url('/').'/storage/app/public/cover_image/')
      ];
 
 

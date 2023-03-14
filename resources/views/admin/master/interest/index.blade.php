@@ -6,14 +6,14 @@
                         <ol class="breadcrumb">
                          <li class="breadcrumb-item"><a href="{{URL::to('/')}}/administrator/dashboard#index" onclick="dashboard()" >Home</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Master</li>
-                            <li class="breadcrumb-item active" aria-current="page">Country</li>
+                            <li class="breadcrumb-item active" aria-current="page">Interest</li>.
 
                         </ol>
                     </nav>
 
                     <!---== data-bs-toggle="modal" data-bs-target="#add_body" ==-->
                     <div class="rightButton">
-                        <a href="javascript:void(0);" onclick="showModal('add_body456')" class="border-btn d-flax" ><i class="bi bi-plus"></i><span>Add Country</span></a>
+                        <a href="javascript:void(0);" onclick="showModal('add_body456')" class="border-btn d-flax" ><i class="bi bi-plus"></i><span>Add Interest</span></a>
                     </div>
                 </div>
                 <form action="javascript:void(0);" method="post" id="featureSearchForm">
@@ -50,12 +50,12 @@
                             <tr>
                                 <th scope="col" width="10px">#</th>
                                 <th scope="col ">Title</th> 
-                                <th scope="col ">Country Code</th> 
                                 <th scope="col" >Status</th>
                                 <th scope="col" >Action</th>
                             </tr>
                         </thead>
-                        <tbody>                         
+                        <tbody>
+                           
                         </tbody>
                     </table>
                     <!-- <div class="table-footer">
@@ -69,7 +69,7 @@
     <div class="modal-dialog modal-dialog-slideout add_motification_modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Country</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Add Interest</h5>
                 <div class="cross-btn">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -84,14 +84,7 @@
                          <span id="err_sTitle" class="err" style="color:red"></span>
                     </div>
                 </div>
-                <div class="form modal-form">
-                    <div class="form-group">
-                        <label for="Manufacture">Country Code</label>
-                         <input type="text" name="apiCode" id="apiCode"  class="form-control" placeholder="Country Code">
-                         <span id="err_apiCode" class="err" style="color:red"></span>
-                    </div>
-                </div>
-             	
+                
                 <div class="mt-4">
                     <a href="javascript:void(0);"  onclick="submitNotifyFor()" class="search-btn">Submit</a>
                     <a href="javascript:void(0);" id="cancelBType" onclick="cancelFeature()" class="search-btn clear-btn" data-bs-dismiss="modal">Cancel</a>
@@ -107,7 +100,7 @@
     <div class="modal-dialog modal-dialog-slideout edit_body_typ">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Country</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit Interest</h5>
                 <div class="cross-btn">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -139,7 +132,7 @@
                       "visible":false
                   } ,
                        {
-                            "aTargets": [3],
+                            "aTargets": [2],
                             "mRender" : function(data, type, full){ 
                               var action='' ;
                                var className='' ;
@@ -159,7 +152,7 @@
 
                         
                           {
-                            "aTargets": [4],
+                            "aTargets": [3],
                             "mRender" : function(data, type, full){
 
                                 // data-bs-toggle="modal" data-bs-target="#edit_body"
@@ -183,16 +176,15 @@
                         ],
 
                     ajax: {
-                              url: '{!! URL::asset('country_datatable') !!}',
+                              url: '{!! URL::asset('interest_datatable') !!}',
                             },
                      columns : [            
                                 { data:'id' },
                                 { data:'title' },
-                                { data:'api_code' },
                                 { data:'status_' },
                                 { data:'status' }
                   ],
-                 
+
                 });
 
               $k('.input-group-addon').click(function() {
@@ -215,7 +207,7 @@
         $.ajax({
 
         type:"POST",
-        url:baseUrl+'/deleteCountry',
+        url:baseUrl+'/deleteInterest',
         data:{"id":id},
         dataType:'json',
         beforeSend:function()
@@ -247,22 +239,18 @@
          ajaxCsrf();
        
         var sTitle=$('#sTitle').val();
-        var apiCode=$('#apiCode').val();
-        
 
         $('.err').html('');
 
        if(sTitle==''){
-          $('#err_sTitle').html('Please enter title.');
-        }else if(apiCode==''){
-           $('#err_apiCode').html('Please enter country code.');
-        } else {
+          $('#err_sTitle').html('Please enter title.')
+        }else {
 
             var formData=new FormData($('#fuelTypeForm')[0]);
 
               $.ajax({
                 type: "POST",
-                url: baseUrl + '/saveCountry',
+                url: baseUrl + '/saveInterest',
                 data:formData ,
                 dataType:'json',
                 cache:false,
@@ -304,7 +292,7 @@
         $('#edit_body').modal('show') ;
         $.ajax({
             type: "POST",
-            url: baseUrl +'/editCountry',
+            url: baseUrl +'/editInterest',
             data:{'updatedId':updatedId} ,           
             cache: 'FALSE',
             beforeSend: function () {
@@ -320,9 +308,6 @@
     function updateNFor(){
 
       var editSTitle= $('#editSTitle').val() ;
-      var editApiCode = $('#edit_apiCode').val() ;
-    
-      
 
       ajaxCsrf();
 
@@ -330,8 +315,6 @@
 
       if(editSTitle==''){
          $('#err_editSTitle').html("Please enter title");
-      }  if(editApiCode==''){
-         $('#err_editAPICODE').html("Please enter country code");
       } else{
         $('.err').html('');
         var formData=new FormData($('#editFeatureForm')[0]);
@@ -339,7 +322,7 @@
 
         $.ajax({
             type: "POST",
-            url: baseUrl +'/updateCountry',
+            url: baseUrl +'/updateInterest',
             data:formData ,
             dataType:'json',
             cache: 'FALSE',
@@ -380,7 +363,7 @@ function changeStateStatus(id){
 
     $.ajax({
         type:"POST",
-        url:baseUrl+'/countryStatus',
+        url:baseUrl+'/interestStatus',
        data:{"id":id},
        dataType:'json',
   beforeSend:function()
@@ -407,7 +390,7 @@ function clearNFor(){
 
     var table = $('#dataTable').DataTable();
     document.getElementById("featureSearchForm").reset();
-      countryList();
+      interestList();
      //$('#dataTable').DataTable().ajax.reload();        
   
 }
@@ -416,16 +399,15 @@ function clearNFor(){
 
    function searchNFor(){
 
-        var fTitleS=$("#fState_Search").val();
-        var fStatus_S=$("#fStatus_S").val();
-       
-
-     if(fTitleS){
-         $('#dataTable').DataTable().column(1).search(fTitleS).draw();
+    var fTitleS=$("#fState_Search").val();
+    var fStatus_S=$("#fStatus_S").val();
+        
+    if(fTitleS){
+     $('#dataTable').DataTable().column(1).search(fTitleS).draw();
     }
 
-     if(fStatus_S){
-              $('#dataTable').DataTable().column(4).search(fStatus_S).draw();
+    if(fStatus_S){
+      $('#dataTable').DataTable().column(3).search(fStatus_S).draw();
     }
    
   }

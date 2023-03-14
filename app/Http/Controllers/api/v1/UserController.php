@@ -1269,4 +1269,50 @@ public function resetPassword(Request $request){
     
    }
 
+   public function sendContactUsEmail(Request $request){ 
+    
+       $name = $request->name ;
+       $phoneNumber = $request->phone;
+       $email=$request->email ;
+       $subject= $request->subject;
+       $message=$request->message ;
+
+      //  $data = array(
+      //   'baseUrl'=>URL('/')."/public/contactUs/visitorq.png",
+      //   'name'=>"Amit",
+      //   'email' => "amit@gmail.com",
+      //   'subject' =>  "Vistior",
+      //   'phone_number'=>"728957538" ,
+      //   'messages' =>"Test"
+      //   );
+   
+    $data = array(
+      'baseUrl'=>URL('/')."/public/contactUs/visitorq.png",
+      'name'=>$name,
+      'email' => $email,
+      'subject' =>  $subject,
+      'phone_number'=>$phoneNumber ,
+      'messages' => $message
+      );
+   
+      // return view('emails/contactUs',$data);
+      // exit ;
+      
+       Mail::send('emails.contactUs', $data, function($message) use ($data) {
+        $to= 'walkofweb@gmail.com' ;
+        $recieverName = "" ;
+        $subject = $data['subject'] ;
+          
+          $message->to($to,$recieverName)->subject($subject);
+          $message->bcc('amitshukla.intigate@gmail.com');        
+      });
+
+      if (Mail::failures()) {
+       
+        return false ;
+       }else{
+        return true ;
+       
+       }
+    }
 }

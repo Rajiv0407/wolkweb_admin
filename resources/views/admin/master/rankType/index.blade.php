@@ -6,14 +6,14 @@
                         <ol class="breadcrumb">
                          <li class="breadcrumb-item"><a href="{{URL::to('/')}}/administrator/dashboard#index" onclick="dashboard()" >Home</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Master</li>
-                            <li class="breadcrumb-item active" aria-current="page">Country</li>
+                            <li class="breadcrumb-item active" aria-current="page">Rank Type</li>.
 
                         </ol>
                     </nav>
 
                     <!---== data-bs-toggle="modal" data-bs-target="#add_body" ==-->
                     <div class="rightButton">
-                        <a href="javascript:void(0);" onclick="showModal('add_body456')" class="border-btn d-flax" ><i class="bi bi-plus"></i><span>Add Country</span></a>
+                        <a href="javascript:void(0);" onclick="showModal('add_body456')" class="border-btn d-flax" ><i class="bi bi-plus"></i><span>Add Rank Type</span></a>
                     </div>
                 </div>
                 <form action="javascript:void(0);" method="post" id="featureSearchForm">
@@ -50,7 +50,9 @@
                             <tr>
                                 <th scope="col" width="10px">#</th>
                                 <th scope="col ">Title</th> 
-                                <th scope="col ">Country Code</th> 
+                                <th scope="col ">Range From</th> 
+                                <th scope="col ">Range To</th>
+                                <th scope="col ">Star Image</th>
                                 <th scope="col" >Status</th>
                                 <th scope="col" >Action</th>
                             </tr>
@@ -69,7 +71,7 @@
     <div class="modal-dialog modal-dialog-slideout add_motification_modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Country</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Add Rank Type</h5>
                 <div class="cross-btn">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -86,9 +88,23 @@
                 </div>
                 <div class="form modal-form">
                     <div class="form-group">
-                        <label for="Manufacture">Country Code</label>
-                         <input type="text" name="apiCode" id="apiCode"  class="form-control" placeholder="Country Code">
-                         <span id="err_apiCode" class="err" style="color:red"></span>
+                        <label for="Manufacture">Range From</label>
+                         <input type="number" name="range_from" id="range_from"  class="form-control" placeholder="Range From">
+                         <span id="err_range_from" class="err" style="color:red"></span>
+                    </div>
+                </div>
+                <div class="form modal-form">
+                    <div class="form-group">
+                        <label for="Manufacture">Range To</label>
+                         <input type="number" name="rangeTo" id="rangeTo"  class="form-control" placeholder="Range To">
+                         <span id="err_rangeTo" class="err" style="color:red"></span>
+                    </div>
+                </div>
+                <div class="form modal-form">
+                    <div class="form-group">
+                        <label for="Manufacture">Star Image</label>
+                         <input type="file" name="sImage" id="sImage"  class="form-control" placeholder="Star Image">
+                         <span id="err_sImage" class="err" style="color:red"></span>
                     </div>
                 </div>
              	
@@ -107,7 +123,7 @@
     <div class="modal-dialog modal-dialog-slideout edit_body_typ">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Country</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit Rank Type</h5>
                 <div class="cross-btn">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -138,8 +154,21 @@
                       "aTargets": [0],
                       "visible":false
                   } ,
+                  {
+                            "aTargets": [4],
+                            "mRender" : function(data, type, full){ 
+                             var action='' ;
+
+                              if(full["star_img"]!=''){
+                                action='<img src="'+full["star_img"]+'" height="50px" weight="50px" />' ;
+                              }
+                               
+                              
+                            return action ;
+                            }
+                        } ,
                        {
-                            "aTargets": [3],
+                            "aTargets": [5],
                             "mRender" : function(data, type, full){ 
                               var action='' ;
                                var className='' ;
@@ -159,7 +188,7 @@
 
                         
                           {
-                            "aTargets": [4],
+                            "aTargets": [6],
                             "mRender" : function(data, type, full){
 
                                 // data-bs-toggle="modal" data-bs-target="#edit_body"
@@ -183,12 +212,14 @@
                         ],
 
                     ajax: {
-                              url: '{!! URL::asset('country_datatable') !!}',
+                              url: '{!! URL::asset('rankType_datatable') !!}',
                             },
                      columns : [            
                                 { data:'id' },
                                 { data:'title' },
-                                { data:'api_code' },
+                                { data:'range_from' },
+                                { data:'range_to' },
+                                { data:'star_img' },
                                 { data:'status_' },
                                 { data:'status' }
                   ],
@@ -215,7 +246,7 @@
         $.ajax({
 
         type:"POST",
-        url:baseUrl+'/deleteCountry',
+        url:baseUrl+'/deleteRank',
         data:{"id":id},
         dataType:'json',
         beforeSend:function()
@@ -247,22 +278,27 @@
          ajaxCsrf();
        
         var sTitle=$('#sTitle').val();
-        var apiCode=$('#apiCode').val();
-        
+        var sRangeFrom=$('#range_from').val();
+        var sRangeTo=$('#rangeTo').val();
+        var sRangeImage=$('#sImage').val(); 
 
         $('.err').html('');
 
        if(sTitle==''){
           $('#err_sTitle').html('Please enter title.');
-        }else if(apiCode==''){
-           $('#err_apiCode').html('Please enter country code.');
+        }else if(sRangeFrom==''){
+           $('#err_range_from').html('Please enter range from.');
+        }else if(sRangeTo==''){
+            $('#err_rangeTo').html('Please enter range to.');
+        }else if(sRangeImage==undefined){
+            $('#err_sImage').html('Please select star image.');
         } else {
 
             var formData=new FormData($('#fuelTypeForm')[0]);
 
               $.ajax({
                 type: "POST",
-                url: baseUrl + '/saveCountry',
+                url: baseUrl + '/saveRankType',
                 data:formData ,
                 dataType:'json',
                 cache:false,
@@ -304,7 +340,7 @@
         $('#edit_body').modal('show') ;
         $.ajax({
             type: "POST",
-            url: baseUrl +'/editCountry',
+            url: baseUrl +'/editRankType',
             data:{'updatedId':updatedId} ,           
             cache: 'FALSE',
             beforeSend: function () {
@@ -320,8 +356,8 @@
     function updateNFor(){
 
       var editSTitle= $('#editSTitle').val() ;
-      var editApiCode = $('#edit_apiCode').val() ;
-    
+      var fromRange = $('#edit_rangFrom').val() ;
+      var toRange = $('#editRangeTo').val() ;
       
 
       ajaxCsrf();
@@ -330,16 +366,18 @@
 
       if(editSTitle==''){
          $('#err_editSTitle').html("Please enter title");
-      }  if(editApiCode==''){
-         $('#err_editAPICODE').html("Please enter country code");
-      } else{
+      }  if(fromRange==''){
+         $('#err_edit_rangFrom').html("Please enter range from");
+      } if(toRange==''){
+         $('#err_editRangeTo').html("Please enter to range");
+      }else{
         $('.err').html('');
         var formData=new FormData($('#editFeatureForm')[0]);
         
 
         $.ajax({
             type: "POST",
-            url: baseUrl +'/updateCountry',
+            url: baseUrl +'/updateRank',
             data:formData ,
             dataType:'json',
             cache: 'FALSE',
@@ -380,7 +418,7 @@ function changeStateStatus(id){
 
     $.ajax({
         type:"POST",
-        url:baseUrl+'/countryStatus',
+        url:baseUrl+'/rankStatus',
        data:{"id":id},
        dataType:'json',
   beforeSend:function()
@@ -407,7 +445,7 @@ function clearNFor(){
 
     var table = $('#dataTable').DataTable();
     document.getElementById("featureSearchForm").reset();
-      countryList();
+      rankTypeList();
      //$('#dataTable').DataTable().ajax.reload();        
   
 }
@@ -425,7 +463,7 @@ function clearNFor(){
     }
 
      if(fStatus_S){
-              $('#dataTable').DataTable().column(4).search(fStatus_S).draw();
+              $('#dataTable').DataTable().column(6).search(fStatus_S).draw();
     }
    
   }

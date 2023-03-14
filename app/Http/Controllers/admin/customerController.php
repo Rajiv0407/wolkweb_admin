@@ -15,7 +15,7 @@ class customerController extends Controller
     
     public function index(Request $request){
 
-    	$data['title']='LesGo';
+    	$data['title']=siteTitle();
 
     	echo view('admin/customerManagement/index',$data);
 
@@ -23,7 +23,7 @@ class customerController extends Controller
 
     public function customerData(Request $request){
 
-    	$data['title']='LesGo';
+    	$data['title']=siteTitle();
 
     	echo view('admin/customerManagement/index',$data);
 
@@ -31,7 +31,7 @@ class customerController extends Controller
 
     public function detail(Request $request){
 
-    	$data['title']='LesGo';
+    	$data['title']=siteTitle();
         $userId = isset($request->userId)?$request->userId:'' ;
 
         $userInfo = user::find($userId) ;
@@ -42,7 +42,7 @@ class customerController extends Controller
     }
 
     public function customerlist(Request $request){
-    	$data['title']='LesGo';
+    	$data['title']=siteTitle();
 
       $imgPath = config('constants.user_image');
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\model\cms;
+use App\models\cms;
 use DB;
 
 class cmsController extends Controller
@@ -31,11 +31,11 @@ class cmsController extends Controller
     }
     public function termCondition(Request $request){
 
-    	$data['title']='LesGo';
-
-        $qry="select Description from cms where Content_type='termCondition' and status=1" ;
+    	$data['title']=siteTitle();
+       
+        $qry="select description from cms where slug='term_condition' and status=1" ;
         $tData = DB::select($qry) ;
-        $description = isset($tData[0]->Description)?$tData[0]->Description:'' ;
+        $description = isset($tData[0]->description)?$tData[0]->description:'' ;
         $data['description']=$description ;
 
     	echo view('admin/cms/termCondition',$data);
@@ -44,10 +44,10 @@ class cmsController extends Controller
 
     public function privacyPolicy(Request $request){
 
-    	$data['title']='LesGo';
-        $qry="select Description from cms where Content_type='privacyPolicy' and status=1" ;
+    	$data['title']=siteTitle();
+        $qry="select description from cms where slug='privacy_policy' and status=1" ;
         $tData = DB::select($qry) ;
-        $description = isset($tData[0]->Description)?$tData[0]->Description:'' ;
+        $description = isset($tData[0]->description)?$tData[0]->description:'' ;
         $data['description']=$description ;
     	echo view('admin/cms/privacyPolicy',$data);
 
@@ -69,11 +69,11 @@ class cmsController extends Controller
         
         $termCondition = $request->termCondition ;
         $insertData=array(
-            "Description"=> $termCondition
+            "description"=> $termCondition
         );
 
         try{             
-            cms::where('Content_type','termCondition')->update($insertData);
+            cms::where('slug','term_condition')->update($insertData);
             echo successResponse([],'save term condition successfully'); 
         } catch(\Exception $e) {
             echo errorResponse('error occurred'.$e); 
@@ -89,7 +89,7 @@ class cmsController extends Controller
         );
 
         try{             
-            cms::where('Content_type','privacyPolicy')->update($insertData);
+            cms::where('slug','privacy_policy')->update($insertData);
             echo successResponse([],'save privacy policy successfully'); 
         } catch(\Exception $e) {
             echo errorResponse('error occurred'.$e); 

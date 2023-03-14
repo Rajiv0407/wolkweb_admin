@@ -40,6 +40,8 @@ Route::post('/resetPassword',[UserController::class, 'resetPassword']);
 Route::get('/updateEncryptionKey',[UserController::class, 'update_encryption']); 
 Route::post('/saveContactus',[PostController::class, 'save_contactus']);  
 
+Route::post('/sendContactUsEmail',[UserController::class,'sendContactUsEmail']);
+
 Route::middleware([Cors::class,EnsureTokenIsValid::class])->group(function () {    
     
     Route::post('/updateSocialInfo',[UserController::class, 'updateSocialInfo']);
