@@ -3,7 +3,7 @@
                     <nav aria-label="breadcrumb">
                         <h3 class="fs-5 m-0 fw-500">Social Management</h3>
                         <ol class="breadcrumb">
-                           <li class="breadcrumb-item"><a href="{{URL::to('/')}}/administrator/dashboard#index" onclick="dashboard()" >Home</a></li>
+                           <li class="breadcrumb-item"><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#index" onclick="dashboard()" >Home</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Social Management</li>
                         </ol>
                     </nav>
@@ -177,7 +177,7 @@
                 ],
 
             ajax: {
-                      url: '{!! URL::asset('socialDatatable') !!}',
+                      url: '<?php echo URL::asset('socialDatatable'); ?>',
                     },
              columns : [
              
@@ -457,4 +457,4 @@ function changePassword(userId){
 
  }
  
-</script>
+</script><?php /**PATH D:\xampp\htdocs\walkofwebAdmin\walkofweb_admin\resources\views/admin/socialManagement/index.blade.php ENDPATH**/ ?>

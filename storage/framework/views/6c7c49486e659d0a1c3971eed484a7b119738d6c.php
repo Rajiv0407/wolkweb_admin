@@ -1,25 +1,24 @@
-<div class="carManagement__wrapper">
-                <div class="breadcrumbWrapper d-flex align-items-center justify-content-between">
+ 
+            <div class="carManagement__wrapper">
+                <div class="breadcrumbWrapper">
                     <nav aria-label="breadcrumb">
-                        <h3 class="fs-5 m-0 fw-500">Social Management</h3>
+                        <h3 class="fs-5 m-0 fw-500">Post Management</h3>
                         <ol class="breadcrumb">
-                           <li class="breadcrumb-item"><a href="{{URL::to('/')}}/administrator/dashboard#index" onclick="dashboard()" >Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Social Management</li>
+                           <li class="breadcrumb-item"><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#index" onclick="dashboard()" >Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Post Management</li>
                         </ol>
                     </nav>
-                  <!-- <div class="rightButton">
-                        <a href="javascript:void(0);" onclick="showModal('add_body456')" class="border-btn d-flax" ><i class="bi bi-plus"></i><span>Add Soical</span></a>
-                    </div> -->
                 </div>
-
-                
-                
                 <form class="" id="n_serarchForm" action="javascript:void(0);" > 
                 <div class="filterWrapper">
                     <div class="form filterWrapper__l">
                         <div class="form-group">
-                            <label for="Model">Title</label>
-                            <input type="text" class="form-control" id="title" placeholder="Title">
+                            <label for="Manufacture">Name</label>
+                            <input type="text" class="form-control" placeholder="Name" id="cust_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="Model">User Name</label>
+                            <input type="text" class="form-control" id="username" placeholder="Username">
                         </div>  
                         <!-- <div class="form-group">
                             <label for="oName">Mobile Number</label>
@@ -27,7 +26,7 @@
                         </div> -->
                         <div class="form-group">
                             <label for="status">Status</label>
-                            <select name="" id="social_status" class="form-control">
+                            <select name="" id="cust_status" class="form-control">
                                 <option value="">Select</option>
                                 <option value="1">Active</option>
                                 <option value="0">In Active</option>
@@ -51,8 +50,13 @@
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Title</th>
-                                <th scope="col" width="10%">Weightage</th>
+                                <th scope="col">User</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Post Message</th>
+                                <th scope="col">Total Like</th>
+                                <th scope="col" >Total Comment</th>
+                                <th scope="col">Total Share</th>                                        
                                 <th scope="col" width="10%">status</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -60,61 +64,47 @@
                         <tbody>
                         </tbody>
                     </table>
-                </div>    
-                
-    <div class="modal fade right_side" id="add_body456" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-slideout add_motification_modal">
+                </div>
+               
+
+
+
+        <div class="modal fade right_side" id="change_pass" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-slideout edit_body_typ">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Social</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
                 <div class="cross-btn">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
             </div>
             <div class="modal-body">
-                <form action="javascript:void(0);" method="post" id="fuelTypeForm">
-         
+                <form action="javascript:void(0);" method="post" class="form-control" id="changePassword_"> 
+                <input type="hidden" name="changeUserPwd" id="changeUserPwd">
                 <div class="form modal-form">
                     <div class="form-group">
-                        <label for="Manufacture">Title</label>  
-                         <input type="text" name="social_title" id="social_title"  class="form-control" placeholder="Title">
-                         <span id="err_social_title" class="err" style="color:red"></span>
+                        <label for="">New Password</label>
+                        <input type="password" placeholder="Enter New Password" id="newPassword" name="newPassword" class="form-control">
+                        <span class="err" id="err_newPassword"></span>
                     </div>
-                </div>
-                <div class="form modal-form">
-                    <div class="form-group">
-                        <label for="Manufacture">Weightage</label>
-                         <input type="text" name="weightage" id="weightage"  class="form-control" placeholder="Weightage">
-                         <span id="err_weightage" class="err" style="color:red"></span>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <a href="javascript:void(0);"  onclick="submitNotifyFor()" class="search-btn">Submit</a>
-                    <a href="javascript:void(0);" id="cancelBType" onclick="cancelFeature()" class="search-btn clear-btn" data-bs-dismiss="modal">Cancel</a>
-                </div>
 
-            </form>
+                    <div class="form-group">
+                        <label for="">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Enter Confirm Password" class="form-control">
+                         <span class="err" id="err_confirmPwd"></span>
+                    </div>
+                </div>
+                 <div class="mt-4">
+                <a href="javascript:void(0);" onclick="updateChangePwd()" class="search-btn">Update</a>
+                <a href="javascript:void(0);" class="search-btn clear-btn" data-bs-dismiss="modal" onclick="cancelChangePwd()" >Cancel</a>
             </div>
+        </form>
+            </div>
+           
         </div>
     </div>
 </div>
 
-        
-<div class="modal fade right_side" id="edit_body" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-slideout edit_body_typ">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Social</h5>
-                <div class="cross-btn">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-            </div>
-            <div class="modal-body" id="editBodyTypeMb">                
-                
-            </div>
-        </div>
-    </div>
-</div>
 <script type="text/javascript">
 
      $(document).ready(function($k){
@@ -130,17 +120,48 @@
       lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
       sPaginationType: "bootstrap",
       "aaSorting": [[ 0, 'desc' ]],   
-      columnDefs: [ 
-        
+      columnDefs: [  
                 {
                     "aTargets": [0],
                     "visible":false
                 },
+                {
+                    "aTargets": [10],
+                    "visible":false
+                },
+                {
+                    "aTargets": [1],
+                    "mRender": function(data, type, full){
+                        var response ='' ;
+                       
+                        if(full['image']!='' || full['image']==undefined ){
+                         response='<img src="'+full['image']+'" width="50px" height="50px" /> '+full['name'];
+                        }else{
+                          response=full['name'];   
+                        }
+                        return response ;
+                    }
+                }
+                // {
+                //     "aTargets": [3],
+                //     "mRender": function(data, type, full){
+                //         var response ='' ;
+                //         if(full['username']!=''){
+                //          response=full['username'];
+                //         }else{
+                //           response=full['username'];   
+                //         }
+                //         return response ;
+                //     }
+                // }
+                ,{
+                    "aTargets": [2],
+                    "visible":false
+                },
                
                 {
-                            "aTargets": [3],
+                            "aTargets": [8],
                             "mRender" : function(data, type, full){ 
-                                
                               var action='' ;
                                var className='' ;
 
@@ -156,11 +177,10 @@
                             }
                         } ,
                 {
-                    "aTargets": [4],
+                    "aTargets": [9],
                      "mRender": function(data, type, full){
-                        var response ='<td><div class="align-items-center d-flex"><div class="more_n"> <i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"><li><a class="dropdown-item" href="javascript:void(0);"  onclick="editNFor('+full["id"]+')" >Edit</a></li> <li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')">Delete</a></li>  </ul> </div>  <div> <label class="switch">' ;
-                        
-                                  
+                        var response ='<td><div class="align-items-center d-flex">  <div> <label class="switch">' ;
+
                         if(full['status']=='1'){
                              response +='<input type="checkbox" onclick="changeUsrStatus('+full['id']+')" checked>' ;
                             
@@ -173,21 +193,37 @@
 
                         return response ;
                     }
+                },   
+                
+                {
+                    "aTargets": [10],
+                     "mRender": function(data, type, full){
+                        var response ='<td><div class="align-items-center d-flex"> <div class="more_n"> <i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"> <li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')">Delete</a></li> <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#change_pass" onclick="changePassword('+full["id"]+')">Change Password</a></li> </ul> </div> ' ;
+
+                        
+
+                        response+=' </div> </td>'  ;
+
+                        return response ;
+                    }
                 }
                 ],
 
             ajax: {
-                      url: '{!! URL::asset('socialDatatable') !!}',
+                      url: '<?php echo URL::asset('postDatatable'); ?>',
                     },
              columns : [
              
                         { data: 'id' },
-                        { data: 'title' },
-                        { data: 'weightage' },
-                        { data: 'status' },
-                        { data: 'status_' },
-                        
-
+                        { data: 'name' },
+                        { data: 'image' },
+                        { data: 'username' },
+                        { data: 'message'},
+                        { data: 'total_like'},
+                        { data: 'total_comment'},  
+                        { data: 'total_share'}, 
+                        { data: 'status_'},
+                        { data: 'status' }
           ],
          
         });
@@ -199,56 +235,14 @@
 
 });
 
-function submitNotifyFor(){
-ajaxCsrf();
-var social_title=$('#social_title').val();
-var weightage=$('#weightage').val();
-$('.err').html('');
-if(social_title==''){
- $('#err_social_title').html('Please select title.');
-}else if(weightage==''){
-  $('#err_weightage').html('Please enter weightage.');
-} else {
-   var formData=new FormData($('#fuelTypeForm')[0]);
-     $.ajax({
-       type: "POST",
-       url: baseUrl + '/SaveSocial',
-       data:formData ,
-       dataType:'json',
-       cache:false,
-       contentType:false,
-       processData:false,
-       beforeSend: function () {
-              ajax_before();
-       },
-       success: function(html){
-        ajax_success() ;
-           if(html.status==1){
-               $('#fuelTypeForm')[0].reset();  
-               $('#add_body456').modal('hide'); 
-               $('.modal-backdrop').remove();    
-                removeModelOpen();
-               $('#dataTable').DataTable().ajax.reload();
-                 statusMesage('Save successfully','success');
-             }else{
-                 statusMesage(html.message,'error');
-             }
-           }
-           });   
-
-}
-}
-
-function cancelFeature(){
-$('#social_title').val('');
-$('#weightage').val('');
-}
 
 function changeUsrStatus(id){
+
     ajaxCsrf();
+
     $.ajax({
         type:"POST",
-        url:baseUrl+'/socialStatus',
+        url:baseUrl+'/postStatus',
         data:{"id":id},
         dataType:'json',
     beforeSend:function()
@@ -274,95 +268,43 @@ function resetSearchForm(){
 
     var table = $('#dataTable').DataTable();
     document.getElementById("n_serarchForm").reset();
-  socialManagement();
+  postManagement();
      //$('#dataTable').DataTable().ajax.reload();        
   
 }
 
-function editNFor(updatedId){   
 
-ajaxCsrf();
-$('#edit_body').modal('show') ;
-$.ajax({
-    type: "POST",
-    url: baseUrl +'/editsocial',
-    data:{'updatedId':updatedId} ,           
-    cache: 'FALSE',
-    beforeSend: function () {
-           ajax_before();
-    },
-    success: function(html){
-     ajax_success() ;
-       $('#editBodyTypeMb').html(html) ;
-        }
-    });   
-}
 
-function updateNFor(){
-    
-var edit_social_title=$('#edit_social_title').val();
-var edit_social_weightage=$('#edit_social_weightage').val();
-ajaxCsrf();
-$('.err').html('');
-if(edit_social_title==''){
- $('#err_edit_social_title').html('Please enter social title.');
-}else if(edit_social_weightage==''){
-  $('#err_edit_social_weightage').html('Please enter social weightage.');
-}else {
-
-$('.err').html('');
-var formData=new FormData($('#editFeatureForm')[0]);
-
-$.ajax({
-    type: "POST",
-    url: baseUrl +'/updatesocial',
-    data:formData ,
-    dataType:'json',
-    cache: 'FALSE',
-        contentType:false,
-        processData:false,
-    beforeSend: function () {
-           ajax_before();
-    },
-    success: function(html){
-     ajax_success() ;
-     if(html.status==1){
-
-         modalHide_('edit_body'); 
-        // $('.modal-backdrop').hide();   
-        $('#dataTable').DataTable().ajax.reload();
-        statusMesage('Update successfully','success');
-        // $('#edit_fuel').modal('hide');  
-                   
-     }else{
-         statusMesage('Something went wrong','error');
-     }
+  function searchNType(){
       
-    
-            }
-    });      
+        var status=$("#cust_status").val();
+        var username=$("#username").val();
+        //var email=$("#cus_email").val();
+        var cName=$("#cust_name").val();
+   
+   
+     if(status){
+   
+          $('#dataTable').DataTable().column(10).search(status).draw();
+    }
+   
+    //  if(mobileNumber){
+   
+    //       $('#dataTable').DataTable().column(6).search(mobileNumber).draw();
+    // }
 
+     if(username){
+   
+          $('#dataTable').DataTable().column(3).search(username).draw();
+    }
 
+    if(cName){
+   
+          $('#dataTable').DataTable().column(1).search(cName).draw();
+    }
 
-
+   
 }
-
-
-}
-
-function searchNType(){
-      
-      var title=$("#title").val();
-      var social_status=$("#social_status").val();
-        if(title){
-                $('#dataTable').DataTable().column(1).search(title).draw();
-        }
-        if(social_status){
-                $('#dataTable').DataTable().column(3).search(social_status).draw();
-        }
-}
-
-  
    
 function ConfirmDelete(id) {
     
@@ -374,7 +316,7 @@ function ConfirmDelete(id) {
     function delete_customer(id){
              ajaxCsrf();
         $.ajax({type:"POST",
-        url:baseUrl+'/socialDelete',    
+        url:baseUrl+'/delete_customer',
         data:{"id":id},
         dataType:'json',
         beforeSend:function()
@@ -457,4 +399,4 @@ function changePassword(userId){
 
  }
  
-</script>
+</script><?php /**PATH D:\xampp\htdocs\walkofwebAdmin\walkofweb_admin\resources\views/admin/postManagement/index.blade.php ENDPATH**/ ?>

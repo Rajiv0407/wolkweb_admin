@@ -1,4 +1,22 @@
+function socialManagement(){
     
+    ajaxCsrf();
+    $.ajax({
+    type: "POST",
+    url: baseUrl+'/socialList',
+    cache: 'FALSE',
+    beforeSend: function () {
+    ajax_before();
+    },
+    success: function(html){
+    ajax_success() ;
+    $('.main_site_data').html(html);
+
+    }
+
+    });
+}
+
     function removeModelOpen(){
           // $('.modal').removeClass('in');
           //       $('.modal').attr("aria-hidden","true");
@@ -643,23 +661,6 @@ function contactSupport(){
         });
     }
 	
-	function socialManagement(){
-        ajaxCsrf();
-        $.ajax({
-        type: "POST",
-        url: baseUrl+'/socialList',
-        cache: 'FALSE',
-        beforeSend: function () {
-        ajax_before();
-        },
-        success: function(html){
-        ajax_success() ;
-        $('.main_site_data').html(html);
-
-        }
-
-        });
-    }
 
  function notificationList(){
         
