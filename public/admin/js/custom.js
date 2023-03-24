@@ -284,7 +284,7 @@ function rejectReview(reviewId){
         
         }
         });
-    }
+    }  
 
 function modalHide_(id){
     $('#'+id).modal('hide'); 
@@ -581,8 +581,6 @@ function vehicleBookingDetail(bookingId,type=1){
         });
     }
 
-
-    
 function notificationDetail(id){
   ajaxCsrf();
 
@@ -644,6 +642,24 @@ function contactSupport(){
 
         });
     }
+	
+	function socialManagement(){
+        ajaxCsrf();
+        $.ajax({
+        type: "POST",
+        url: baseUrl+'/socialList',
+        cache: 'FALSE',
+        beforeSend: function () {
+        ajax_before();
+        },
+        success: function(html){
+        ajax_success() ;
+        $('.main_site_data').html(html);
+
+        }
+
+        });
+    }
 
  function notificationList(){
         
@@ -651,6 +667,25 @@ function contactSupport(){
         $.ajax({
         type: "POST",
         url: baseUrl+'/notification',
+        cache: 'FALSE',
+        beforeSend: function () {
+        ajax_before();
+        },
+        success: function(html){
+        ajax_success() ;
+        $('.main_site_data').html(html);
+
+        }
+
+        });
+    }
+
+    function userPointList(){
+        
+        ajaxCsrf();
+        $.ajax({
+        type: "POST",
+        url: baseUrl+'/userPointList', 
         cache: 'FALSE',
         beforeSend: function () {
         ajax_before();
@@ -720,9 +755,7 @@ function contactSupport(){
 
         });
     }
-
      function helpSupport(){
-
         ajaxCsrf();
         $.ajax({
         type: "POST",
@@ -739,7 +772,6 @@ function contactSupport(){
 
         });
     }
-
      function fuleTypeList(){
 
         ajaxCsrf();
@@ -760,7 +792,6 @@ function contactSupport(){
     }
 
      function bodyTypeList(){
-
         ajaxCsrf();
         $.ajax({
         type: "POST",
@@ -779,7 +810,6 @@ function contactSupport(){
     }
 
 function sponserList(){
-
         ajaxCsrf();
         $.ajax({
         type: "POST",
@@ -796,16 +826,10 @@ function sponserList(){
 
         });
     }
-
-    
-    
     function onlyNumbers(event) {
-      
        var charCode = (event.which) ? event.which : event.keyCode
-   
        if (charCode > 31 && (charCode < 48 || charCode > 57))
          return false;
-
        return true;
      }
 
@@ -821,9 +845,7 @@ function dashboard(){
         success: function(html){
         ajax_success() ;
         $('.main_site_data').html(html);
-
         }
-
         });
 }
  function vehicleDashboard(){
@@ -838,9 +860,7 @@ function dashboard(){
         success: function(html){
         ajax_success() ;
         $('.main_site_data').html(html);
-
         }
-
         });
  }
 

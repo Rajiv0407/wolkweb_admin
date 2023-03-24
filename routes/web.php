@@ -12,7 +12,7 @@ use App\Http\Controllers\admin\CmsController;
 use App\Http\Controllers\admin\MasterController;
 use App\Http\Controllers\admin\PostController;
 use App\Http\Controllers\admin\AdsController;
-
+use App\Http\Controllers\admin\SocialController; 
 /*FacebookSocialiteController
 |--------------------------------------------------------------------------
 | Web Routes
@@ -146,7 +146,7 @@ Route::post('/postList',[PostController::class,'postList']);
 Route::get('postDatatable',[PostController::class,'post_datatable']);
 Route::post('/postStatus',[PostController::class,'postStatus']);
 
-/* Ads management */
+/* Ads management */    
 Route::post('/adsList',[AdsController::class,'adsList']);
 Route::get('adsDatatable',[AdsController::class,'ads_datatable']);
 Route::post('/adsStatus',[AdsController::class,'adsStatus']);
@@ -157,7 +157,25 @@ Route::post('/SaveAdvertisement',[AdsController::class,'SaveAdvertisement']);
 
 Route::post('/advertisementDetail',[AdsController::class,'advertisementDetail']); 
 
+/* Social Point managenent */
+
+Route::post('/socialList',[SocialController::class,'socialList']);  
+Route::get('socialDatatable',[SocialController::class,'socialDatatable']); 
+Route::post('/socialStatus',[SocialController::class,'socialStatus']);
+Route::post('/editsocial',[SocialController::class,'editsocial']);  
+Route::post('/updatesocial',[SocialController::class,'updatesocial']); 
+Route::post('/SaveSocial',[SocialController::class,'SaveSocial']); 
+Route::post('/socialDelete',[SocialController::class,'socialDelete']);     
+
+
+/* User Social Point */
+Route::post('/userPointList',[SocialController::class,'userPointList']); 
+Route::get('userPointDatatable',[SocialController::class,'userPointDatatable']); 
+Route::post('/userPointStatus',[SocialController::class,'userPointStatus']);   
+
 Auth::routes();
 
 });
+
+
 

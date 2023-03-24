@@ -4,11 +4,11 @@
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Walkofweb</title>
-      <link rel="stylesheet" type="text/css" href="{{URL::to('/public/admin')}}/css/style.css">
-      <link rel="stylesheet" type="text/css" href="{{URL::to('/public/admin')}}/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="<?php echo e(URL::to('/public/admin')); ?>/css/style.css">
+      <link rel="stylesheet" type="text/css" href="<?php echo e(URL::to('/public/admin')); ?>/css/bootstrap.min.css">
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
-      <link rel="icon" href="{{URL::to('/public/admin')}}/images/fav.png?v={{ time() }}" >
-      <meta name="csrf-token" content="{{ csrf_token() }}">
+      <link rel="icon" href="<?php echo e(URL::to('/public/admin')); ?>/images/fav.png?v=<?php echo e(time()); ?>" >
+      <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
    </head>
    <body>
     
@@ -24,7 +24,7 @@
           
           <div class="lg_login_img">
             
-            <img src="{{URL::to('/public/admin/')}}/images/login_car.svg" class="img-fluid">
+            <img src="<?php echo e(URL::to('/public/admin/')); ?>/images/login_car.svg" class="img-fluid">
 
           </div>
 
@@ -36,7 +36,7 @@
                <div class="account-logo-box">
                   <h2 class="text-uppercase text-center">
                      <!-- <a href="" class="text-success">
-                     <span><img src="{{URL::to('/public/admin/')}}/images/logo.png?v1" alt=""></span>
+                     <span><img src="<?php echo e(URL::to('/public/admin/')); ?>/images/logo.png?v1" alt=""></span>
                      </a> -->
                   </h2>
                </div>
@@ -53,14 +53,14 @@
                                  <div class="form-group form-group_copy">
                                   <label>UserName</label>
                                     <!-- <i class="bi bi-envelope-fill"></i> -->
-                                    <input type="text" placeholder="Enter user name" class="form-control" id="txtUserName" onkeyup="removeError()" name="txtUserName" onclick="remove_valid(this.id)" onkeypress="remove_valid(this.id)" value="{{$userName}}" autofocus>
+                                    <input type="text" placeholder="Enter user name" class="form-control" id="txtUserName" onkeyup="removeError()" name="txtUserName" onclick="remove_valid(this.id)" onkeypress="remove_valid(this.id)" value="<?php echo e($userName); ?>" autofocus>
                                     <span id="error_txtUserName" class="errorbox"></span>
                                  </div>
                                  <div class="form-group form-group_copy">
                                     <label>Password</label>
                                     <!-- <i class="bi bi-lock-fill"></i> -->
                                      
-                                    <input type="password" placeholder="Password" class="form-control" id="txtPassword" onkeyup="removeError()" name="txtPassword" onclick="remove_valid(this.id)" onkeypress="remove_valid(this.id)" value="{{$userPassword}}">
+                                    <input type="password" placeholder="Password" class="form-control" id="txtPassword" onkeyup="removeError()" name="txtPassword" onclick="remove_valid(this.id)" onkeypress="remove_valid(this.id)" value="<?php echo e($userPassword); ?>">
                                     <span id="error_txtPassword" class="errorbox"></span>
                                  </div>
                                  <div class="form-group" style="margin:25px 0px 0px;">
@@ -71,7 +71,7 @@
                                        <span class="checkmark"></span>
                                        </label>
                                     </div>
-                                    <div id="loadingGif2" style="display: none;"><img src="{{URL::to('/public/admin')}}/images/loader.gif"></div>
+                                    <div id="loadingGif2" style="display: none;"><img src="<?php echo e(URL::to('/public/admin')); ?>/images/loader.gif"></div>
                                     <div class="btnlogin">
                                        <button class="btn btn-primary" style="margin-top:20px;" id="btnLogin" type="submit" style="background-color: #204d74;">
                                        Sign In
@@ -154,7 +154,7 @@
             }
          });
          
-         var baseUrl = "{{ url('/') }}";
+         var baseUrl = "<?php echo e(url('/')); ?>";
          
          $.ajax({
          type: "POST",
@@ -183,8 +183,8 @@
          
       </script>
       <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
-      <script src="{{URL::to('/public/admin/js')}}/bootstrap.min.js" type="text/javascript"></script>
+      <script src="<?php echo e(URL::to('/public/admin/js')); ?>/bootstrap.min.js" type="text/javascript"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
-      <script src="{{URL::to('/public/admin/js')}}/custom.js" type="text/javascript"></script>
+      <script src="<?php echo e(URL::to('/public/admin/js')); ?>/custom.js" type="text/javascript"></script>
    </body>
-</html>
+</html><?php /**PATH C:\xampp\htdocs\walkofweb_admin\resources\views/admin/login.blade.php ENDPATH**/ ?>

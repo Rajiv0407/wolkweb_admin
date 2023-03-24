@@ -57,13 +57,9 @@ class customerController extends Controller
 
     public function changeStatus(Request $request)
     {
-
     	$id=$request->id ;
-
     	$qry="update users set status=(case when status=1 then 0 else 1 end) where id=".$id;
-
     	try{
-
            DB::select($qry);	
             return $this->successResponse([],'changed status successfully'); 
          

@@ -2,10 +2,10 @@
             <div class="carManagement__wrapper">
                 <div class="breadcrumbWrapper">
                     <nav aria-label="breadcrumb">
-                        <h3 class="fs-5 m-0 fw-500">Customer Management</h3>
+                        <h3 class="fs-5 m-0 fw-500">Post Management</h3>
                         <ol class="breadcrumb">
-                           <li class="breadcrumb-item"><a href="{{URL::to('/')}}/administrator/dashboard#index" onclick="dashboard()" >Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Customer Management</li>
+                           <li class="breadcrumb-item"><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#index" onclick="dashboard()" >Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Post Management</li>
                         </ol>
                     </nav>
                 </div>
@@ -17,13 +17,13 @@
                             <input type="text" class="form-control" placeholder="Name" id="cust_name">
                         </div>
                         <div class="form-group">
-                            <label for="Model">Email</label>
-                            <input type="text" class="form-control" id="cus_email" placeholder="Email">
+                            <label for="Model">User Name</label>
+                            <input type="text" class="form-control" id="username" placeholder="Username">
                         </div>  
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="oName">Mobile Number</label>
                             <input type="text" class="form-control" id="cus_mobileNumber" placeholder="Mobile Number">
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label for="status">Status</label>
                             <select name="" id="cust_status" class="form-control">
@@ -52,14 +52,11 @@
                                 <th scope="col">#</th>
                                 <th scope="col">User</th>
                                 <th scope="col">Image</th>
-                                <th scope="col">Handle</th>
-                                <th scope="col">Platform</th>
-                                <th scope="col" width="25%">Email</th>
-                                <th scope="col">Contact No.</th>
-                                <th scope="col">Followers</th>
-                                <th scope="col">Rank</th>
-                                <th scope="col">Date Joined</th>
-                                <th scope="col">Country</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Post Message</th>
+                                <th scope="col">Total Like</th>
+                                <th scope="col" >Total Comment</th>
+                                <th scope="col">Total Share</th>                                        
                                 <th scope="col" width="10%">status</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -68,6 +65,8 @@
                         </tbody>
                     </table>
                 </div>
+               
+
 
 
         <div class="modal fade right_side" id="change_pass" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -122,50 +121,63 @@
       sPaginationType: "bootstrap",
       "aaSorting": [[ 0, 'desc' ]],   
       columnDefs: [  
-                //     {
-                //     "aTargets": [0],
-                //     "mRender": function(data, type, full){
-                      
-                //         return '<th scope="row"><a href="'+baseUrl+'/administrator/dashboard#customer_detail/'+full['id']+'" onclick="customerDetail('+full['id']+')"><i class="bi bi-chevron-right"></i></a></th> ';
-                //     }
-                // },
                 {
                     "aTargets": [0],
                     "visible":false
                 },
-
+                {
+                    "aTargets": [10],
+                    "visible":false
+                },
                 {
                     "aTargets": [1],
                     "mRender": function(data, type, full){
                         var response ='' ;
-                        if(full['image']!=''){
+                       
+                        if(full['image']!='' || full['image']==undefined ){
                          response='<img src="'+full['image']+'" width="50px" height="50px" /> '+full['name'];
                         }else{
                           response=full['name'];   
                         }
                         return response ;
                     }
-                },
-                {
-                    "aTargets": [3],
-                    "mRender": function(data, type, full){
-                        var response ='' ;
-                        if(full['username']!=''){
-                         response=full['name'];
-                        }else{
-                          response=full['name'];   
-                        }
-                        return response ;
-                    }
                 }
+                // {
+                //     "aTargets": [3],
+                //     "mRender": function(data, type, full){
+                //         var response ='' ;
+                //         if(full['username']!=''){
+                //          response=full['username'];
+                //         }else{
+                //           response=full['username'];   
+                //         }
+                //         return response ;
+                //     }
+                // }
                 ,{
                     "aTargets": [2],
                     "visible":false
                 },
                
-
                 {
-                    "aTargets": [11],
+                            "aTargets": [8],
+                            "mRender" : function(data, type, full){ 
+                              var action='' ;
+                               var className='' ;
+
+                            if(full['status']==1){
+                              className='activeNFor' ;
+                            }else{
+                              className='inactiveNFor' ;
+                            }
+
+                            action+='<span class="'+className+'">'+full['status_']+'</span>';
+
+                            return action ;
+                            }
+                        } ,
+                {
+                    "aTargets": [9],
                      "mRender": function(data, type, full){
                         var response ='<td><div class="align-items-center d-flex">  <div> <label class="switch">' ;
 
@@ -181,8 +193,10 @@
 
                         return response ;
                     }
-                },   {
-                    "aTargets": [12],
+                },   
+                
+                {
+                    "aTargets": [10],
                      "mRender": function(data, type, full){
                         var response ='<td><div class="align-items-center d-flex"> <div class="more_n"> <i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"> <li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')">Delete</a></li> <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#change_pass" onclick="changePassword('+full["id"]+')">Change Password</a></li> </ul> </div> ' ;
 
@@ -196,7 +210,7 @@
                 ],
 
             ajax: {
-                      url: '{!! URL::asset('customer_datatable') !!}',
+                      url: '<?php echo URL::asset('postDatatable'); ?>',
                     },
              columns : [
              
@@ -204,16 +218,14 @@
                         { data: 'name' },
                         { data: 'image' },
                         { data: 'username' },
-                        { data: 'registration_from'},
-                        { data: 'email'},
-                        { data: 'phoneNumber'},
-                        { data: 'followers'},
-                        { data: 'rank_'},
-                        { data: 'created_at'},
-                        { data: 'countryId' },
-                        { data: 'status' },
+                        { data: 'message'},
+                        { data: 'total_like'},
+                        { data: 'total_comment'},  
+                        { data: 'total_share'}, 
+                        { data: 'status_'},
+                        { data: 'status' }
           ],
-
+         
         });
 
       $k('.input-group-addon').click(function() {
@@ -230,7 +242,7 @@ function changeUsrStatus(id){
 
     $.ajax({
         type:"POST",
-        url:baseUrl+'/userManagement/changeStatus',
+        url:baseUrl+'/postStatus',
         data:{"id":id},
         dataType:'json',
     beforeSend:function()
@@ -256,7 +268,7 @@ function resetSearchForm(){
 
     var table = $('#dataTable').DataTable();
     document.getElementById("n_serarchForm").reset();
-  customerManagement();
+  postManagement();
      //$('#dataTable').DataTable().ajax.reload();        
   
 }
@@ -266,24 +278,24 @@ function resetSearchForm(){
   function searchNType(){
       
         var status=$("#cust_status").val();
-        var mobileNumber=$("#cus_mobileNumber").val();
-        var email=$("#cus_email").val();
+        var username=$("#username").val();
+        //var email=$("#cus_email").val();
         var cName=$("#cust_name").val();
    
    
      if(status){
    
-          $('#dataTable').DataTable().column(11).search(status).draw();
+          $('#dataTable').DataTable().column(10).search(status).draw();
     }
    
-     if(mobileNumber){
+    //  if(mobileNumber){
    
-          $('#dataTable').DataTable().column(6).search(mobileNumber).draw();
-    }
+    //       $('#dataTable').DataTable().column(6).search(mobileNumber).draw();
+    // }
 
-     if(email){
+     if(username){
    
-          $('#dataTable').DataTable().column(5).search(email).draw();
+          $('#dataTable').DataTable().column(3).search(username).draw();
     }
 
     if(cName){
@@ -329,12 +341,13 @@ function ConfirmDelete(id) {
 
     }
 
+   
  function updateChangePwd(){
     
         var newPwd = $('#newPassword').val();
         var confirmPwd = $('#confirmPassword').val();
 
-        $('.err').html('');
+        $('.err').html('') ;
         if(newPwd==''){
             $('#err_newPassword').html('Please enter new password') ;
         }else if(confirmPwd==''){
@@ -362,10 +375,10 @@ function ConfirmDelete(id) {
                  ajax_success() ;
 
             if(res.status==1){
-           // $('.modal-backdrop').hide();      
-           // $('#changePassword_')[0].reset();
-            //$('#change_pass').modal('hide');
-           // $('#dataTable').DataTable().ajax.reload();                
+            $('.modal-backdrop').hide();      
+            $('#changePassword_')[0].reset();
+            $('#change_pass').modal('hide');
+            $('#dataTable').DataTable().ajax.reload();                
               statusMesage('password updated successfully','success');
             }else{
                statusMesage('something went wrong','error');
@@ -386,4 +399,4 @@ function changePassword(userId){
 
  }
  
-</script>
+</script><?php /**PATH C:\xampp\htdocs\walkofweb_admin\resources\views/admin/postManagement/index.blade.php ENDPATH**/ ?>

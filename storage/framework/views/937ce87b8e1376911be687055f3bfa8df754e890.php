@@ -120,34 +120,34 @@ $('#letsgo_sidebar').find('li a').click(function(){
 </script>
     <div class="header_logo">
     <a class="navbar-brand" href="#">
-                <img src="{{URL::to('/public/admin')}}/images/lesgo_logo.png?v" class="un-clp-logo" alt="">
-                 <img src="{{URL::to('/public/admin')}}/images/lesgo_logo-sml.png?v" class="clp-logo" alt="">
+                <img src="<?php echo e(URL::to('/public/admin')); ?>/images/lesgo_logo.png?v" class="un-clp-logo" alt="">
+                 <img src="<?php echo e(URL::to('/public/admin')); ?>/images/lesgo_logo-sml.png?v" class="clp-logo" alt="">
             </a>
             </div>
     <div class="sidebarWrapper">   
     <ul class="height_navigation" id="letsgo_sidebar">
-        <li><a href="{{URL::to('/')}}/administrator/dashboard#index" onclick="dashboard();"><i class="ri-dashboard-line"></i><span class="tooltip_nav">Dashboard</span></a></li>
+        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#index" onclick="dashboard();"><i class="ri-dashboard-line"></i><span class="tooltip_nav">Dashboard</span></a></li>
      
-        <li><a href="{{URL::to('/')}}/administrator/dashboard#customer_management" onclick="customerManagement()"><i class="ri-user-settings-line"></i>
+        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#customer_management" onclick="customerManagement()"><i class="ri-user-settings-line"></i>
            <span class="tooltip_nav">
         Customer Management
     </span></a></li>
-    <li><a href="{{URL::to('/')}}/administrator/dashboard#post_management" onclick="postManagement()"><i class="ri-user-settings-line"></i>
+    <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#post_management" onclick="postManagement()"><i class="ri-user-settings-line"></i>
            <span class="tooltip_nav">
         Post Management
     </span></a></li>
-    <li><a href="{{URL::to('/')}}/administrator/dashboard#adsManagement" onclick="adsManagement()"><i class="ri-user-settings-line"></i>
+    <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#adsManagement" onclick="adsManagement()"><i class="ri-user-settings-line"></i>
            <span class="tooltip_nav">
         Ads Management
     </span></a></li>
-    <!-- <li><a href="{{URL::to('/')}}/administrator/dashboard#socialManagement" onclick="socialManagement()"><i class="ri-user-settings-line"></i>
+    <!-- <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#socialManagement" onclick="socialManagement()"><i class="ri-user-settings-line"></i>
            <span class="tooltip_nav">
         Soical Management
     </span></a></li> -->
-        <li><a href="{{URL::to('/')}}/administrator/dashboard#contactSupport" onclick="contactSupport()"><i class="ri-customer-service-2-line"></i>
+        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#contactSupport" onclick="contactSupport()"><i class="ri-customer-service-2-line"></i>
          
     <span class="tooltip_nav">Contact Support</span></a></li>
-        <li><a href="{{URL::to('/')}}/administrator/dashboard#notification" onclick="notificationList()"><i class="ri-notification-3-line"></i>
+        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#notification" onclick="notificationList()"><i class="ri-notification-3-line"></i>
         <span class="too ltip_nav">
  Notification Management
         </span>
@@ -161,12 +161,12 @@ $('#letsgo_sidebar').find('li a').click(function(){
                 <span class="dropdown_tog"><i class="ri-arrow-drop-down-line"></i></span>
                 </a>
                 <ul class="dropdown-menu" id="drop_content12">
-                <li><a href="{{URL::to('/')}}/administrator/dashboard#socialManagement" onclick="socialManagement()"><i class="ri-arrow-right-s-line"></i>
+                <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#socialManagement" onclick="socialManagement()"><i class="ri-arrow-right-s-line"></i>
                      <span class="tooltip_nav">
                     Point  Management
                      </span>
                 </a></li>
-                    <li><a href="{{URL::to('/')}}/administrator/dashboard#usersocialpoint" onclick="userPointList()">
+                    <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#usersocialpoint" onclick="userPointList()">
                      <i class="ri-arrow-right-s-line"></i>
                      <span class="tooltip_nav">
                        User Social Point
@@ -185,13 +185,13 @@ $('#letsgo_sidebar').find('li a').click(function(){
                 <span class="dropdown_tog"><i class="ri-arrow-drop-down-line"></i></span>
                 </a>
                 <ul class="dropdown-menu" id="drop_content">
-                    <li><a href="{{URL::to('/')}}/administrator/dashboard#termCondition" onclick="termCondition()">
+                    <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#termCondition" onclick="termCondition()">
                      <i class="ri-arrow-right-s-line"></i>
                      <span class="tooltip_nav">
                     Terms & Conditions
                      </span>
                 </a></li>
-                    <li><a href="{{URL::to('/')}}/administrator/dashboard#privacyPolicy" onclick="privacyPolicy()">
+                    <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#privacyPolicy" onclick="privacyPolicy()">
                      <i class="ri-arrow-right-s-line"></i>
                      <span class="tooltip_nav">
                        Privacy Policy
@@ -206,27 +206,27 @@ $('#letsgo_sidebar').find('li a').click(function(){
                      <span class="tooltip_nav">Master</span>
                 </span> <span class="dropdown_tog"><i class="ri-arrow-drop-down-line"></i></span></a>
                 <ul class="dropdown-menu" id="drop_content_m"> 
-                <li><a href="{{URL::to('/')}}/administrator/dashboard#country_list" onclick="countryList()">
+                <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#country_list" onclick="countryList()">
                 <i class="ri-arrow-right-s-line"></i>
                 <span class="tooltip_nav">Country</span>
                 </a></li>
 
-                <li><a href="{{URL::to('/')}}/administrator/dashboard#notification_for" onclick="notificationFor()">
+                <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#notification_for" onclick="notificationFor()">
                 <i class="ri-arrow-right-s-line"></i>
                 <span class="tooltip_nav">Notification Type</span>
                 </a></li>   
 
-                <li><a href="{{URL::to('/')}}/administrator/dashboard#rankType" onclick="rankTypeList()">
+                <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#rankType" onclick="rankTypeList()">
                 <i class="ri-arrow-right-s-line"></i>
                 <span class="tooltip_nav">Rank Type</span>
                 </a></li>
 
-                <li><a href="{{URL::to('/')}}/administrator/dashboard#sponser" onclick="sponserList()">
+                <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#sponser" onclick="sponserList()">
                 <i class="ri-arrow-right-s-line"></i>
                 <span class="tooltip_nav">Sponser</span>
                 </a></li>
 
-                 <li><a href="{{URL::to('/')}}/administrator/dashboard#interest" onclick="interestList()">
+                 <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#interest" onclick="interestList()">
                 <i class="ri-arrow-right-s-line"></i>
                 <span class="tooltip_nav">Interest</span>
                 </a></li> 
@@ -260,3 +260,4 @@ $('.social_nav #social_drop_nav').click(function(){
 
 </script>
 
+<?php /**PATH C:\xampp\htdocs\walkofweb_admin\resources\views/includes/admin/sidebar.blade.php ENDPATH**/ ?>

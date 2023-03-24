@@ -4,7 +4,7 @@
                     <nav aria-label="breadcrumb">
                         <h3 class="fs-5 m-0 fw-500">Customer Management</h3>
                         <ol class="breadcrumb">
-                           <li class="breadcrumb-item"><a href="{{URL::to('/')}}/administrator/dashboard#index" onclick="dashboard()" >Home</a></li>
+                           <li class="breadcrumb-item"><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#index" onclick="dashboard()" >Home</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Customer Management</li>
                         </ol>
                     </nav>
@@ -196,7 +196,7 @@
                 ],
 
             ajax: {
-                      url: '{!! URL::asset('customer_datatable') !!}',
+                      url: '<?php echo URL::asset('customer_datatable'); ?>',
                     },
              columns : [
              
@@ -386,4 +386,4 @@ function changePassword(userId){
 
  }
  
-</script>
+</script><?php /**PATH C:\xampp\htdocs\walkofweb_admin\resources\views/admin/customerManagement/index.blade.php ENDPATH**/ ?>

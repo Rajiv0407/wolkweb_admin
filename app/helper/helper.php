@@ -14,12 +14,8 @@ function authguard(){
  // if(empty($token)){
  // 	$token=array();
  // }
- 
-
 }
-
-
-   function sendPasswordToEmail(Array $data){
+   function sendPasswordToEmail(Array $data){   
 
        $data = array(
         'email' => $data['email'],
@@ -57,8 +53,7 @@ function userfollowers($userId){
 
 
 function createdAt($created_at)
-    {
-        
+    { 
         $created_at = str_replace([' seconds', ' second'], ' sec', $created_at);
         $created_at = str_replace([' minutes', ' minute'], ' min', $created_at);
         $created_at = str_replace([' hours', ' hour'], ' h', $created_at);
