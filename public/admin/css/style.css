@@ -1889,10 +1889,10 @@ color: #ff0000;
         width:200px;
       }
       .body_tble tbody tr td:nth-child(2) { object-fit:cover;  }
-       .cms_nav > a, .master_nav > a {    justify-content: space-between;}
-      .cms_nav a span:first-child, .master_nav a span:first-child{ gap: 10px;
-    display: flex;
- }
+      .social_nav > a, .cms_nav > a, .master_nav > a {    justify-content: space-between;}
+      .social_nav a span:first-child, .cms_nav a span:first-child, .master_nav a span:first-child{ gap: 10px;
+    display: flex;      
+ }  
 /* .cms_nav a span, .master_nav a span{  transition: all .3s;  }*/
  /*.cms_nav a span:last-child i{  font-size:18px; }*/
 .show_submenu span.dropdown_tog {

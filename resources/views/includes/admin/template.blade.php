@@ -17,7 +17,7 @@
      <script src="{{URL::to('/public/admin')}}/js/jquery.dataTables.min.js?v={{ time() }}"></script> 
     <link  href="{{URL::to('/public/admin')}}/css/jquery.dataTables.min.css?v={{ time() }}" rel="stylesheet"> 
     <link rel="stylesheet" type="text/css" href="{{URL::to('/public/admin')}}/css/style.css?v={{ time() }}">
-
+    <link rel="icon" href="{{URL::to('/public/admin')}}/images/fav.png?v={{ time() }}" >
     <link rel="stylesheet" type="text/css" href="{{URL::to('/public/admin')}}/css/jquery.notyfy.css?v={{ time() }}">
     <link rel="stylesheet" type="text/css" href="{{URL::to('/public/admin')}}/css/notyfy.theme.default.css?v={{ time() }}">
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">

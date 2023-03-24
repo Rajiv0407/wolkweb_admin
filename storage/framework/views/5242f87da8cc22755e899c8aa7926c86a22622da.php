@@ -4,7 +4,7 @@
                     <nav aria-label="breadcrumb">
                         <h3 class="fs-5 m-0 fw-500">Customer Management</h3>
                         <ol class="breadcrumb">
-                           <li class="breadcrumb-item"><a href="{{URL::to('/')}}/administrator/dashboard#index" onclick="dashboard()" >Home</a></li>
+                           <li class="breadcrumb-item"><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#index" onclick="dashboard()" >Home</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Customer Management</li>
                         </ol>
                     </nav>
@@ -51,9 +51,9 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">User</th>
-                                <th scope="col">Image</th>
+                                <th scope="col">User</th>
                                 <th scope="col">Handle</th>
-                                <th scope="col">Platform</th>
+                                <th scope="col">Plateform</th>
                                 <th scope="col" width="25%">Email</th>
                                 <th scope="col">Contact No.</th>
                                 <th scope="col">Followers</th>
@@ -122,54 +122,34 @@
       sPaginationType: "bootstrap",
       "aaSorting": [[ 0, 'desc' ]],   
       columnDefs: [  
-                //     {
-                //     "aTargets": [0],
-                //     "mRender": function(data, type, full){
-                      
-                //         return '<th scope="row"><a href="'+baseUrl+'/administrator/dashboard#customer_detail/'+full['id']+'" onclick="customerDetail('+full['id']+')"><i class="bi bi-chevron-right"></i></a></th> ';
-                //     }
-                // },
-                {
+                    {
                     "aTargets": [0],
-                    "visible":false
+                    "mRender": function(data, type, full){
+                      
+                        return '<th scope="row"><a href="'+baseUrl+'/administrator/dashboard#customer_detail/'+full['id']+'" onclick="customerDetail('+full['id']+')"><i class="bi bi-chevron-right"></i></a></th> ';
+                    }
                 },
 
-                {
-                    "aTargets": [1],
-                    "mRender": function(data, type, full){
-                        var response ='' ;
-                        if(full['image']!=''){
-                         response='<img src="'+full['image']+'" width="50px" height="50px" /> '+full['name'];
-                        }else{
-                          response=full['name'];   
-                        }
-                        return response ;
-                    }
-                },
-                {
-                    "aTargets": [3],
-                    "mRender": function(data, type, full){
-                        var response ='' ;
-                        if(full['username']!=''){
-                         response=full['name'];
-                        }else{
-                          response=full['name'];   
-                        }
-                        return response ;
-                    }
-                }
-                ,{
-                    "aTargets": [2],
-                    "visible":false
-                },
+                // {
+                //     "aTargets": [4],
+                //     "mRender": function(data, type, full){
+                //         var response ='' ;
+                        
+                //         return response ;
+                //     }
+                // }
+                // ,{
+                //     "aTargets": [5],
+                //     "visible":false
+                // },
                
 
                 {
                     "aTargets": [11],
                      "mRender": function(data, type, full){
-                        var response ='<td><div class="align-items-center d-flex">  <div> <label class="switch">' ;
+                        var response ='<td><div class="align-items-center d-flex"> <div class="more_n"> <i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"> <li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')">Delete</a></li> <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#change_pass" onclick="changePassword('+full["id"]+')">Change Password</a></li> </ul> </div> <div> <label class="switch">' ;
 
-                        if(full['status']=='1'){
+                        if(full['userStatus']=='1'){
                              response +='<input type="checkbox" onclick="changeUsrStatus('+full['id']+')" checked>' ;
                             
                         }else{
@@ -181,22 +161,11 @@
 
                         return response ;
                     }
-                },   {
-                    "aTargets": [12],
-                     "mRender": function(data, type, full){
-                        var response ='<td><div class="align-items-center d-flex"> <div class="more_n"> <i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"> <li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')">Delete</a></li> <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#change_pass" onclick="changePassword('+full["id"]+')">Change Password</a></li> </ul> </div> ' ;
-
-                        
-
-                        response+=' </div> </td>'  ;
-
-                        return response ;
-                    }
                 }
                 ],
 
             ajax: {
-                      url: '{!! URL::asset('customer_datatable') !!}',
+                      url: '<?php echo URL::asset('customer_datatable'); ?>',
                     },
              columns : [
              
@@ -278,12 +247,12 @@ function resetSearchForm(){
    
      if(mobileNumber){
    
-          $('#dataTable').DataTable().column(6).search(mobileNumber).draw();
+          $('#dataTable').DataTable().column(2).search(mobileNumber).draw();
     }
 
      if(email){
    
-          $('#dataTable').DataTable().column(5).search(email).draw();
+          $('#dataTable').DataTable().column(3).search(email).draw();
     }
 
     if(cName){
@@ -319,9 +288,9 @@ function ConfirmDelete(id) {
         if(res.status==1){
         //carManagement();
           $('#dataTable').DataTable().ajax.reload();                
-          statusMesage('Deleted successfully','success');
+          statusMesage('deleted successfully','success');
         }else{
-           statusMesage('Something went wrong','error');
+           statusMesage('something went wrong','error');
         }
         }
 
@@ -329,12 +298,13 @@ function ConfirmDelete(id) {
 
     }
 
+   
  function updateChangePwd(){
     
         var newPwd = $('#newPassword').val();
         var confirmPwd = $('#confirmPassword').val();
 
-        $('.err').html('');
+        $('.err').html('') ;
         if(newPwd==''){
             $('#err_newPassword').html('Please enter new password') ;
         }else if(confirmPwd==''){
@@ -362,10 +332,10 @@ function ConfirmDelete(id) {
                  ajax_success() ;
 
             if(res.status==1){
-           // $('.modal-backdrop').hide();      
-           // $('#changePassword_')[0].reset();
-            //$('#change_pass').modal('hide');
-           // $('#dataTable').DataTable().ajax.reload();                
+            $('.modal-backdrop').hide();      
+            $('#changePassword_')[0].reset();
+            $('#change_pass').modal('hide');
+            $('#dataTable').DataTable().ajax.reload();                
               statusMesage('password updated successfully','success');
             }else{
                statusMesage('something went wrong','error');
@@ -386,4 +356,4 @@ function changePassword(userId){
 
  }
  
-</script>
+</script><?php /**PATH D:\xampp\htdocs\walkofwebapi\resources\views/admin/customerManagement/index.blade.php ENDPATH**/ ?>
