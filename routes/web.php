@@ -36,14 +36,20 @@ Route::get('insta/callback',[FacebookSocialiteController::class,'instagramProvid
 
 
 Route::get('/facebookLogin',[FacebookSocialiteController::class,'fbLogin']);
-Route::get('/fbCallback',[FacebookSocialiteController::class,'fbResponse']);
+
 Route::get('/fbBasicInfo',[FacebookSocialiteController::class,'fbProfileDataResponse']);
 
 //facebook page account and intagram bussiness account 
-Route::get('/fbConnect',[FacebookSocialiteController::class,'fb_connect']);
+
 Route::get('fbSuccess',[FacebookSocialiteController::class,'fbSuccessResp'])->name('fbSuccess');;
 Route::get('fbError',[FacebookSocialiteController::class,'fb_error'])->name('fbError');;
 
+//working
+Route::get('/fbConnect',[FacebookSocialiteController::class,'fb_connect']);
+Route::get('/fbCallback',[FacebookSocialiteController::class,'fbResponse']);
+
+
+Route::get('/userList',[FacebookSocialiteController::class,'user_list']);
 
 Route::get('swagger', function () {
 	

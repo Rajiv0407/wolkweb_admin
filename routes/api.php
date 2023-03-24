@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\v1\UserController;
 use App\Http\Controllers\api\v1\PostController;
+use App\Http\Controllers\api\v1\SocialController;
 use App\Http\Middleware\EnsureTokenIsValid;
 use App\Http\Middleware\Cors;
 /*
@@ -24,9 +25,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/apiDetail',function(Request $request){
     return View('service_info');
  }); 
-
+ 
 
 Route::group(['prefix' => 'v1'], function () {
+
+ Route::post('/socialPointCalculation',[SocialController::class, 'social_point_calculation']);
 
  Route::get('/test',[UserController::class, 'testData']);
  Route::post('/signup',[UserController::class, 'register']);

@@ -59,7 +59,7 @@ class UserController extends Controller
                 
           // new
 
-          $country_code = DB::table('pe_countries')->select('api_code')->where('i_id', $request->countryId)->first();
+          $country_code = DB::table('pe_countries')->select('api_code')->where('id', $request->countryId)->first();
           $request['country_code'] = (!empty($country_code))?$country_code->api_code:'' ;
           $request['name'] = $request->name;
           $request['registration_from'] = $request->deviceType ;
@@ -256,13 +256,21 @@ class UserController extends Controller
     }
 
     public function advertisement_listing(Request $request){
+      
       $data=Advertisement::all()->where('status',1) ;
       return $this->successResponse($data,'Sponser list',200);
     }
 
     public function notificationsList(Request $request){
-        $data=Notifications::all();
-        return $this->successResponse($data,'Notifications list',200);
+
+        $userId=authguard()->id;
+        $filePath = config('constants.user_image') ; 
+        $starImg = config('constants.star_image');       
+        $notificationList='select n.id,n.title,n.message,n.isAccept,case when concat(u.image) is null then "" else concat("'.$filePath.'",u.image) end as image,concat("'.$starImg.'",rt.star_img) as starImg from notifications as n left join users as u on u.id=n.userId left join rank_types as rt on rt.id=u.rank_type where n.isAccept!=2 ' ;
+        //and n.userId='.$userId 
+         $notificationList_ = DB::Select($notificationList);
+        
+        return $this->successResponse($notificationList_,'Notifications list',200);
     }
 
     public function udpateNotifications(Request $request){
@@ -754,7 +762,7 @@ public function resetPassword(Request $request){
       $userInfo = DB::table('users')->select('users.id','name',$image,$cover_image,'username',$instaUrsername,$fbUrsername,$tiktokUrsername,'rank_type','rank_',$bio,'rt.rank_title',DB::raw('concat("'.$starImg.'",rt.star_img) as starImg'),'pv_type',$profileVideo)
         ->join('rank_types as rt','rt.id','=','users.rank_type')
         ->where('users.id',$userId)->where('users.isTrash',0)->first();
-        return $this->successResponse($userInfo,'User List',200);
+        //return $this->successResponse($userInfo,'User List',200);
        //print_r(DB::getQueryLog());
       $totalFollowers = userfollowers($userId);
       // print_r($totalFollowers);
@@ -1019,13 +1027,15 @@ public function resetPassword(Request $request){
  }
 
  public function social_connect(Request $request){
-    // $response = 
+   
     //   social connect
-
     // >> Tiktok , login url
     // >> Facebook,login url
     // >> Instagram,login url
-    $soicalInfo = DB::table('social_media')->select('id','title','login_url')->where('social_connect',1)->get();
+    $userId = authguard()->id ;
+    $encryptionKey = DB::table('users')->select('encryption')->where('id',$userId)->first();
+    $encryption=$encryptionKey->encryption ;
+    $soicalInfo = DB::table('social_media')->select('id','title',DB::raw('concat(login_url,"/","'.$encryption.'") as login_url'))->where('social_connect',1)->get();
     return $this->successResponse($soicalInfo,'Social Connect',200);
  }
 

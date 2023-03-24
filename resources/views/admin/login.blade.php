@@ -3,7 +3,7 @@
    <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Lesgo</title>
+      <title><?php echo sitetitle(); ?></title>
       <link rel="stylesheet" type="text/css" href="{{URL::to('/public/admin')}}/css/style.css">
       <link rel="stylesheet" type="text/css" href="{{URL::to('/public/admin')}}/css/bootstrap.min.css">
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
@@ -12,13 +12,9 @@
    <body>
     
 
-    <section class="lg_login__box">
-      
-
+    <section class="lg_login__box"> 
       <div class="container-fluid">
-        
         <div class="row">
-        
         <div class="col-md-7 p-0">
           
           <div class="lg_login_img">
