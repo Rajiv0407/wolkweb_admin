@@ -5,7 +5,7 @@
     <div class="form modal-form">
         <div class="form-group">
             <label for="Manufacture">Title</label>
-             <input type="text" name="editSTitle" id="editSTitle"  value="<?php echo isset($countryInfo->v_title)?$countryInfo->v_title:'' ; ?>" class="form-control" placeholder="Title">
+             <input type="text" name="editSTitle" id="editSTitle"  value="<?php echo isset($countryInfo->title)?$countryInfo->title:'' ; ?>" class="form-control" placeholder="Title">
              <span id="err_editSTitle" class="err" style="color:red"></span>
         </div>
     </div>

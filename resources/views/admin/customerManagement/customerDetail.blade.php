@@ -2,23 +2,20 @@
 
 $userId=isset($userInfo->id)?$userInfo->id:'' ;
 $name = isset($userInfo->name)?$userInfo->name:'' ;
-$mobileNumber = isset($userInfo->mobile_Number)?$userInfo->mobile_Number:'' ;
-$mobileCode = isset($userInfo->mobile_Code)?$userInfo->mobile_Code:'' ;
+$mobileNumber = isset($userInfo->phoneNumber)?$userInfo->phoneNumber:'' ;
 $email = isset($userInfo->email)?$userInfo->email:'' ;
-$country = isset($userInfo->Country)?$userInfo->Country:'' ;
-$state = isset($userInfo->State)?$userInfo->State:'' ;
-$city = isset($userInfo->City)?$userInfo->City:'' ;
-$zipcode = isset($userInfo->Zipcode)?$userInfo->Zipcode:'' ;
-$houseNumber = isset($userInfo->House_Number)?$userInfo->House_Number:'' ;
-$landMark = isset($userInfo->LandMark)?$userInfo->LandMark:'' ;
-$address=userAddress($landMark,$houseNumber,$city,$state,$country,$zipcode);
-$appImg = isset($userInfo->App_Image)?$userInfo->App_Image:'' ;
-$imgPath = url('/').'/public/storage/profileImage/thumb/';
+$country = isset($userInfo->country)?$userInfo->country:'' ;
+$point = isset($userInfo->rank_)?$userInfo->rank_:'' ;
+$followers = isset($userInfo->followers)?$userInfo->followers:'' ;
+$status = isset($userInfo->status)?$userInfo->status:'' ;
+
+$appImg = isset($userInfo->image)?$userInfo->image:'' ;
+$imgPath = url('/').'/public/admin/images/avtar_i.png';
 
 if($appImg!=''){
-    $imgPath_=$imgPath.$appImg ;
+    $imgPath_=$appImg ;
 }else{
-    $imgPath_ = '' ;
+    $imgPath_ = $imgPath ;
 }
      
  ?>
@@ -37,19 +34,22 @@ if($appImg!=''){
                 <div class="carDetail__wrapper">
                     <div class="cd_if_1 filterWrapper">
                         <div>
-                           @if($appImg!=''):
+                        @if($appImg!=''):
                             <img src="{{$imgPath_}}" alt="">
                             @else
                             <img src="{{URL::to('/')}}/public/admin/images/avtar_i.png" alt="">
-                            @endif
+                            @endif 
                         </div>
                         <div class="ownerDetail">
                             <div class="c_D">
-                                <h3><?php echo isset($userInfo->name)?$userInfo->name:'' ; ?></h3>
-                                
-                                <p><span>Mobile Number</span> : <span><?php echo $mobileCode." ".$mobileNumber ; ?></span></p>
+                                <h3><?php echo isset($userInfo->name)?$userInfo->name:'' ; ?></h3> 
                                 <p><span>Email ID</span> : <span><?php echo $email ; ?></span></p>
-                                <p><span>Address:</span> : <span><?php echo $address ; ?></span></p>
+                                <p><span>Mobile Number</span> : <span><?php echo $mobileNumber ; ?></span></p>
+                                <p><span>Country:</span> : <span><?php echo $country ;  ?></span></p>
+                                <p><span>Point:</span> : <span><?php echo $point ;  ?></span></p>
+                                <p><span>Followers:</span> : <span><?php echo $followers ;  ?></span></p>
+                                <p><span>Status:</span> : <span><?php echo $status ;  ?></span></p>
+                                <p><span>Interest:</span> : <span><?php echo $userInterest ;  ?></span></p>
                             </div>
                         </div>
                     </div>
@@ -57,12 +57,30 @@ if($appImg!=''){
                 <div class="c_Doc c_dtl">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="Details-tab" data-bs-toggle="tab" data-bs-target="#Details" type="button" role="tab" aria-controls="Details" aria-selected="true" onclick="carRentBooking('{{$userId}}',2,'Details')">Car Booking</button>
+                            <button class="nav-link active" id="Details-tab" data-bs-toggle="tab" data-bs-target="#Details" type="button" role="tab" aria-controls="Details" aria-selected="true" onclick="userHostListing('{{$userId}}',2,'Details')">Host</button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link " id="Advertisement-tab" data-bs-toggle="tab" data-bs-target="#Advertisement" type="button" role="tab" aria-controls="Advertisement" aria-selected="true" onclick="userHostListing('{{$userId}}',3,'Advertisement')" >Advertisement</button>
+                        </li>   
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link " id="followers-tab" data-bs-toggle="tab" data-bs-target="#followers" type="button" role="tab" aria-controls="followers" aria-selected="true" onclick="userHostListing('{{$userId}}',1,'followers')" >Followers</button>
+                        </li>  
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link " id="follows-tab" data-bs-toggle="tab" data-bs-target="#follows" type="button" role="tab" aria-controls="follows" aria-selected="true" onclick="userHostListing('{{$userId}}',4,'follows')" >Follows</button>
+                        </li>                       
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="Details" role="tabpanel" aria-labelledby="Details-tab">
                             
+                        </div>
+                        <div class="tab-pane fade show" id="Advertisement" role="tabpanel" aria-labelledby="Advertisement-tab">
+                            Advertisement
+                        </div>
+                        <div class="tab-pane fade show" id="followers" role="tabpanel" aria-labelledby="followers-tab">
+                            Followers
+                        </div>
+                        <div class="tab-pane fade show" id="follows" role="tabpanel" aria-labelledby="follows-tab">
+                            Follows
                         </div>
                     </div>
                 </div>
@@ -85,6 +103,7 @@ if($appImg!=''){
 <script type="text/javascript">
     $(document).ready(function(){
         var userId ='<?php echo $userId ; ?>' ;
-        carRentBooking(userId,2,'Details');
+      
+        userHostListing(userId,2,'Details');
     });
 </script>

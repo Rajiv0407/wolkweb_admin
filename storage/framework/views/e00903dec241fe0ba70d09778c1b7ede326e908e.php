@@ -20,7 +20,7 @@
     <link rel="icon" href="<?php echo e(URL::to('/public/admin')); ?>/images/fav.png?v=<?php echo e(time()); ?>" >
     <link rel="stylesheet" type="text/css" href="<?php echo e(URL::to('/public/admin')); ?>/css/jquery.notyfy.css?v=<?php echo e(time()); ?>">
     <link rel="stylesheet" type="text/css" href="<?php echo e(URL::to('/public/admin')); ?>/css/notyfy.theme.default.css?v=<?php echo e(time()); ?>">
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
 
     <script src="<?php echo e(URL::to('/public/admin')); ?>/js/highcharts.js"></script>
     <script src="<?php echo e(URL::to('/public/admin')); ?>/js/data.js"></script>

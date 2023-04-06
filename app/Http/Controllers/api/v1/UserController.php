@@ -22,7 +22,7 @@ use Hash;
 use DB ;
 use Image ;
 use File ;
-
+use Mail ;
 
 class UserController extends Controller
 {
@@ -64,7 +64,7 @@ class UserController extends Controller
           $request['name'] = $request->name;
           $request['registration_from'] = $request->deviceType ;
           $request['rank_type'] = rand(1,5);
-          $request['rank_'] = rand(1,30);
+          $request['rank_'] = rand(1,30);     
           $request['username'] ='' ; //$userName;
     			$request['password']=Hash::make($request['password']);
     			$request['remember_token'] = Str::random(10);
@@ -130,7 +130,7 @@ class UserController extends Controller
           }
 
       
-        $user = User::where($param)->where('user_type', '!=' , 1)->first();
+        $user = User::where($param)->first();
 
          if ($user) {
             if (Hash::check($request->password, $user->password)) {
@@ -255,15 +255,11 @@ class UserController extends Controller
       $img = Image::make($path)->resize($width, $height)->save($path);
     }
 
-    public function advertisement_listing(Request $request){
-      
-      $data=Advertisement::all()->where('status',1) ;
-      return $this->successResponse($data,'Sponser list',200);
-    }
 
     public function notificationsList(Request $request){
-
-        $userId=authguard()->id;
+        //$data=Notifications::all();
+       // return $this->successResponse($data,'Notifications list',200);
+         $userId=authguard()->id;
         $filePath = config('constants.user_image') ; 
         $starImg = config('constants.star_image');       
         $notificationList='select n.id,n.title,n.message,n.isAccept,case when concat(u.image) is null then "" else concat("'.$filePath.'",u.image) end as image,concat("'.$starImg.'",rt.star_img) as starImg from notifications as n left join users as u on u.id=n.userId left join rank_types as rt on rt.id=u.rank_type where n.isAccept!=2 ' ;
@@ -332,14 +328,12 @@ class UserController extends Controller
           'name' => 'required',
           'bio' => 'required' ,
           'location' => 'required',
-          'dob' => 'required|date_format:Y-m-d'
+          'dob' => 'required',
+          'countryId'=>'required'
           ]);
       }
-
-
-
-
-
+//|date_format:Y-m-d
+                                    
       if($validator->fails())
         {
         return response(['errors'=>$validator->errors()->first()], 422);
@@ -353,11 +347,14 @@ class UserController extends Controller
          User::where('id',$userId)->update(['phoneNumber'=>$request->phoneNumber]);
       }else if($type==4){
         User::where('id',$userId)->update(['email'=>$request->email]);
-      }else if($type==5){
-        User::where('id',$userId)->update(['name'=>$request->name ,'bio'=>$request->bio ,'location'=>$request->location ,'dob'=>$request->dob ]);
+      }else if($type==5){       
+        $date_=(date('Y-m-d', strtotime($request->dob)));
+        User::where('id',$userId)->update(['name'=>$request->name ,'bio'=>$request->bio ,'location'=>$request->location ,'dob'=>$date_,'countryId'=>$request->countryId,'instagram_username'=>$request->insta_username ,'facebook_username'=>$request->fb_username ,'tiktok_username'=>$request->tiktok_username  ]);
       }
-        
-       return $this->successResponse([],'Successfull updated user account',200);
+      
+      $userDetail = DB::table('users')->select('id','name','email','phoneNumber','bio','location','countryId',DB::raw('case when dob is null then "" else Date_format(dob,"%d %b %Y") end as dob'))->where('id',$userId)->first();
+      return $this->successResponse($userDetail,'Successfull updated user account',200);
+      
 
     }
 
@@ -650,7 +647,7 @@ public function resetPassword(Request $request){
       }
             
       $countryCode = DB::raw('case when country_code is null then "" else country_code end as country_code');
-      $list=DB::select("select id,name,rank_,rank_type,case when image is null then '' else concat('".$filePath."',image) end as image,countryId,$countryCode from users where id!=".$userId." and isTrash=0 and user_type!=1 and isFeatured=0".$filter.$searchKeyword);
+      $list=DB::select("select id,name,rank_,rank_type,case when image is null then '' else concat('".$filePath."',image) end as image,countryId,$countryCode from users where id!=".$userId." and isTrash=0 and isFeatured=0".$filter.$searchKeyword);
 
       $image = DB::raw('case when concat("'.$filePath.'",image) is null then "" else concat("'.$filePath.'",image) end as image') ;
       $featureUser = DB::table('users')->select('id','name','rank_','rank_type',$image)->Where('isFeatured',1)->where('isTrash',0)->get() ;
@@ -759,11 +756,12 @@ public function resetPassword(Request $request){
       $coverImg = config('constants.cover_image');
       $cover_image = DB::raw('case when concat(cover_image) is null then "" else concat("'.$coverImg.'",cover_image) end as cover_image') ;
      //DB::enableQueryLog();
-      $userInfo = DB::table('users')->select('users.id','name',$image,$cover_image,'username',$instaUrsername,$fbUrsername,$tiktokUrsername,'rank_type','rank_',$bio,'rt.rank_title',DB::raw('concat("'.$starImg.'",rt.star_img) as starImg'),'pv_type',$profileVideo)
-        ->join('rank_types as rt','rt.id','=','users.rank_type')
+      $userInfo = DB::table('users')->select('users.id','email','location','countryId','phoneNumber',DB::raw('case when dob is null then "" else Date_Format(dob,"%d %b %Y") end as dob'),'name',$image,$cover_image,'username',$instaUrsername,$fbUrsername,$tiktokUrsername,'rank_type','rank_',$bio,'rt.rank_title',DB::raw('concat("'.$starImg.'",rt.star_img) as starImg'),'pv_type',$profileVideo)
+        ->leftJoin('rank_types as rt','rt.id','=','users.rank_type')
         ->where('users.id',$userId)->where('users.isTrash',0)->first();
-        //return $this->successResponse($userInfo,'User List',200);
-       //print_r(DB::getQueryLog());
+        
+      // print_r(DB::getQueryLog());
+       //return $this->successResponse($userInfo,'User List',200);
       $totalFollowers = userfollowers($userId);
       // print_r($totalFollowers);
       // exit ;
@@ -774,8 +772,9 @@ public function resetPassword(Request $request){
       }
      
       
-      $about = DB::select("select ui.id,ui.title from user_interests_map as uim inner join user_interests as ui on ui.id=uim.interest_id where uim.user_id=".$userId);
-      $userInfo->about['interest'] = $about ;
+      $about = DB::select("select ui.id,concat('#',ui.title) as title from user_interests_map as uim inner join user_interests as ui on ui.id=uim.interest_id where uim.user_id=".$userId);
+      //$userInfo->about['interest'] = $about ;
+      $userInfo->interest = $about ;
       $userInfo->increase_rank = 36 ;
       $userAdvertisement = User::advertisement();
       $userInfo->advertisement = $userAdvertisement ;
@@ -866,6 +865,7 @@ public function resetPassword(Request $request){
 
    public function accept_following(Request $request){
       $validator = Validator::make($request->all(), [
+      'type' => 'required',
       'following_userId' => 'required'
      ]);
 
@@ -874,20 +874,29 @@ public function resetPassword(Request $request){
           return $this->errorResponse($validator->errors()->first(), 401);
       }
 
+      $type= $request->type ;
       $userId = authguard()->id ;
-      $checkFollowing=DB::table('user_follows')->where('followed_user_id',$request->following_userId)->where('follower_user_id',$userId)->update(['isAccept'=>1]);
+      if($type==4){
+        $checkFollowing=DB::table('user_follows')->where('followed_user_id',$userId)->where('follower_user_id',$request->following_userId)->update(['isAccept'=>$type]);
+      }else{
+        $checkFollowing=DB::table('user_follows')->where('followed_user_id',$request->following_userId)->where('follower_user_id',$userId)->update(['isAccept'=>$type]);
+      }
+      
 
-      return $this->successResponse([],'Successfull accepted following request',200);
+      return $this->successResponse([],'Successfull updated request',200);
    }
 
    public function following_list(Request $request){
 
        $userId = authguard()->id ;
        $userImgPath = config('constants.user_image');
+       $starImg = config('constants.star_image');
        $bio = DB::raw('case when bio is null then "" else bio end as bio');
        $image = DB::raw('case when image is null then "" else concat("'.$userImgPath.'",image) end as image');
-       $followingList = DB::table('user_follows')->select('users.id','name','username',$bio,$image,'rank_type','rank_',DB::raw('case when isAccept=1 then 1 else 0 end as isFollowing'))->where('followed_user_id',$userId)      
-       ->join('users', 'users.id', '=', 'user_follows.follower_user_id')     
+       $followingList = DB::table('user_follows')->select('users.id','name','username',$bio,$image,'rank_type','rank_',DB::raw('case when isAccept=1 then 1 else 0 end as isFollowing'),DB::raw('concat("'.$starImg.'",rt.star_img) as starImg'))->where('followed_user_id',$userId)      
+       ->join('users', 'users.id', '=', 'user_follows.follower_user_id')   
+       ->leftJoin('rank_types as rt','rt.id','=','users.rank_type')  
+       ->where('isAccept','!=',4) 
        ->get();
        
         return $this->successResponse($followingList,'Following List',200);
@@ -898,10 +907,12 @@ public function resetPassword(Request $request){
 
        $userId = authguard()->id ;
        $userImgPath = config('constants.user_image');
+       $starImg = config('constants.star_image');
        $bio = DB::raw('case when bio is null then "" else bio end as bio');
        $image = DB::raw('case when image is null then "" else concat("'.$userImgPath.'",image) end as image');
-       $followingList = DB::table('user_follows')->select('users.id','name','username',$bio,$image,'rank_type','rank_')->where('follower_user_id',$userId)      
-       ->join('users', 'users.id', '=', 'user_follows.follower_user_id') 
+       $followingList = DB::table('user_follows')->select('users.id','name','username',$bio,$image,'rank_type','rank_',DB::raw('concat("'.$starImg.'",rt.star_img) as starImg'))->where('follower_user_id',$userId)      
+       ->join('users', 'users.id', '=', 'user_follows.followed_user_id')
+       ->leftJoin('rank_types as rt','rt.id','=','users.rank_type') 
        ->where('isAccept',1)    
        ->get();
        //,DB::raw('case when isAccept=1 then 1 else 0 end as isFollowing')
@@ -913,10 +924,12 @@ public function resetPassword(Request $request){
 
        $userId = authguard()->id ;
        $userImgPath = config('constants.user_image');
+       $starImg = config('constants.star_image');
        $bio = DB::raw('case when bio is null then "" else bio end as bio');
        $image = DB::raw('case when image is null then "" else concat("'.$userImgPath.'",image) end as image');
-       $followingList = DB::table('user_follows')->select('users.id','name','username',$bio,$image,'rank_type','rank_','isAccept')->where('follower_user_id',$userId)      
-       ->join('users', 'users.id', '=', 'user_follows.follower_user_id')
+       $followingList = DB::table('user_follows')->select('users.id','name','username',$bio,$image,'rank_type','rank_','isAccept',DB::raw('concat("'.$starImg.'",rt.star_img) as starImg'))->where('follower_user_id',$userId)      
+       ->join('users', 'users.id', '=', 'user_follows.followed_user_id')
+        ->leftJoin('rank_types as rt','rt.id','=','users.rank_type') 
        ->where('isAccept',0)     
        ->get();
        
@@ -1010,25 +1023,28 @@ public function resetPassword(Request $request){
  public function sponser_detail(Request $request){
 
    $validator = Validator::make($request->all(), [
-      'sponserId' => 'required'
+      'advertisementId' => 'required'
      ]);
 
     
     if($validator->fails()){       
       return $this->errorResponse($validator->errors()->first(), 401);
     }
+    $sponserImg = config('constants.sponser_image');
+    $advImg = config('constants.advertisement_image');
 
-    $sponserId = DB::table("advertisements")->select(DB::raw('advertisements.id as advertiserId'),'sponser.name','advertisements.title',DB::raw('concat(Date_Format(advertisements.start_date,"%d %M %Y")," to ",Date_Format(advertisements.end_date,"%d %M %Y")) as duration'),'advertisements.introduction','advertisements.objectives',
-      'advertisements.target_audience','advertisements.media_mix','advertisements.conclusion','advertisements.media_sample')->where('sponser_id',$request->sponserId)
+    $advertisementDetail = DB::table("advertisements")->select(DB::raw('advertisements.id as advertiserId'),DB::raw('case when sponser.image is null then "" else concat("'.$sponserImg.'",sponser.image) end as sponserImg'),DB::raw('case when advertisements.image is null then 0 else concat("'.$advImg.'",advertisements.image) end as advImage'),'sponser.name','advertisements.title',DB::raw('concat(Date_Format(advertisements.start_date,"%d %M %Y")," to ",Date_Format(advertisements.end_date,"%d %M %Y")) as duration'),'advertisements.introduction','advertisements.objectives',
+      'advertisements.target_audience','advertisements.media_mix','advertisements.conclusion','advertisements.media_sample')->where('sponser_id',$request->advertisementId)
    ->join('sponser','sponser.id','=','advertisements.sponser_id')
     ->first();
 
-    return $this->successResponse($sponserId,'Sponser Detail',200);
+    return $this->successResponse($advertisementDetail,'Advertisement Detail',200);
  }
 
  public function social_connect(Request $request){
-   
+    // $response = 
     //   social connect
+
     // >> Tiktok , login url
     // >> Facebook,login url
     // >> Instagram,login url
@@ -1037,6 +1053,7 @@ public function resetPassword(Request $request){
     $encryption=$encryptionKey->encryption ;
     $soicalInfo = DB::table('social_media')->select('id','title',DB::raw('concat(login_url,"/","'.$encryption.'") as login_url'))->where('social_connect',1)->get();
     return $this->successResponse($soicalInfo,'Social Connect',200);
+    
  }
 
  public function update_encryption(){
@@ -1235,7 +1252,7 @@ public function resetPassword(Request $request){
         
        
         $imgPath='app/public/cover_image/' ;
-       
+        $this->removeCoverImage($request);
      
         $filenamewithextension = $request->file('coverImage')->getClientOriginalName();
   
@@ -1251,19 +1268,20 @@ public function resetPassword(Request $request){
        
         //Upload File
         $request->file('coverImage')->storeAs('public/cover_image', $filenametostore);
-        $request->file('coverImage')->storeAs('public/cover_image/thumb', $smallthumbnail);
+      //  $request->file('coverImage')->storeAs('public/cover_image/thumb', $smallthumbnail);
        
          
         //create small thumbnail
-        $smallthumbnailpath = public_path('storage/cover_image/thumb/'.$smallthumbnail);
-        $this->createThumbnail($smallthumbnailpath, 100, 100);
+       // $smallthumbnailpath = public_path('storage/cover_image/thumb/'.$smallthumbnail);
+       // $this->createThumbnail($smallthumbnailpath, 100, 100);
+      
         $userId = authguard()->id ;
            $update=array(           
             'cover_image'=>$filenametostore
            );
         User::where('id',$userId)->update($update);
 
-        $file_path = url('/').'/public/storage/cover_image/'.$filenametostore;
+        $file_path = config('constants.cover_image').$filenametostore;
         return $this->successResponse(['image_url'=>$file_path],'successfull update user cover image',200);
 
         }else{
@@ -1279,22 +1297,15 @@ public function resetPassword(Request $request){
     
    }
 
-   public function sendContactUsEmail(Request $request){ 
-    
+   public function sendContactUsEmail(Request $request){
+   
        $name = $request->name ;
        $phoneNumber = $request->phone;
        $email=$request->email ;
        $subject= $request->subject;
        $message=$request->message ;
 
-      //  $data = array(
-      //   'baseUrl'=>URL('/')."/public/contactUs/visitorq.png",
-      //   'name'=>"Amit",
-      //   'email' => "amit@gmail.com",
-      //   'subject' =>  "Vistior",
-      //   'phone_number'=>"728957538" ,
-      //   'messages' =>"Test"
-      //   );
+
    
     $data = array(
       'baseUrl'=>URL('/')."/public/contactUs/visitorq.png",
@@ -1305,9 +1316,7 @@ public function resetPassword(Request $request){
       'messages' => $message
       );
    
-      // return view('emails/contactUs',$data);
-      // exit ;
-      
+  
        Mail::send('emails.contactUs', $data, function($message) use ($data) {
         $to= 'walkofweb@gmail.com' ;
         $recieverName = "" ;
@@ -1324,5 +1333,41 @@ public function resetPassword(Request $request){
         return true ;
        
        }
-    }
+   }
+
+   public function advertisement_listing(Request $request){
+    $userId = authguard()->id ;
+    $advImage = config('constants.advertisement_image');
+    $qry="select adv.id,sp.name,case when sp.image is null then '' else concat('".$advImage."',sp.image) end as sponserIcon,adv.introduction, case when CURDATE()  > Date(adv.end_date) then 'Expired' when adv.isAccept=0 then 'Pending' when adv.isAccept=1 then 'Approve' when adv.isAccept=2 then 'Rejected' else '' end as status,adv.isAccept as isAccept from advertisements as adv inner join sponser as sp on sp.id=adv.id where adv.createdBy=1"  ; //.$userId ;
+    
+    $data=DB::Select($qry) ;
+    return $this->successResponse($data,'Advertisement List',200);
+  }
+
+  public function removeProfileImage(Request $request){
+    $userId = authguard()->id ;
+    $profileImg='app/public/profile_image/';
+    $image=DB::table('users')->select(DB::raw('case when image is null then "" else concat(image) end as image'))->where('id',$userId)->first();
+    if(isset($image->image) && $image->image!=''){    
+      $unlinkPath = storage_path($profileImg.$image->image) ;
+      do_upload_unlink(array($unlinkPath));
+   }
+    DB::table('users')->where('id',$userId)->update(['image'=>'']);
+    return $this->successResponse([],'Successfully Remove Profile Image',200);
+  }
+
+
+  public function removeCoverImage(Request $request){   
+    $userId = authguard()->id ;
+    $profileImg='app/public/cover_image/';
+    $image=DB::table('users')->select(DB::raw('case when cover_image is null then "" else concat(cover_image) end as image'))->where('id',$userId)->first();
+    if(isset($image->image) && $image->image!=''){    
+      $unlinkPath = storage_path($profileImg.$image->image) ;
+      do_upload_unlink(array($unlinkPath));
+   }
+    DB::table('users')->where('id',$userId)->update(['cover_image'=>'']);
+    return $this->successResponse([],'Successfully Remove Cover Image',200);
+  }
+
+  
 }

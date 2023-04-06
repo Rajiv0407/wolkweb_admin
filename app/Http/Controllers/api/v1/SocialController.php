@@ -24,7 +24,7 @@ class SocialController extends Controller
         if($type==1){
             $this->tiktokPointActivity($userId);            
         }else if($type==2){
-            $this->fbPointActivity($userId); 
+           $this->fbPointActivity($userId); 
         }else if($type==3){
             $this->instaPointActivity($userId); 
         }else{
@@ -57,7 +57,7 @@ class SocialController extends Controller
             $fbPostLikesWT=$sPWT['fb_post_likes'] ;
             $fbPostCountWT=$sPWT['fb_post_count'] ;
            
-
+            
             // fb point calculation
             $fbTotalFriendsPoint = $fbTotalFriends * $fbFriendsWT ;
             $fbPageFollowersPoint = $fbPageFollowers * $fbPageFollowersWT ;
@@ -71,16 +71,16 @@ class SocialController extends Controller
              + $fbPostCommentsPoint + $fbPostLikesPoint + $fbPostCountPoint  ;
             
 
-            $checkSocialPoint = $this->checkSocialPoint($userId);
+          $checkSocialPoint = $this->checkSocialPoint($userId);
             $updateData=array(
-                'fb_friends_count'=>$followerPoint ,
-                'fb_page_followers_count'=>$followsPoint ,
-                'fb_page_likes_count'=>$likesPoint ,
-                'fb_post_comment'=>$videoLikePoint ,
-                'fb_post_likes'=>$videoSharePoint ,
-                'fb_post_count'=>$videoCommentPoint 
+                'fb_friends_count'=>$fbTotalFriendsPoint ,
+                'fb_page_followers_count'=>$fbPageFollowersPoint ,
+                'fb_page_likes_count'=>$fbPageLikesCountPoint ,
+                'fb_post_comment'=>$fbPostCommentsPoint ,
+                'fb_post_likes'=>$fbPostLikesPoint ,
+                'fb_post_count'=>$fbPostCountPoint 
             );
-           
+          
             if($checkSocialPoint==0){
                 $updateData['user_id']=$userId ;
                 $avgPoint = $fbTotalPoint/100 ;
@@ -88,7 +88,11 @@ class SocialController extends Controller
                 $updateData['avg_point']=$avgPoint ;
                 DB::table('user_social_point')->insert($updateData);
                 $this->updateUserPoint($userId,$fbTotalPoint);
-            }else{                    
+            }else{        
+                $currentTotalPoint =  $checkSocialPoint + $fbTotalPoint ;
+                $avgPoint =  $currentTotalPoint / 100 ;   
+                $updateData['total_point']=$currentTotalPoint ;
+                $updateData['avg_point']=$avgPoint ;              
                 DB::table('user_social_point')->where('user_id',$userId)->update($updateData);
                 $this->updateTotalPoint($userId);
                  
@@ -101,7 +105,7 @@ class SocialController extends Controller
         $sPWT = $this->getSocialMediaPoint();
         $checkSocialUser = DB::table('insta_user_info')->where('userId',$userId)->first();
         $instaTotalPoint=0 ;
-        
+
         if(!empty($checkSocialUser)){   
             // insta activity
             $instaFollowers = $checkSocialUser->followers_count ;
@@ -147,14 +151,20 @@ class SocialController extends Controller
                 $updateData['avg_point']=$avgPoint ;
                 DB::table('user_social_point')->insert($updateData);
                 $this->updateUserPoint($userId,$instaTotalPoint);
-            }else{                    
+            }else{   
+                $currentTotalPoint =  $checkSocialPoint + $instaTotalPoint ;
+                $avgPoint =  $currentTotalPoint / 100 ;   
+                $updateData['total_point']=$currentTotalPoint ;
+                $updateData['avg_point']=$avgPoint ;            
                 DB::table('user_social_point')->where('user_id',$userId)->update($updateData);
                 $this->updateTotalPoint($userId);
                  
             }
 
         }        
-    }    
+    }
+
+    
 
     public function tiktokPointActivity($userId){
         $sPWT = $this->getSocialMediaPoint();
@@ -210,11 +220,16 @@ class SocialController extends Controller
                 $updateData['avg_point']=$avgPoint ;
                 DB::table('user_social_point')->insert($updateData);
                 $this->updateUserPoint($userId,$tiktokTotalPoint);
-            }else{                    
+            }else{ 
+                $currentTotalPoint =  $checkSocialPoint + $tiktokTotalPoint ;
+                $avgPoint =  $currentTotalPoint / 100 ;   
+                $updateData['total_point']=$currentTotalPoint ;
+                $updateData['avg_point']=$avgPoint ;   
                 DB::table('user_social_point')->where('user_id',$userId)->update($updateData);
                 $this->updateTotalPoint($userId);
                  
             }
+
         }        
     }
 
@@ -268,7 +283,7 @@ class SocialController extends Controller
     public function checkSocialPoint($userId){
         $checkSocialPoint = DB::table('user_social_point')->where('user_id',$userId)->first();
         if(!empty($checkSocialPoint)){
-            return $checkSocialPoint->id ;
+            return $checkSocialPoint->total_point ;
         }else{
             return 0 ;
         }
@@ -278,6 +293,7 @@ class SocialController extends Controller
     public function updateUserPoint($userId,$point){
         $rankType = $this->getRankType($point);
         DB::table('users')->where('id',$userId)->update(['rank_'=>$point,'rank_type'=>$rankType]);
+        updateUserFollowers($userId);
     }
 
     public function getRankType($point){
@@ -287,6 +303,7 @@ class SocialController extends Controller
                 if($point >=$val->range_from && $point <=$val->range_to){
                     return $val->id ;
                 }
+
            }  
         }
     }

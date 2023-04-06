@@ -120,7 +120,7 @@ $('#letsgo_sidebar').find('li a').click(function(){
 </script>
     <div class="header_logo">
     <a class="navbar-brand" href="#">
-                <img src="<?php echo e(URL::to('/public/admin')); ?>/images/lesgo_logo.png?v" class="un-clp-logo" alt="">
+                <img src="<?php echo e(URL::to('/public/admin')); ?>/images/sitebar_icon/logo-new.png?v" class="un-clp-logo" alt="">
                  <img src="<?php echo e(URL::to('/public/admin')); ?>/images/lesgo_logo-sml.png?v" class="clp-logo" alt="">
             </a>
             </div>

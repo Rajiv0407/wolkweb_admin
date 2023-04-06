@@ -4,7 +4,7 @@
 	<title>Laravel Email</title>
 </head>
 <body>
- <h3>LesGO !</h3>
+ <h3>Walkofweb</h3>
 
  {{$title}}
 

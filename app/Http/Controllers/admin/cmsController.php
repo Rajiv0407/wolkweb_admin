@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\models\cms;
+use App\Models\Cms;
 use DB;
 
 class cmsController extends Controller
@@ -112,5 +112,8 @@ class cmsController extends Controller
         }
                
     }
+
+    
+
 
 }

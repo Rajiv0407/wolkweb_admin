@@ -1,3 +1,147 @@
+// function commentListing(id,type=1,divId='Details'){
+//     ajaxCsrf();
+
+//    $.ajax({type:"POST",
+//    url:baseUrl+'/postComment',
+//    data:{"postId":id,"type":type},
+  
+//    beforeSend:function()
+//    {
+//        ajax_before();
+//    },
+//    success:function(html)
+//    {
+//        ajax_success() ;
+//        $('#'+divId).html(html);
+   
+//    }
+//    });
+// } 
+
+function customerDetail(userId){
+      
+    ajaxCsrf();
+
+      $.ajax({
+      type:"POST",
+      url:baseUrl+'/userDetail',
+      data:{"userId":userId},
+     
+      beforeSend:function()
+      {
+          ajax_before();
+      },
+      success:function(html)
+      {
+          ajax_success() ;
+         $('.main_site_data').html(html);
+      
+      }
+      });
+}
+function masterStatus(id,tableName){
+
+    ajaxCsrf();
+    
+    $.ajax({
+        type:"POST",
+        url:baseUrl+'/masterStatus',
+        data:{"id":id,"table_name":tableName},
+        dataType:'json',
+    beforeSend:function()
+    {
+        ajax_before();
+    },
+    success:function(res)
+    {
+         ajax_success() ;
+    if(res.status==1){
+    var table = $('#dataTable').DataTable();
+    table.draw( false );
+     statusMesage('changed status successfully','success');
+    }else{
+     statusMesage('something went wrong','success');
+    }
+    }
+    
+    });
+    }
+
+function userHostListing(id,type=1,divId='Details'){
+    ajaxCsrf();
+
+   $.ajax({type:"POST",
+   url:baseUrl+'/userHost',
+   data:{"userId":id,"type":type},
+  
+   beforeSend:function()
+   {
+       ajax_before();
+   },
+   success:function(html)
+   {
+       ajax_success() ;
+        if(type==2){
+        //$('#Details').html('');  
+        $('#Advertisement').html(''); 
+        $('#followers').html(''); 
+        $('#follows').html(''); 
+        }else if(type==3){
+            $('#Details').html('');              
+            $('#followers').html(''); 
+            $('#follows').html(''); 
+        } else if(type==1){
+            $('#Details').html('');              
+            $('#Advertisement').html(''); 
+            $('#follows').html(''); 
+        }else if(type==4){
+            $('#Details').html('');              
+            $('#followers').html(''); 
+            $('#Advertisement').html('');
+        }
+       $('#'+divId).html(html);   
+   }
+   });
+}
+// function likeListing(id,type=1,divId='Details'){
+//     ajaxCsrf();
+
+//    $.ajax({type:"POST",
+//    url:baseUrl+'/postComment',
+//    data:{"postId":id,"type":type},
+  
+//    beforeSend:function()
+//    {
+//        ajax_before();
+//    },
+//    success:function(html)
+//    {
+//        ajax_success() ;
+//        $('#'+divId).html(html);
+   
+//    }
+//    });
+// } 
+
+// function shareListing(id,type=1,divId='Details'){
+//     ajaxCsrf();
+
+//    $.ajax({type:"POST",
+//    url:baseUrl+'/postComment',
+//    data:{"postId":id,"type":type},
+  
+//    beforeSend:function()
+//    {
+//        ajax_before();
+//    },
+//    success:function(html)
+//    {
+//        ajax_success() ;
+//        $('#'+divId).html(html);
+   
+//    }
+//    });
+// }
 function socialManagement(){
     
     ajaxCsrf();
@@ -284,12 +428,15 @@ function rejectReview(reviewId){
         });
 }
 
- function carRentBooking(id,type=1,divId='Rent'){
+ function commentListing(id,type=1,divId='Details'){
          ajaxCsrf();
-
+         var route = '/postComment' ;
+        // if(type==1){
+        //     route='/likeComment';
+        // }
         $.ajax({type:"POST",
-        url:baseUrl+'/carManagement/carRentBooking',
-        data:{"vehicleId":id,"type":type},
+        url:baseUrl+route,
+        data:{"postId":id,"type":type},
        
         beforeSend:function()
         {
@@ -298,6 +445,24 @@ function rejectReview(reviewId){
         success:function(html)
         {
             ajax_success() ;
+            if(type==1){
+                $('#Details').html('');  
+                $('#post_share').html('');    
+                $('#post_file').html(''); 
+            }else if(type==2){
+                $('#post_share').html('');  
+                $('#post_like').html(''); 
+                $('#post_file').html(''); 
+            }else if(type==3){
+                $('#Details').html('');  
+                $('#post_like').html(''); 
+                $('#post_file').html(''); 
+            }else if(type==4){
+                $('#Details').html('');  
+                $('#post_like').html(''); 
+                $('#post_share').html(''); 
+            }
+
             $('#'+divId).html(html);
         
         }
@@ -477,14 +642,14 @@ function ajax_success(){
 
 
 
-function vehicleBookingDetail(bookingId,type=1){
-     
+function postDetail(postId){
+      
       ajaxCsrf();
 
         $.ajax({
         type:"POST",
-        url:baseUrl+'/carManagement/bookingDetail',
-        data:{"bookingId":bookingId,"type":type},
+        url:baseUrl+'/postDetail',
+        data:{"postId":postId},
        
         beforeSend:function()
         {
@@ -519,6 +684,44 @@ function vehicleBookingDetail(bookingId,type=1){
         });
     }
 
+    function subscriptionList(){
+        
+        ajaxCsrf();
+
+        $.ajax({
+        type: "POST",
+        url: baseUrl+'/subscriptionList',       
+        cache: 'FALSE',
+        beforeSend: function () {
+        ajax_before();
+        },
+        success: function(html){
+         ajax_success() ;
+         $('.main_site_data').html(html);
+        }
+
+        });
+    }
+
+    function userPointDetail(Id){
+        
+        ajaxCsrf();
+
+        $.ajax({
+        type: "POST",
+        url: baseUrl+'/userPointDetail',
+        data:{'id':Id},
+        cache: 'FALSE',
+        beforeSend: function () {
+        ajax_before();
+        },
+        success: function(html){
+         ajax_success() ;
+         $('.main_site_data').html(html);
+        }
+
+        });
+    }
 
  function advertisementDetail(Id){
         

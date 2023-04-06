@@ -3,7 +3,7 @@
    <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Walkofweb</title>
+      <title><?php echo sitetitle(); ?></title>
       <link rel="stylesheet" type="text/css" href="<?php echo e(URL::to('/public/admin')); ?>/css/style.css">
       <link rel="stylesheet" type="text/css" href="<?php echo e(URL::to('/public/admin')); ?>/css/bootstrap.min.css">
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
@@ -11,27 +11,16 @@
       <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
    </head>
    <body>
-    
-
-    <section class="lg_login__box">
-      
-
+    <section class="lg_login__box"> 
       <div class="container-fluid">
-        
         <div class="row">
-        
-        <div class="col-md-7 p-0">
-          
-          <div class="lg_login_img">
-            
+        <div class="col-md-7 p-0">          
+          <div class="lg_login_img">            
             <img src="<?php echo e(URL::to('/public/admin/')); ?>/images/login_car.svg" class="img-fluid">
-
           </div>
-
         </div>
 
-        <div class="col-md-5 p-5">
-          
+        <div class="col-md-5 p-5">          
           <div class="account-box">
                <div class="account-logo-box">
                   <h2 class="text-uppercase text-center">
@@ -86,28 +75,13 @@
                   </div>
                </div>
             </div>
-
         </div>
-
       </div>
-
       </div>
-
-
-    </section>
-
-
-
-            
-         
-
-
-
-
+    </section> 
 
       <script type="text/javascript">
          function loginValidation(){   
-         
                  var txtUserName = document.loginform.txtUserName.value;
                  var txtPassword = document.loginform.txtPassword.value;
                  $("#error_txtUserName").html("");

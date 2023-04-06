@@ -60,8 +60,10 @@
                                 <th scope="col">Rank</th>
                                 <th scope="col">Date Joined</th>
                                 <th scope="col">Country</th>
-                                <th scope="col" width="10%">status</th>
+                                <th scope="col" width="10%">status</th>   
+                                <th scope="col" width="10%">status_</th>                            
                                 <th scope="col">Action</th>
+                               
                             </tr>
                         </thead>
                         <tbody>
@@ -122,18 +124,21 @@
       sPaginationType: "bootstrap",
       "aaSorting": [[ 0, 'desc' ]],   
       columnDefs: [  
-                //     {
-                //     "aTargets": [0],
-                //     "mRender": function(data, type, full){
-                      
-                //         return '<th scope="row"><a href="'+baseUrl+'/administrator/dashboard#customer_detail/'+full['id']+'" onclick="customerDetail('+full['id']+')"><i class="bi bi-chevron-right"></i></a></th> ';
-                //     }
-                // },
-                {
+                    {
                     "aTargets": [0],
+                    "mRender": function(data, type, full){
+                      
+                        return '<th scope="row"><a href="'+baseUrl+'/administrator/dashboard#customer_detail/'+full['id']+'" onclick="customerDetail('+full['id']+')"><i class="bi bi-chevron-right"></i></a></th> ';
+                    }
+                },
+                {
+                    "aTargets": [3],
                     "visible":false
                 },
-
+                {
+                    "aTargets": [12],
+                    "visible":false
+                },
                 {
                     "aTargets": [1],
                     "mRender": function(data, type, full){
@@ -162,12 +167,28 @@
                     "aTargets": [2],
                     "visible":false
                 },
-               
+                {
+                            "aTargets": [11],
+                            "mRender" : function(data, type, full){ 
+                              var action='' ;
+                               var className='' ;
+
+                            if(full['status']==1){
+                              className='activeNFor' ;
+                            }else{
+                              className='inactiveNFor' ;
+                            }
+
+                            action+='<span class="'+className+'">'+full['status_']+'</span>';
+
+                            return action ;
+                            }
+                        } ,
 
                 {
-                    "aTargets": [11],
+                    "aTargets": [13],
                      "mRender": function(data, type, full){
-                        var response ='<td><div class="align-items-center d-flex">  <div> <label class="switch">' ;
+                        var response ='<td><div class="align-items-center d-flex"><div class="more_n"> <i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"> <li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')">Delete</a></li> <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#change_pass" onclick="changePassword('+full["id"]+')">Change Password</a></li> </ul> </div>  <div> <label class="switch">' ;
 
                         if(full['status']=='1'){
                              response +='<input type="checkbox" onclick="changeUsrStatus('+full['id']+')" checked>' ;
@@ -181,18 +202,19 @@
 
                         return response ;
                     }
-                },   {
-                    "aTargets": [12],
-                     "mRender": function(data, type, full){
-                        var response ='<td><div class="align-items-center d-flex"> <div class="more_n"> <i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"> <li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')">Delete</a></li> <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#change_pass" onclick="changePassword('+full["id"]+')">Change Password</a></li> </ul> </div> ' ;
+                }  
+                // {
+                //     "aTargets": [12],
+                //      "mRender": function(data, type, full){
+                //         var response ='<td><div class="align-items-center d-flex"> <div class="more_n"> <i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"> <li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')">Delete</a></li> <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#change_pass" onclick="changePassword('+full["id"]+')">Change Password</a></li> </ul> </div> ' ;
 
                         
 
-                        response+=' </div> </td>'  ;
+                //         response+=' </div> </td>'  ;
 
-                        return response ;
-                    }
-                }
+                //         return response ;
+                //     }
+                // }
                 ],
 
             ajax: {
@@ -212,6 +234,7 @@
                         { data: 'created_at'},
                         { data: 'countryId' },
                         { data: 'status' },
+                        { data: 'status_' },
           ],
 
         });

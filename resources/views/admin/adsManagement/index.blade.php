@@ -26,10 +26,14 @@
                             <label for="Model">Ads Title</label>
                             <input type="text" class="form-control" id="username" placeholder="Ads Title">
                         </div>  
-                        <!-- <div class="form-group">
-                            <label for="oName">Mobile Number</label>
-                            <input type="text" class="form-control" id="cus_mobileNumber" placeholder="Mobile Number">
-                        </div> -->
+                        <div class="form-group">
+                            <label for="oName">CreatedBy</label>
+                            <select name="" id="createdBy" class="form-control">
+                                <option value="">Select</option>
+                                <option value="Admin">Admin</option>
+                                <option value="User">User</option>
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label for="status">Status</label>
                             <select name="" id="cust_status" class="form-control">
@@ -63,6 +67,7 @@
                                 <th scope="col">Ads</th>
                                 <th scope="col" >Start Date</th>
                                 <th scope="col">End Date</th>
+                                <th scope="col">CreatedBy</th>
                                 <!-- <th scope="col">Ads Created Date</th>                             -->
                                 <th scope="col" width="10%">status</th>
                                 <th scope="col">Action</th>
@@ -228,7 +233,7 @@
                     }
                 },
                 {
-                    "aTargets": [10],
+                    "aTargets": [11],
                     "visible":false
                 },
                 {
@@ -262,10 +267,10 @@
                 ,{
                     "aTargets": [2],
                     "visible":false
-                },
-               
+                }
+                ,
                 {
-                            "aTargets": [8],
+                            "aTargets": [9],
                             "mRender" : function(data, type, full){ 
                               var action='' ;
                                var className='' ;
@@ -282,7 +287,7 @@
                             }
                         } ,
                 {
-                    "aTargets": [9],
+                    "aTargets": [10],
                      "mRender": function(data, type, full){
                         var response ='<td><div class="align-items-center d-flex"><div class="more_n"> <i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"><li><a class="dropdown-item" href="javascript:void(0);"  onclick="editNFor('+full["id"]+')" >Edit</a></li> <li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')">Delete</a></li>  </ul> </div>  <div> <label class="switch">' ;
                         
@@ -299,16 +304,13 @@
 
                         return response ;
                     }
-                },   {
-                    "aTargets": [10],
+                }
+                ,   {
+                    "aTargets": [11],
                      "mRender": function(data, type, full){
-                        var response ='<td><div class="align-items-center d-flex"> <div class="more_n"> <i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"> <li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')">Delete</a></li> <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#change_pass" onclick="changePassword('+full["id"]+')">Change Password</a></li> </ul> </div> ' ;
+                       
 
-                        
-
-                        response+=' </div> </td>'  ;
-
-                        return response ;
+                        return '' ;
                     }
                 }
                 ],
@@ -326,8 +328,10 @@
                         { data: 'ads'},
                         { data: 'start_date'},  
                         { data: 'end_date'},
+                        { data: 'createdBy'},
                         { data: 'status_'},                      
                         { data: 'status' }
+                       
           ],
          
         });
@@ -473,7 +477,7 @@ $.ajax({
 }
 
 function updateNFor(){
-    
+
 var sponser=$('#edit_sponser_').val();
 var adsTitle=$('#edit_ads_title').val();
 var adsType=$('#edit_ads_type').val();
@@ -513,6 +517,7 @@ $.ajax({
            ajax_before();
     },
     success: function(html){
+        
      ajax_success() ;
      if(html.status==1){
 
@@ -542,7 +547,7 @@ $.ajax({
       
         var status=$("#cust_status").val();
         var username=$("#username").val();
-        //var email=$("#cus_email").val();
+        var createdBy=$("#createdBy").val();
         var cName=$("#cust_name").val();
    
    
@@ -551,10 +556,10 @@ $.ajax({
           $('#dataTable').DataTable().column(9).search(status).draw();
     }
    
-    //  if(mobileNumber){
+     if(createdBy){
    
-    //       $('#dataTable').DataTable().column(6).search(mobileNumber).draw();
-    // }
+          $('#dataTable').DataTable().column(8).search(createdBy).draw();
+    }
 
      if(username){
    

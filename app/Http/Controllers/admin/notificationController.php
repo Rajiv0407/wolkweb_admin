@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\Datatables\Datatables;
 use App\Models\Notification_types;
-use App\models\announcement_lists ;
+use App\Models\Announcement_lists ;
 use DB ;
 use Image ;
 use File ;

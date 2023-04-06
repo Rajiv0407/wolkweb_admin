@@ -67,10 +67,10 @@ function createdAt($created_at)
     }
 
 
-function countryList(){
-   $countries = DB::table('pe_countries')->select('i_id','v_title',DB::raw('api_code as countryCode'))->where('i_status',1)->get();
-   return $countries ;
-}
+    function countryList(){
+      $countries = DB::table('pe_countries')->select('id','title',DB::raw('api_code as countryCode'))->where('i_status',1)->get();
+      return $countries ;
+   }
 
 function do_upload_unlink($unlink_data=array()){
 
@@ -129,4 +129,55 @@ function errorResponse($data,$msg=''){
 function siteTitle(){
   return 'Walkofweb';
 }
+
+function updateUserFollowers($userId){
+    $qry="select sum(totat_followers) as totat_followers from (
+      Select case when sum(fb_page_followers_count) is null then 0 else sum(fb_page_followers_count) end as totat_followers from fb_user_info where userId=".$userId."
+      union
+      Select case when sum(followers_count) is null then 0 else sum(followers_count) end as total_followers from insta_user_info where userId=".$userId."
+      union
+      select case when sum(followers_count) is null then 0 else sum(followers_count) end as total_followers from tiktok_user_info where userId=".$userId."
+      union
+      select case when count(id) is null then 0 else count(id) end as total_followers from user_follows where follower_user_id=".$userId.") as userFollowers" ;
+   $userFollowers=DB::select($qry);
+   $totalUserFollower = isset($userFollowers[0]->totat_followers)?$userFollowers[0]->totat_followers:0 ;
+   DB::table('users')->where('id',$userId)->update(['followers'=>$totalUserFollower]);
+   
+}
+
+function uploadImage($image_key,$path,$request){
+  //print_r($request->$image_key); exit ;
+   if($request->hasfile($image_key)){
+    $imgPath='app/public/'.$path.'/' ;  
+    $allowedfileExtension=['jpg', 'jpeg', 'gif', 'png', 'bmp', 'svg', 'svgz', 'cgm', 'djv', 'djvu', 'ico', 'ief','jpe', 'pbm', 'pgm', 'pnm', 'ppm', 'ras', 'rgb', 'tif', 'tiff', 'wbmp', 'xbm', 'xpm', 'xwd','flv','mp4','m3u8','ts','3gp','mov','avi','wmv','mp3'];
+
+    $files = $request->file($image_key); 
+    $fileType=0 ;    
+    $mimeType=$files->getMimeType() ; 
+    $filenamewithextension = $files->getClientOriginalName(); 
+    $extension = $files->getClientOriginalExtension();  
+       
+         $check = in_array($extension,$allowedfileExtension);
+         $fileType = $this->checkFileType($filenamewithextension);
+         
+           if($check){
+         
+            $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
+            $filename=str_replace(' ', '_', $filename);
+            $filenametostore = $filename.'_'.time().'.'.$extension;       
+            $smallthumbnail = $filename.'_100_100_'.time().'.'.$extension;    
+             
+              
+              $files->storeAs('public/'.$path.'/', $filenametostore);
+              $file_path= url('/').'/public/storage/'.$path.'/'.$filenametostore;              
+             return $response=array('fileType'=>$fileType,"fileName"=>$filenametostore);
+           }else{
+             return array(); 
+           }
+         }else{
+           return array(); 
+         }
+  }
+
+  
  ?>

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\Datatables\Datatables;
 use DB ; 
-use App\models\countries ;
+use App\Models\Countries ;
 use Image ;
 use Illuminate\Support\Facades\Validator;
 
@@ -33,7 +33,7 @@ public function createThumbnail($path, $width, $height)
 
         $data['title']=siteTitle();
         
-        $carQry="select i_id as id,v_title as title,api_code,case when i_status=1 then 'Active' else 'Inactive' end as status_,i_status as status from pe_countries" ;   
+        $carQry="select id as id,title as title,api_code,case when i_status=1 then 'Active' else 'Inactive' end as status_,i_status as status from pe_countries" ;   
         $carData = DB::select($carQry); 
         $tableData = Datatables::of($carData)->make(true);  
         return $tableData; 
@@ -47,12 +47,12 @@ public function createThumbnail($path, $width, $height)
         try{
 
         $insertData = array(
-             "v_title"=>$request->sTitle,
+             "title"=>$request->sTitle,
              "api_code"=>$cCode,
              "i_status"=>1
         );
 
-        $check= countries::where('v_title', '=', $cTitle)->get()->toArray() ;
+        $check= countries::where('title', '=', $cTitle)->get()->toArray() ;
 
        
         if(empty($check)){
@@ -78,7 +78,7 @@ public function createThumbnail($path, $width, $height)
 
         $deleteId=isset($request->id)?$request->id:'' ;
         try{
-                countries::where('i_id', $deleteId)->delete();
+                countries::where('id', $deleteId)->delete();
 
               echo successResponse([],'successfully deleted'); 
         }
@@ -91,7 +91,7 @@ public function createThumbnail($path, $width, $height)
      public function editCountry(Request $request){
 
           $updatedId = isset($request->updatedId)?$request->updatedId:0 ;
-           $countryInfo = countries::where('i_id',$updatedId)->first() ;
+           $countryInfo = countries::where('id',$updatedId)->first() ;
            
            $data['countryInfo'] = $countryInfo ;
            $data['updatedId']=$updatedId ;
@@ -106,12 +106,12 @@ public function createThumbnail($path, $width, $height)
           $editCTitle = isset($request->editSTitle)?$request->editSTitle:'' ;
           $editCode = isset($request->edit_apiCode)?$request->edit_apiCode:'' ;
           $updateData = array(
-                "v_title"=>$editCTitle,
+                "title"=>$editCTitle,
                 "api_code"=>$editCode
             ) ;
 
         try{
-              countries::where('i_id',$updateId)->update($updateData) ;
+              countries::where('id',$updateId)->update($updateData) ;
               echo successResponse([],'successfully updated country '); 
         }
          catch(\Exception $e){
@@ -124,7 +124,7 @@ public function createThumbnail($path, $width, $height)
 
         $id=$request->id ;
 
-        $qry="update pe_countries set i_status=(case when i_status=1 then 0 else 1 end) where i_id=".$id;
+        $qry="update pe_countries set i_status=(case when i_status=1 then 0 else 1 end) where id=".$id;
 
         try{
 
@@ -334,7 +334,7 @@ public function createThumbnail($path, $width, $height)
 
         $data['title']=siteTitle();
         $img=config('constants.sponser_image');
-        $carQry="select id,name,email,case when image is null then '' else concat('".$img."',image) end as image,description,case when status=1 then 'Active' else 'Inactive' end as status_,status as status from sponser" ;  
+        $carQry="select s.id,s.name,s.email,case when s.image is null then '' else concat('".$img."',s.image) end as image,s.description,case when s.createdBy=0 then 'Admin' when u.name is null then '' else u.name end as createdBy,case when s.status=1 then 'Active' else 'Inactive' end as status_,s.status as status from sponser as s left join users as u on u.id=s.createdBy" ;  
         $carData = DB::select($carQry); 
         $tableData = Datatables::of($carData)->make(true);  
         return $tableData; 

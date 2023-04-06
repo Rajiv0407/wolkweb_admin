@@ -167,7 +167,7 @@ $('#letsgo_sidebar').find('li a').click(function(){
 
     <div class="header_logo">
     <a class="navbar-brand" href="#">
-                <img src="<?php echo e(URL::to('/public/admin')); ?>/images/lesgo_logo.png?v" class="un-clp-logo" alt="">
+                <img src="<?php echo e(URL::to('/public/admin')); ?>/images/sitebar_icon/logo-new.png" class="un-clp-logo" alt="">
                  <img src="<?php echo e(URL::to('/public/admin')); ?>/images/lesgo_logo-sml.png?v" class="clp-logo" alt="">
             </a>
             </div>
@@ -176,9 +176,14 @@ $('#letsgo_sidebar').find('li a').click(function(){
          
     <ul class="height_navigation" id="letsgo_sidebar">
      
-        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#index" onclick="dashboard();"><i class="ri-dashboard-line"></i><span class="tooltip_nav">Dashboard</span></a></li>
+        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#index" onclick="dashboard();">
+        <!-- <i class="ri-dashboard-line"></i> -->
+        <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/icon1.png" alt="">
+        <span class="tooltip_nav">Dashboard</span></a></li>
      
-        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#customer_management" onclick="customerManagement()"><i class="ri-user-settings-line"></i>
+        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#customer_management" onclick="customerManagement()">
+        <!-- <i class="ri-user-settings-line"></i> -->
+        <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/UsersThree.png" alt="">
            <span class="tooltip_nav">
         Customer Management
     </span></a></li>
@@ -187,7 +192,9 @@ $('#letsgo_sidebar').find('li a').click(function(){
 
     
 
-        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#contactSupport" onclick="contactSupport()"><i class="ri-customer-service-2-line"></i>
+        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#contactSupport" onclick="contactSupport()">
+        <!-- <i class="ri-customer-service-2-line"></i> -->
+        <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/icon1.png" alt="">
          
     <span class="tooltip_nav">Contact Support</span></a></li>
 
@@ -198,7 +205,9 @@ $('#letsgo_sidebar').find('li a').click(function(){
     </a></li>
         <li>
             <div class="cms_nav">
-                <a class="" id="drop_nav"><span><i class="ri-settings-3-line"></i>
+                <a class="" id="drop_nav"><span>
+                    <!-- <i class="ri-settings-3-line"></i> -->
+                    <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/icon1.png" alt="">
                       <span class="tooltip_nav">CMS</span>
                 </span>
                     <!-- <span class="tooltip_nav">CMS</span> -->
@@ -206,13 +215,15 @@ $('#letsgo_sidebar').find('li a').click(function(){
                 </a>
                 <ul class="dropdown-menu" id="drop_content">
                     <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#termCondition" onclick="termCondition()">
-                     <i class="ri-arrow-right-s-line"></i>
+                     <!-- <i class="ri-arrow-right-s-line"></i> -->
+                     <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/icon1.png" alt="">
                      <span class="tooltip_nav">
                     Terms & Conditions
                      </span>
                 </a></li>
                     <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#privacyPolicy" onclick="privacyPolicy()">
-                     <i class="ri-arrow-right-s-line"></i>
+                     <!-- <i class="ri-arrow-right-s-line"></i> -->
+                     <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/icon1.png" alt="">
                      <span class="tooltip_nav">
                        Privacy Policy
                      </span>
@@ -225,14 +236,18 @@ $('#letsgo_sidebar').find('li a').click(function(){
             <div class="master_nav">
                 <a class="" id="master_n"><span><i class="ri-sound-module-line"></i>
                      <span class="tooltip_nav">Master</span>
-                </span> <span class="dropdown_tog"><i class="ri-arrow-drop-down-line"></i></span></a>
+                </span> <span class="dropdown_tog">
+                    <!-- <i class="ri-arrow-drop-down-line"></i> -->
+                    <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/icon1.png" alt="">
+                </span></a>
                 <ul class="dropdown-menu" id="drop_content_m">
                   
                    
 
 
 <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#country_list" onclick="countryList()">
-<i class="ri-arrow-right-s-line"></i>
+<!-- <i class="ri-arrow-right-s-line"></i> -->
+<img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/icon1.png" alt="">
 <span class="tooltip_nav">Country</span>
 </a></li>
 

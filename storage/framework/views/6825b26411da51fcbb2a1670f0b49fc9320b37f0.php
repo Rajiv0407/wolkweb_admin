@@ -26,6 +26,11 @@
                         </div> 
                         
                         <div class="form-group">
+                            <label for="status">CreatedBy</label>
+                            <input type="text" class="form-control" id="createdBy" placeholder="CreatedBy">
+                        </div>
+
+                        <div class="form-group">
                             <label for="status">Status</label>
                             <select name="fStatus_S" id="fStatus_S" class="form-control">
                                 <option value="1">Active</option>
@@ -54,6 +59,7 @@
                                 <th scope="col ">Email</th>                                 
                                 <th scope="col ">Image</th>
                                 <th scope="col ">Description</th>
+                                <th scope="col ">CreatedBy</th>
                                 <th scope="col" >Status</th>
                                 <th scope="col" >Action</th>
                             </tr>
@@ -170,7 +176,7 @@
                             }
                         } ,
                        {
-                            "aTargets": [5],
+                            "aTargets": [6],
                             "mRender" : function(data, type, full){ 
                               var action='' ;
                                var className='' ;
@@ -190,7 +196,7 @@
 
                         
                           {
-                            "aTargets": [6],
+                            "aTargets": [7],
                             "mRender" : function(data, type, full){
 
                                 // data-bs-toggle="modal" data-bs-target="#edit_body"
@@ -221,7 +227,8 @@
                                 { data:'name' },
                                 { data:'email' },
                                 { data:'image' },
-                                { data:'description' },                                
+                                { data:'description' },    
+                                { data:'createdBy' },                             
                                 { data:'status_' },
                                 { data:'status' }
                   ],
@@ -459,6 +466,7 @@ function clearNFor(){
 
         var fTitleS=$("#fState_Search").val();
         var fStatus_S=$("#fStatus_S").val();
+        var createdBy=$("#createdBy").val();
        
 
      if(fTitleS){
@@ -466,9 +474,13 @@ function clearNFor(){
     }
 
      if(fStatus_S){
-              $('#dataTable').DataTable().column(6).search(fStatus_S).draw();
+              $('#dataTable').DataTable().column(7).search(fStatus_S).draw();
     }
    
+    if(createdBy){
+              $('#dataTable').DataTable().column(5).search(createdBy).draw();
+    }
+
   }
 
 

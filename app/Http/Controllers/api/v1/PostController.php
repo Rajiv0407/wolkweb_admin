@@ -274,11 +274,11 @@ class postController extends Controller
    }
 
    public function sponser_list(Request $request){
-    $imagePath = config('constants.sponser_image');
     
+    $userId = authguard()->id ;
+    $imagePath = config('constants.sponser_image');    
      //$list=DB::select('CALL GetAllSponsers("'.$imagePath.'")');
-
-     $sponserList=DB::table('sponser')->select('id','title',DB::raw('concat("'.$imagePath.'",image) as image'),'description')->where('status',1)->get();
+     $sponserList=DB::table('sponser')->select('id','name',DB::raw('concat("'.$imagePath.'",image) as image'),'description')->where('status',1)->whereIn('createdBy',array('0',$userId))->get();
      return $this->successResponse($sponserList,'Sponser list',200);   
    }
 
@@ -383,6 +383,102 @@ class postController extends Controller
 
             }  
      return $this->successResponse([],'Successfull Save Data',200);   
+   }
+
+   public function save_advertisement(Request $request){
+       
+    
+    $validatedData = Validator::make($request->all(),
+        [
+        "sponserId"=>'required',   
+        "adv_title"=>'required',
+        "start_date"=>'required',
+        "adv_image"=>'required',
+        "end_date"=>'required',
+        "description"=>'required'
+      ]); 
+
+   
+        if($validatedData->fails()){       
+          return $this->errorResponse($validatedData->errors()->first(), 401);
+        }
+
+        if($request->sponserId==0){
+          $validatedData = Validator::make($request->all(),[ 
+            "sponser_title"=>'required|unique:sponser,name',
+            "sponser_icon"=>'required'
+          ]); 
+        }
+
+        if($validatedData->fails()){       
+          return $this->errorResponse($validatedData->errors()->first(), 401);
+        }
+
+        $userId=authguard()->id;
+        if($request->sponserId==0){
+          $sponserIcon=$this->uploadImage('sponser_icon','sponser_image',$request);         
+          $sp_img=isset($sponserIcon['fileName'])?$sponserIcon['fileName']:'' ;
+          $insertSponser=array(
+            "name"=>$request->sponser_title,
+            "image"=>$sp_img,
+            'createdBy'=>$userId
+          );
+          $sponserId=DB::table('sponser')->insertGetId($insertSponser);
+          $sponserId = $sponserId ;
+        }else{
+          $sponserId = $request->sponserId ;
+        }
+
+        $advData=array(
+          'sponser_id'=>$sponserId ,
+          'title'=>$request->adv_title ,         
+          'start_date'=>$request->start_date ,
+          'end_date'=>$request->end_date ,
+          'introduction'=>$request->description,
+          'createdBy'=>$userId
+        );
+               
+        // Start
+            $advImage=$this->uploadImage('adv_image','sponser_image',$request);            
+            $advData['ad_type']=isset($sponserIcon['fileType'])?$sponserIcon['fileType']:'' ;
+            $advData['image']=isset($advImage['fileName'])?$advImage['fileName']:'' ;
+        // End
+        DB::table('advertisements')->insert($advData);
+        return $this->successResponse([],'Successfully Submited your advertisement request',200);   
+   }
+
+   public function uploadImage($image_key,$path,$request){
+   //print_r($request->$image_key); exit ;
+    if($request->hasfile($image_key)){
+     $imgPath='app/public/'.$path.'/' ;  
+     $allowedfileExtension=['jpg', 'jpeg', 'gif', 'png', 'bmp', 'svg', 'svgz', 'cgm', 'djv', 'djvu', 'ico', 'ief','jpe', 'pbm', 'pgm', 'pnm', 'ppm', 'ras', 'rgb', 'tif', 'tiff', 'wbmp', 'xbm', 'xpm', 'xwd','flv','mp4','m3u8','ts','3gp','mov','avi','wmv','mp3'];
+ 
+     $files = $request->file($image_key); 
+     $fileType=0 ;    
+     $mimeType=$files->getMimeType() ; 
+     $filenamewithextension = $files->getClientOriginalName(); 
+     $extension = $files->getClientOriginalExtension();  
+        
+          $check = in_array($extension,$allowedfileExtension);
+          $fileType = $this->checkFileType($filenamewithextension);
+          
+            if($check){
+          
+             $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
+             $filename=str_replace(' ', '_', $filename);
+             $filenametostore = $filename.'_'.time().'.'.$extension;       
+             $smallthumbnail = $filename.'_100_100_'.time().'.'.$extension;    
+              
+               
+               $files->storeAs('public/'.$path.'/', $filenametostore);
+               $file_path= url('/').'/public/storage/'.$path.'/'.$filenametostore;              
+              return $response=array('fileType'=>$fileType,"fileName"=>$filenametostore);
+            }else{
+              return array(); 
+            }
+          }else{
+            return array(); 
+          }
    }
 
 }

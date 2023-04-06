@@ -22,13 +22,14 @@ class adsController extends Controller
     }    
 
     public function ads_datatable(Request $request){
-
+        // select adv.id,sp.name,adv.title,adv.image,case when adv.createdBy,adv.start_date,adv.end_date,adv.isAccept,adv.status,adv.createdOn from advertisements as adv
+        // inner join sponser as sp on sp.id=adv.Sponser_id 
         $data['title']=siteTitle();
         $sponserImg = config('constants.sponser_image'); 
         $adsImg = config('constants.advertisement_image'); 
         $carQry="select ads.id,s.name,case when s.image is null then '' else concat('".$sponserImg."',s.image) end as sponserIcon,ads.title,
         case when ads.ad_type=1 then 'image' when ads.ad_type=2 then 'video' else '' end as adType,
-        case when ads.image is null then '' else concat('".$adsImg."',ads.image) end as ads,ads.start_date,ads.end_date,case when ads.status=1 then 'Active' else 'Inactive' end as status_,ads.status 
+        case when ads.image is null then '' else concat('".$adsImg."',ads.image) end as ads,ads.start_date,ads.end_date,case when ads.createdBy=1 then 'Admin' else 'User' end as createdBy,case when ads.status=1 then 'Active' else 'Inactive' end as status_,ads.status 
                 from advertisements as ads left join sponser as s on s.id=ads.sponser_id where ads.start_date is not null and ads.end_date is not null" ;   
         $carData = DB::select($carQry); 
         $tableData = Datatables::of($carData)->make(true);  
@@ -44,7 +45,7 @@ class adsController extends Controller
 
         try{
 
-           DB::select($qry);    
+            DB::select($qry);    
             echo successResponse([],'changed status successfully'); 
          
         }
@@ -58,7 +59,7 @@ class adsController extends Controller
 
     public function editAds(Request $request){
 
-        $updatedId = isset($request->updatedId)?$request->updatedId:0 ;
+         $updatedId = isset($request->updatedId)?$request->updatedId:0 ;
          $advertisement = DB::table('advertisements')->where('id',$updatedId)->first() ;
          $data['sponser']=DB::table('sponser')->where('status',1)->get();
          $data['advertisement'] = $advertisement ;
@@ -125,17 +126,14 @@ class adsController extends Controller
                  $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
            
                  //get file extension
-                 $extension = $request->file('edit_adsFile')->getClientOriginalExtension();
-           
+                 $extension = $request->file('edit_adsFile')->getClientOriginalExtension();           
                  $filename=str_replace(' ', '_', $filename);
                  $filenametostore = $filename.'_'.time().'.'.$extension;       
                  $smallthumbnail = $filename.'_100_100_'.time().'.'.$extension;    
                 
                  //Upload File
                  $request->file('edit_adsFile')->storeAs('public/sponser_image', $filenametostore);
-                // $request->file('sImage')->storeAs('public/star_type_img/thumb', $smallthumbnail);
-                
-                  
+                // $request->file('sImage')->storeAs('public/star_type_img/thumb', $smallthumbnail); 
                  //create small thumbnail
                 // $smallthumbnailpath = public_path('storage/star_type_img/thumb/'.$smallthumbnail);
                 // $this->createThumbnail($smallthumbnailpath, 100, 100);                 
@@ -144,12 +142,8 @@ class adsController extends Controller
                     $unlinkPath = storage_path($imgPath.$checkPV->image) ;
                     do_upload_unlink(array($unlinkPath));
                 }
-
                 $updateData['image']=$filenametostore;
-                }
-
-              
-                			
+                }  		
             DB::table('advertisements')->where('id',$updatedId)->update($updateData);
            echo successResponse([],'Updated successfully'); 
 
@@ -172,8 +166,6 @@ class adsController extends Controller
     $endDate = isset($request->endDate)?$request->endDate:'' ;
     $filenametostore='';
 
-
-
     $insertData=array(
         'sponser_id'=>$sponser_ ,
         'title'=>$adsTitle,
@@ -185,32 +177,20 @@ class adsController extends Controller
     try{
         
         if($request->hasFile('adsFile')) {
-    
-   
-            $imgPath='app/public/sponser_image/' ;
-            
-          
-             $filenamewithextension = $request->file('adsFile')->getClientOriginalName();
-       
+            $imgPath='app/public/sponser_image/' ;  
+            $filenamewithextension = $request->file('adsFile')->getClientOriginalName();
              //get filename without extension
-             $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
-       
+            $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
              //get file extension
-             $extension = $request->file('adsFile')->getClientOriginalExtension();
-       
+            $extension = $request->file('adsFile')->getClientOriginalExtension();
              $filename=str_replace(' ', '_', $filename);
              $filenametostore = $filename.'_'.time().'.'.$extension;       
-             $smallthumbnail = $filename.'_100_100_'.time().'.'.$extension;    
-            
+             $smallthumbnail = $filename.'_100_100_'.time().'.'.$extension; 
              //Upload File
              $request->file('adsFile')->storeAs('public/sponser_image', $filenametostore);
-           
             $insertData['image']=$filenametostore;
             }
-
-           
-                        
-        DB::table('advertisements')->insert($insertData);
+       DB::table('advertisements')->insert($insertData);
        echo successResponse([],'Save successfully'); 
 
     }

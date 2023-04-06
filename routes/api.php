@@ -50,14 +50,14 @@ Route::middleware([Cors::class,EnsureTokenIsValid::class])->group(function () {
     Route::post('/updateSocialInfo',[UserController::class, 'updateSocialInfo']);
     Route::post('/user_interest',[UserController::class, 'user_interest']);
     Route::post('/logout',[UserController::class, 'logout']);
-    Route::post('/save_sponser',[UserController::class, 'save_sponser']);
-    Route::post('/advertisement_listing',[UserController::class, 'advertisement_listing']);
+    Route::post('/save_sponser',[UserController::class, 'save_sponser']);    
     Route::post('/notificationsList',[UserController::class, 'notificationsList']);
     Route::post('/udpateNotifications',[UserController::class, 'udpateNotifications']);
     Route::post('/deActivateUserAccount',[UserController::class, 'deActivateUserAccount']);
     Route::post('/updateUserProfile',[UserController::class, 'updateUserProfile']);
     Route::post('/updateProfileImage',[UserController::class, 'updateProfileImage']);
     Route::post('/changePassword',[UserController::class, 'changePassword']);
+
     
     Route::post('/userList',[UserController::class, 'user_list']);
     Route::get('/user_filter',[UserController::class, 'user_filter']);
@@ -72,7 +72,7 @@ Route::middleware([Cors::class,EnsureTokenIsValid::class])->group(function () {
     Route::post('/addLike',[PostController::class, 'add_like']); 
     Route::get('/sendPwdEmail',[PostController::class, 'sendPwdEmail']); 
     Route::post('/postDetail',[PostController::class, 'post_detail']); 
-    Route::post('/sponserList',[PostController::class, 'sponser_list']);
+    
     Route::post('/fileList',[PostController::class, 'file_list']);
 
     //user follow following
@@ -84,8 +84,7 @@ Route::middleware([Cors::class,EnsureTokenIsValid::class])->group(function () {
     Route::post('/userFollowerList',[UserController::class, 'user_follower_list']); 
     Route::post('/userQrCodeDetail',[UserController::class, 'user_qrCodeDetail']); 
 
-    //sponser detail
-    Route::post('/sponserDetail',[UserController::class, 'sponser_detail']); 
+    
 
     //Social Connect
     Route::post('/socialConnect',[UserController::class, 'social_connect']); 
@@ -102,6 +101,17 @@ Route::middleware([Cors::class,EnsureTokenIsValid::class])->group(function () {
     //user dashboard api
     Route::post('/dashboard',[UserController::class, 'user_dashboard']); 
     Route::post('/coverImage',[UserController::class, 'cover_image']); 
+
+    // Advertisement and sponser     
+    Route::post('/sponserList',[PostController::class, 'sponser_list']);
+    Route::post('/saveAdvertisement',[PostController::class, 'save_advertisement']); 
+    Route::post('/advertisement_listing',[UserController::class, 'advertisement_listing']);
+    Route::post('/advertisementDetail',[UserController::class, 'sponser_detail']); 
+    
+    //user 05-April-2023
+    Route::post('/removeProfileImage',[UserController::class, 'removeProfileImage']);
+    Route::post('/updateCoverImage',[UserController::class, 'updateCoverImage']);
+    Route::post('/removeCoverImage',[UserController::class, 'removeCoverImage']);
      
 });
 

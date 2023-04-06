@@ -20,7 +20,7 @@
     <link rel="icon" href="{{URL::to('/public/admin')}}/images/fav.png?v={{ time() }}" >
     <link rel="stylesheet" type="text/css" href="{{URL::to('/public/admin')}}/css/jquery.notyfy.css?v={{ time() }}">
     <link rel="stylesheet" type="text/css" href="{{URL::to('/public/admin')}}/css/notyfy.theme.default.css?v={{ time() }}">
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
 
     <script src="{{URL::to('/public/admin')}}/js/highcharts.js"></script>
     <script src="{{URL::to('/public/admin')}}/js/data.js"></script>

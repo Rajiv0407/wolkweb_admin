@@ -11,23 +11,16 @@
       <meta name="csrf-token" content="{{ csrf_token() }}">
    </head>
    <body>
-    
-
     <section class="lg_login__box"> 
       <div class="container-fluid">
         <div class="row">
-        <div class="col-md-7 p-0">
-          
-          <div class="lg_login_img">
-            
+        <div class="col-md-7 p-0">          
+          <div class="lg_login_img">            
             <img src="{{URL::to('/public/admin/')}}/images/login_car.svg" class="img-fluid">
-
           </div>
-
         </div>
 
-        <div class="col-md-5 p-5">
-          
+        <div class="col-md-5 p-5">          
           <div class="account-box">
                <div class="account-logo-box">
                   <h2 class="text-uppercase text-center">
@@ -82,28 +75,13 @@
                   </div>
                </div>
             </div>
-
         </div>
-
       </div>
-
       </div>
-
-
-    </section>
-
-
-
-            
-         
-
-
-
-
+    </section> 
 
       <script type="text/javascript">
          function loginValidation(){   
-         
                  var txtUserName = document.loginform.txtUserName.value;
                  var txtPassword = document.loginform.txtPassword.value;
                  $("#error_txtUserName").html("");

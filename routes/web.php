@@ -77,6 +77,28 @@ Route::post('userManagement/changeStatus',[CustomerController::class,'changeStat
 Route::post('/delete_customer',[CustomerController::class,'delete_customer']);
 Route::post('/changePassword',[CustomerController::class,'changePassword']);
 Route::post('/changeAdminPassword',[CustomerController::class,'changeAdminPassword']);
+Route::post('/userDetail',[CustomerController::class,'userDetail']);
+Route::post('/userHost',[CustomerController::class,'userHost']);
+Route::get('/userHost_datatable/{userId}/{type}',[CustomerController::class,'userHost_datatable']);
+// Route::post('/masterStatus',[CustomerController::class,'masterStatus']);
+Route::post('/userHostStatus',[CustomerController::class,'userHostStatus']);
+Route::post('/deleteHost',[CustomerController::class,'deleteHost']);
+Route::get('/userAdv_datatable/{userId}/{type}',[CustomerController::class,'userAdv_datatable']);
+Route::post('/deleteUserAdv',[CustomerController::class,'deleteUserAdv']);
+Route::post('/userAdvStatus',[CustomerController::class,'userAdvStatus']);
+Route::post('/editUserAds',[CustomerController::class,'editUserAds']);
+Route::get('/userFollower_datatable/{userId}/{type}',[CustomerController::class,'userFollower_datatable']);
+Route::get('/userFollows_datatable/{userId}/{type}',[CustomerController::class,'userFollows_datatable']);
+
+Route::post('/deleteFollower',[CustomerController::class,'deleteFollower']);
+Route::post('/deleteFollows',[CustomerController::class,'deleteFollows']);
+
+
+
+
+
+
+
 
 /* Contact Support */
 Route::post('/contactSupport',[RatingController::class,'contactSupport']);
@@ -151,8 +173,23 @@ Route::post('/sponserStatus',[MasterController::class,'sponserStatus']);
 Route::post('/postList',[PostController::class,'postList']);
 Route::get('postDatatable',[PostController::class,'post_datatable']);
 Route::post('/postStatus',[PostController::class,'postStatus']);
+Route::post('/postDetail',[PostController::class,'postDetail']);
+Route::post('/postComment',[PostController::class,'postCommentListing']);
+Route::get('/postComments_datatable/{postId}/{type}',[PostController::class,'postComments_datatable']);
+Route::post('/commentStatus',[PostController::class,'commentStatus']);
+Route::post('/deleteComment',[PostController::class,'deleteComment']);
+Route::get('/like_datatable/{postId}/{type}',[PostController::class,'like_datatable']);
+Route::post('/likeStatus',[PostController::class,'likeStatus']);
+Route::post('/deletelike',[PostController::class,'deletelike']);
+Route::get('/share_datatable/{postId}/{type}',[PostController::class,'share_datatable']);
+Route::post('/shareStatus',[PostController::class,'shareStatus']);
+Route::post('/deleteShare',[PostController::class,'deleteShare']);
+Route::get('/post_file_datatable/{postId}/{type}',[PostController::class,'post_file_datatable']);
+Route::post('/postFileStatus',[PostController::class,'postFileStatus']);
+Route::post('/deletePostFile',[PostController::class,'deletePostFile']);
+Route::post('/delete_post',[PostController::class,'delete_post']);
 
-/* Ads management */    
+/* Ads management f*/    
 Route::post('/adsList',[AdsController::class,'adsList']);
 Route::get('adsDatatable',[AdsController::class,'ads_datatable']);
 Route::post('/adsStatus',[AdsController::class,'adsStatus']);
@@ -177,7 +214,20 @@ Route::post('/socialDelete',[SocialController::class,'socialDelete']);
 /* User Social Point */
 Route::post('/userPointList',[SocialController::class,'userPointList']); 
 Route::get('userPointDatatable',[SocialController::class,'userPointDatatable']); 
-Route::post('/userPointStatus',[SocialController::class,'userPointStatus']);   
+Route::post('/userPointStatus',[SocialController::class,'userPointStatus']);  
+Route::post('/userPointDetail',[SocialController::class,'userPoint_detail']); 
+
+// User Subscriptions List
+Route::post('/subscriptionList',[SocialController::class,'subscriptionList']); 
+Route::get('subscriberDatatable',[SocialController::class,'subscriber_datatable']); 
+Route::post('/subscriberStatus',[SocialController::class,'subscriberStatus']);
+Route::post('/subscriptionDelete',[SocialController::class,'subscriptionDelete']);    
+
+//Dashboard
+Route::post('/trafficByPlateForm',[DashboardController::class,'trafficByPlateForm']);   
+Route::post('/trafficByLocation',[DashboardController::class,'trafficByLocation']);   
+Route::post('/advertisementChart',[DashboardController::class,'advertisementChart']); 
+Route::post('/currentWeekReport',[DashboardController::class,'currentWeekReport']); 
 
 Auth::routes();
 

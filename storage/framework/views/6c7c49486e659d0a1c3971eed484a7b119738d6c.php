@@ -123,7 +123,14 @@
       columnDefs: [  
                 {
                     "aTargets": [0],
-                    "visible":false
+                    "visible":true
+                },
+                {
+                    "aTargets": [0],
+                    "mRender": function(data, type, full){
+                      
+                        return '<th scope="row"><a href="'+baseUrl+'/administrator/dashboard#post_detail/'+full['id']+'" onclick="postDetail('+full['id']+')"><i class="bi bi-chevron-right"></i></a></th> ';
+                    }
                 },
                 {
                     "aTargets": [10],
@@ -133,7 +140,7 @@
                     "aTargets": [1],
                     "mRender": function(data, type, full){
                         var response ='' ;
-                       
+                         
                         if(full['image']!='' || full['image']==undefined ){
                          response='<img src="'+full['image']+'" width="50px" height="50px" /> '+full['name'];
                         }else{
@@ -179,7 +186,7 @@
                 {
                     "aTargets": [9],
                      "mRender": function(data, type, full){
-                        var response ='<td><div class="align-items-center d-flex">  <div> <label class="switch">' ;
+                        var response ='<td><div class="align-items-center d-flex"><div class="more_n"> <i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"> <li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')">Delete</a></li></ul> </div>  <div> <label class="switch">' ;
 
                         if(full['status']=='1'){
                              response +='<input type="checkbox" onclick="changeUsrStatus('+full['id']+')" checked>' ;
@@ -193,17 +200,12 @@
 
                         return response ;
                     }
-                },   
-                
+                },                   
                 {
                     "aTargets": [10],
                      "mRender": function(data, type, full){
                         var response ='<td><div class="align-items-center d-flex"> <div class="more_n"> <i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"> <li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')">Delete</a></li> <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#change_pass" onclick="changePassword('+full["id"]+')">Change Password</a></li> </ul> </div> ' ;
-
-                        
-
                         response+=' </div> </td>'  ;
-
                         return response ;
                     }
                 }
@@ -316,7 +318,7 @@ function ConfirmDelete(id) {
     function delete_customer(id){
              ajaxCsrf();
         $.ajax({type:"POST",
-        url:baseUrl+'/delete_customer',
+        url:baseUrl+'/delete_post',
         data:{"id":id},
         dataType:'json',
         beforeSend:function()

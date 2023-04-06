@@ -53,10 +53,14 @@ $('#letsgo_sidebar').find('li a').click(function(){
             notificationFor();
         }    
         
+        if(res[0]=='#customer_detail'){
+            customerDetail(res[1]);
+        }    
+
         if(res[0]=='#country_list'){
             countryList();
         }    
-
+ 
         
         if(res[0]=='#rankType'){
             rankTypeList();
@@ -64,7 +68,11 @@ $('#letsgo_sidebar').find('li a').click(function(){
         
         if(res[0]=='#interest'){
             interestList();
-        }    
+        }   
+
+        if(res[0]=='#customer_management'){
+            customerManagement();
+        }  
 
 
         if(res[0]=='#sponser'){
@@ -75,6 +83,10 @@ $('#letsgo_sidebar').find('li a').click(function(){
        
         if(res[0]=='#advertisement_detail'){
             advertisementDetail(res[1]);
+        }
+
+        if(res[0]=='#userPoint_detail'){
+            userPointDetail(res[1]);
         }
         
 
@@ -118,27 +130,42 @@ $('#letsgo_sidebar').find('li a').click(function(){
         if(res[0]=='#usersocialpoint'){
             userPointList();   
         }  
+        if(res[0]=='#subscriptions'){
+            subscriptionList();   
+        } 
+        if(res[0]=='#post_detail'){
+            postDetail(res[1]);   
+        } 
 });
 </script>
     <div class="header_logo">
     <a class="navbar-brand" href="#">
-                <img src="<?php echo e(URL::to('/public/admin')); ?>/images/lesgo_logo.png?<?php echo e(time()); ?>" class="un-clp-logo" alt="">
+                <img src="<?php echo e(URL::to('/public/admin')); ?>/images/sitebar_icon/logo-new.png?<?php echo e(time()); ?>" class="un-clp-logo" alt="">
                  <img src="<?php echo e(URL::to('/public/admin')); ?>/images/lesgo_logo-sml.png?<?php echo e(time()); ?>" class="clp-logo" alt="">
             </a>
             </div>
     <div class="sidebarWrapper">   
     <ul class="height_navigation" id="letsgo_sidebar">
-        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#index" onclick="dashboard();"><i class="ri-dashboard-line"></i><span class="tooltip_nav">Dashboard</span></a></li>
+        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#index" onclick="dashboard();">
+        <!-- <i class="ri-dashboard-line"></i> -->
+        <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/icon1.png" alt="">
+        <span class="tooltip_nav">Dashboard</span></a></li>
      
-        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#customer_management" onclick="customerManagement()"><i class="ri-user-settings-line"></i>
+        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#customer_management" onclick="customerManagement()">
+        <!-- <i class="ri-user-settings-line"></i> -->
+        <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/UsersThree.png" alt="">
            <span class="tooltip_nav">
         Customer Management
     </span></a></li>
-    <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#post_management" onclick="postManagement()"><i class="ri-user-settings-line"></i>
+    <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#post_management" onclick="postManagement()">
+    <!-- <i class="ri-user-settings-line"></i> -->
+    <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/Image.png" alt="">
            <span class="tooltip_nav">
         Post Management
     </span></a></li>
-    <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#adsManagement" onclick="adsManagement()"><i class="ri-user-settings-line"></i>
+    <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#adsManagement" onclick="adsManagement()">
+    <!-- <i class="ri-user-settings-line"></i> -->
+    <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/Television.png" alt="">
            <span class="tooltip_nav">
         Ads Management
     </span></a></li>
@@ -146,17 +173,29 @@ $('#letsgo_sidebar').find('li a').click(function(){
            <span class="tooltip_nav">
         Soical Management
     </span></a></li> -->
-        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#contactSupport" onclick="contactSupport()"><i class="ri-customer-service-2-line"></i>
-         
+        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#contactSupport" onclick="contactSupport()">
+        <!-- <i class="ri-customer-service-2-line"></i> -->
+        <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/AddressBook.png" alt="">
     <span class="tooltip_nav">Contact Support</span></a></li>
-        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#notification" onclick="notificationList()"><i class="ri-notification-3-line"></i>
+        <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#notification" onclick="notificationList()">
+        <!-- <i class="ri-notification-3-line"></i> -->
+        <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/BellSimple.png" alt="">
         <span class="too ltip_nav">
  Notification Management
         </span>
     </a></li>
+    <li><a href="<?php echo e(URL::to('/')); ?>/administrator/dashboard#subscriptions" onclick="subscriptionList()">
+    <!-- <i class="ri-notification-3-line"></i> -->
+    <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/IdentificationBadge.png" alt="">
+        <span class="too ltip_nav">
+ User Subscription
+        </span>
+    </a></li>
     <li>
             <div class="social_nav">  
-                <a class="" id="social_drop_nav"><span><i class="ri-settings-3-line"></i>
+                <a class="" id="social_drop_nav"><span>
+                    <!-- <i class="ri-settings-3-line"></i> -->
+                    <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/At.png" alt="">
                       <span class="tooltip_nav">Social Management</span>
                 </span>
                     <!-- <span class="tooltip_nav">CMS</span> -->
@@ -180,7 +219,9 @@ $('#letsgo_sidebar').find('li a').click(function(){
         </li>
         <li>
             <div class="cms_nav">
-                <a class="" id="drop_nav"><span><i class="ri-settings-3-line"></i>
+                <a class="" id="drop_nav"><span>
+                    <!-- <i class="ri-settings-3-line"></i> -->
+                    <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/IdentificationCard.png" alt="">
                       <span class="tooltip_nav">CMS</span>
                 </span>
                     <!-- <span class="tooltip_nav">CMS</span> -->
@@ -204,7 +245,9 @@ $('#letsgo_sidebar').find('li a').click(function(){
         </li>
         <li>
             <div class="master_nav">
-                <a class="" id="master_n"><span><i class="ri-sound-module-line"></i>
+                <a class="" id="master_n"><span>
+                    <!-- <i class="ri-sound-module-line"></i> -->
+                    <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/Notebook.png" alt="">
                      <span class="tooltip_nav">Master</span>
                 </span> <span class="dropdown_tog"><i class="ri-arrow-drop-down-line"></i></span></a>
                 <ul class="dropdown-menu" id="drop_content_m"> 

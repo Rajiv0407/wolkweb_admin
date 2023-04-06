@@ -279,7 +279,7 @@
          ajax_success() ;
          if(html.status==1){
     
-             modalHide_('edit_body'); 
+             modalHide_('editDetailVehicle'); 
             // $('.modal-backdrop').hide();   
             $('#dataTable').DataTable().ajax.reload();
             statusMesage('Update successfully','success');
@@ -288,8 +288,7 @@
          }else{
              statusMesage('Something went wrong','error');
          }
-          
-        
+                 
                 }
         });      
     

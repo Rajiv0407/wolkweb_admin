@@ -53,7 +53,7 @@
 
     </div>
           
-    
+  
 
     <section id="features" class="intro-area">
         <div class="container">
@@ -65,49 +65,110 @@
                 </div>
             </div>
             <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <div class="intro-thumb">
-                        <img src="assets/images/intro-thumb.png" alt="">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <h3></h3>
-                    <h4>User Name : Manoj Sharma </h4>
+               
+                <div class="col-lg-12">
+                    <h3>User List</h3>
+                   
                     <table class="table">
                         <thead>
                         <tr>
-                            <th>Facebook Fields</th>
-                            <th>Facebook Data</th>
+                            <th>User Name</th>
+                            <th>Email</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Total Friends Count</td>
-                            <td></td>
+                        <?php if(!empty($userList)){ 
+
+                            foreach ($userList as $key => $value) { ?>
+                                <tr>
+                            <td width="20px"><?php echo $value->name ; ?></td>
+                            <td width="20px"><?php echo $value->email ; ?></td>
+                             <td width="100px">
+                            <a  style="margin-left:10px; " href="<?php echo url('/').'/fbProfileConnect/'.$value->encryption ; ?>" >Connect With Facebook</a>
+                            <br>
+                            <a  style="margin-left:10px; " href="<?php echo url('/').'/fbConnect/'.$value->encryption ; ?>">Connect With Insta Business Account</a>
+                            <br>
+                          <!--   <a  style="margin-left:10px; " target="_blank" href="<?php //echo 'https://www.walkofweb.net/'.$value->encryption ; ?>" >Connect With Tiktok</a> -->
+                            <br>
+                            <a href="JavaScript:void(0);" style="margin-left:10px; "  data-toggle="modal" data-target="#exampleModal" onclick="getUserPoints('<?php echo $value->id ; ?>','<?php echo $value->name; ?>')">View</a>
+                             </td>
                         </tr>
-                        <tr>
-                            <td>Facebook Post comments</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Facebook Post likes</td>
-                            <td>0.2</td>
-                        </tr>
-                        <tr>
-                            <td>Facebook Post count</td>
-                            <td>0.05</td>
-                        </tr>
+                         <?php 
+                                }
+                        ?> 
+                       
+                        <?php } ?>
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
     </section>
 
+  
+
+<div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">       
+        <h3 class="modal-title" id="exampleModalLabel" style="text-align:center;">User Points Detail</h3>
+        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 style="text-align:center;">User Name : <span id="userN"></span></h4>
+      </div>
+      <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+      <div class="modal-body" id="socialData">
+       
+      </div>
+     
+    </div>
+  </div>
+</div>
    
-   
-   
+   <script type="text/javascript">
+    var baseUrl = "{{ url('/') }}";
+        function ajaxCsrf(){
+         $.ajaxSetup({
+           headers: {
+               'X-CSRF-TOKEN': $('#token').val()
+           }
+        });
+        }
+
+       function getUserPoints(id,name){
+         $('#userN').text(name);
+       ajaxCsrf();
+
+        $.ajax({
+        type: "POST",
+        url: baseUrl+'/userPoints',
+        data:{"id":id,"name":name},       
+        cache: 'FALSE',
+        beforeSend: function () {
+       // ajax_before();
+        },
+        success: function(html){
+       // ajax_success() ;
+           $('#socialData').html(html);
+
+        }
+
+        });
+    }
+
+function ajax_before(){
+     var over = '<div class="overlay" style="margin-left:20%;margin-top:20%;position:absolute;z-index:1;"><img id="loading" width="" src="' + baseUrl + '/public/admin/images/loader.gif"></div>';
+          $(over).prependTo('.main_site_data');
+}
+
+function ajax_success(){
+     $('.overlay').remove();
+}
+
+   </script>
 
 </body>
 

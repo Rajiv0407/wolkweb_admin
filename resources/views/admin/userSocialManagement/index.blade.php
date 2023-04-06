@@ -41,10 +41,14 @@
                 </div>
             </form>
                 <div class="table-area">
+
+                
+
+
                     <table class="table" id="dataTable">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
+                                <th scope="col" width="10px">#</th>
                                 <th scope="col">Name</th>
                                 <th scope="col" width="10%">Total Count</th>
                                 <th scope="col" width="10%">Avg Count</th>
@@ -71,7 +75,18 @@
       columnDefs: [ 
                 {
                     "aTargets": [0],
+                    "visible":true
+                },
+                {
+                    "aTargets": [6],
                     "visible":false
+                },
+                {
+                    "aTargets": [0],
+                    "mRender": function(data, type, full){
+                      
+                        return '<th scope="row"><a href="'+baseUrl+'/administrator/dashboard#userPoint_detail/'+full['userId']+'" onclick="userPointDetail('+full['userId']+')"><i class="bi bi-chevron-right"></i></a></th> ';
+                    }
                 },
                 {
                             "aTargets": [4], 
@@ -112,12 +127,14 @@
                         { data: 'avg_point' },
                         { data: 'status' },
                         { data: 'status_' }, 
+                        {data:'userId'}
           ],
         });
       $k('.input-group-addon').click(function() {
         $k(this).prev('input').focus();
     });      
 });
+
 function cancelFeature(){
 $('#name').val('');
 $('#point_status').val('');
