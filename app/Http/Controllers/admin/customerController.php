@@ -343,5 +343,65 @@ try{
 
 }
 
+public function term_condition(){
+    $qry=DB::table('cms')->where('slug','term_condition')->first();
+    $data['term_conditions']= $qry->description ;
+    echo view('web_view/term_conditions',$data);
 
+}
+
+public function privacy_policy(){
+  $qry=DB::table('cms')->where('slug','privacy_policy')->first();
+  $data['privacy_policy']= $qry->description ;
+  echo view('web_view/privacy_policy',$data);
+}
+
+public function followers_graph($userId){  
+  $data['title']= siteTitle() ;
+  $data['userId']=$userId ;  
+  echo view('web_view/followers',$data);
+}
+
+public function social_media_follower(Request $request){ 
+
+  $baseUrl=url('/').'/public/social_icon/' ;
+  $userId = isset($request->userId)?$request->userId:exit ;
+   
+  $fbFollowers="select sum(fb_page_followers_count) as total_fb_followers from fb_user_info where userId=".$userId;
+  $instaFollowers="select sum(followers_count) as instaFollowers from insta_user_info where userId=".$userId;
+   $tiktokFollowers="select sum(followers_count) as tiktokFollowers from tiktok_user_info where userId=".$userId;
+   $walkofwebFollowers="select count(*) as walkofwebFollowers from user_follows where follower_user_id=".$userId." and isAccept=1";
+ 
+  $fbF = DB::select($fbFollowers);
+  $fbF_ = isset($fbF[0]->total_fb_followers)?$fbF[0]->total_fb_followers:0 ;
+ 
+  $instaF = DB::select($instaFollowers);
+  $instaF_ = isset($instaF[0]->instaFollowers)?$instaF[0]->instaFollowers:0 ;
+ 
+  $tiktokF = DB::select($tiktokFollowers);
+  $tiktokF_ = isset($tiktokF[0]->tiktokFollowers)?$tiktokF[0]->tiktokFollowers:0 ;
+   
+  $walkofwebF = DB::select($walkofwebFollowers);
+  $walkofwebF_ = isset($walkofwebF[0]->walkofwebFollowers)?$walkofwebF[0]->walkofwebFollowers:0 ;
+ 
+ 
+  $categoryImg=array(
+     'Walkofweb'=>$baseUrl.'walkofweb.png',
+     'Tiktok'=>$baseUrl.'tiktok.png',
+     'Facebook'=>$baseUrl.'fb.png',
+     'Instagram'=>$baseUrl.'insta.png'
+  );
+ 
+   $response=array(
+    array("name"=>"Walkofweb","y"=>(int)$walkofwebF_),
+    array("name"=>"Tiktok","y"=>(int)$tiktokF_),
+    array("name"=>"Facebook","y"=>(int)$fbF_),
+    array("name"=>"Instagram","y"=>(int)$instaF_)
+   );
+  
+   $resp=array('category'=>$categoryImg,'data'=>$response);
+   return json_encode($resp)     ;
+   
+ }
+ 
 }

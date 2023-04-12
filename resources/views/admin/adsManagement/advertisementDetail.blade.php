@@ -49,7 +49,21 @@
                         <p><span><b>Conclusion:</b> </span><div><?php echo isset($advertisement->conclusion)?$advertisement->conclusion:'' ; ?></div></p> 
                         <p><span><b>Target Audience: </b></span><div><?php echo isset($advertisement->target_audience)?$advertisement->target_audience:'' ; ?></div></p> 
                         <p><span><b>Media Sample:</b> </span><div><?php echo isset($advertisement->media_sample)?$advertisement->media_sample:'' ; ?></div></p> 
-                        <p><span><b>Is Accept:</b> </span><span>Yes</span></p> 
+                        <?php 
+                        $today = date("Y-m-d H:i:s");
+                                if($today > Date($advertisement->end_date)){
+                                    $ads_status='Expired' ;
+                                }else if(isset($advertisement->isAccept) && $advertisement->isAccept==0){
+                                    $ads_status='Pending' ;
+                                }else if(isset($advertisement->isAccept) && $advertisement->isAccept==1){
+                                    $ads_status='Approved' ;
+                                }else if(isset($advertisement->isAccept) && $advertisement->isAccept==2){
+                                    $ads_status='Rejected' ;
+                                }else {
+                                    $ads_status='Expired' ;
+                                }
+                        ?>
+                        <p><span><b>Advertisement Status:</b> </span><span><?php echo $ads_status ; ?></span></p> 
                     
                      
                     </div>  
@@ -178,13 +192,14 @@
                          <span id="err_media_sample" class="err" style="color:red"></span>
                     </div>
                 </div>
+
                 <div class="form modal-form">
                     <div class="form-group">
-                        <label for="is_accept">Is Accept</label>                         
+                        <label for="is_accept">Advertisement Status</label>                         
                         <select name="is_accept" id="is_accept" class="form-control" >
-                            <option value="">Select</option>
-                            <option value="1" <?php echo ($advertisement->ad_type==1)?'selected':'' ; ?> >Yes</option>
-                            <option value="2" <?php echo ($advertisement->ad_type==2)?'selected':'' ; ?> >No</option>
+                            <option value="0">Select</option>
+                            <option value="1" <?php echo ($advertisement->isAccept==1)?'selected':'' ; ?> >Approved</option>
+                            <option value="2" <?php echo ($advertisement->isAccept==2)?'selected':'' ; ?> >Rejected</option>
                         </select>
                          <span id="err_is_accept" class="err" style="color:red"></span>
                     </div>

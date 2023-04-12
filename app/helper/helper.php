@@ -16,6 +16,7 @@ function authguard(){
  // }
 }
    function sendPasswordToEmail(Array $data){   
+       $type=isset($data['type'])?$data['type']:'' ;
 
        $data = array(
         'email' => $data['email'],
@@ -23,16 +24,24 @@ function authguard(){
         'messages' => $data['message']
         );
 
+        if($type=='user_subscribers'){
+          Mail::send('emails.subscribers', $data, function($message) use ($data) {
+            $to= $data['email'] ;
+            $recieverName = "" ;
+            $subject = $data['subject'] ;         
+              $message->to($to,$recieverName)->subject($subject);                    
+          });
+        }else{
+          Mail::send('emails.password', $data, function($message) use ($data) {
+            $to= $data['email'] ;
+            $recieverName = "" ;
+            $subject = $data['subject'] ;         
+              $message->to($to,$recieverName)->subject($subject);                    
+          });
+        }
        
     
-         Mail::send('emails.password', $data, function($message) use ($data) {
-          $to= $data['email'] ;
-          $recieverName = "" ;
-          $subject = $data['subject'] ;
-         
-            $message->to($to,$recieverName)->subject($subject);
-                    
-        });
+     
  
         if (Mail::failures()) {
           // return response()->Fail('Sorry! Please try again latter');

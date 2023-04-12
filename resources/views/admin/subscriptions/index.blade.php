@@ -104,7 +104,7 @@
     <div class="modal-dialog modal-dialog-slideout edit_body_typ">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Social</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Send E-mail to Subscriber</h5>
                 <div class="cross-btn">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -158,7 +158,7 @@
                 {
                     "aTargets": [4],
                      "mRender": function(data, type, full){
-                        var response ='<td><div class="align-items-center d-flex"><div class="more_n"><i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i><ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"><li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')">Delete</a></li>  </ul> </div>  <div> <label class="switch">' ;
+                        var response ='<td><div class="align-items-center d-flex"><div class="more_n"><i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i><ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"><li><a class="dropdown-item" href="javascript:void(0);" onclick="editNFor('+full['id']+')">Send E-mail</a></li><li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')">Delete</a></li>  </ul> </div>  <div> <label class="switch">' ;
                         
                         if(full['status']=='1'){
                              response +='<input type="checkbox" onclick="changeUsrStatus('+full['id']+')" checked>' ;
@@ -246,7 +246,7 @@ ajaxCsrf();
 $('#edit_body').modal('show') ;
 $.ajax({
     type: "POST",
-    url: baseUrl +'/editsocial',
+    url: baseUrl +'/sendSubscribersEmail',
     data:{'updatedId':updatedId} ,           
     cache: 'FALSE',
     beforeSend: function () {
@@ -261,14 +261,18 @@ $.ajax({
 
 function updateNFor(){
     
-var edit_social_title=$('#edit_social_title').val();
-var edit_social_weightage=$('#edit_social_weightage').val();
+var subscriberSubject=$('#subscriber_subject').val();
+var subscriberMessage=$('#subscriber_message').val();
+
+
+
+
 ajaxCsrf();
 $('.err').html('');
-if(edit_social_title==''){
- $('#err_edit_social_title').html('Please enter social title.');
-}else if(edit_social_weightage==''){
-  $('#err_edit_social_weightage').html('Please enter social weightage.');
+if(subscriberSubject==''){
+ $('#err_subscriber_subject').html('Please enter title.');
+}else if(subscriberMessage==''){
+  $('#err_subscriber_message').html('Please enter message.');
 }else {
 
 $('.err').html('');
@@ -276,7 +280,7 @@ var formData=new FormData($('#editFeatureForm')[0]);
 
 $.ajax({
     type: "POST",
-    url: baseUrl +'/updatesocial',
+    url: baseUrl +'/sendSubscriberMail',
     data:formData ,
     dataType:'json',
     cache: 'FALSE',
@@ -291,8 +295,8 @@ $.ajax({
 
          modalHide_('edit_body'); 
         // $('.modal-backdrop').hide();   
-        $('#dataTable').DataTable().ajax.reload();
-        statusMesage('Update successfully','success');
+        //$('#dataTable').DataTable().ajax.reload();
+        echo successResponse([],'Successfully sent E-mail to subscribers.');
         // $('#edit_fuel').modal('hide');  
                    
      }else{

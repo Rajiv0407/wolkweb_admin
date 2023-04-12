@@ -24,8 +24,14 @@ use App\Http\Controllers\admin\SocialController;
 |
 */
 
+
+Route::get('exportExcel',[MasterController::class,'exportUsers'])->name('exportUsers');
+Route::post('importExcel',[MasterController::class,'import'])->name('import');
+Route::get('import',[MasterController::class,'importView']);
+Route::get('generate-pdf', [MasterController::class, 'generatePDF']);
+
 Route::get('/', function () {
-    return view('welcome');
+   return '<h3>Coming Soon.............</h3>';
 });
 
 // Route::get('auth/facebook', [FacebookSocialiteController::class,'redirectToFB']);
@@ -92,13 +98,6 @@ Route::get('/userFollows_datatable/{userId}/{type}',[CustomerController::class,'
 
 Route::post('/deleteFollower',[CustomerController::class,'deleteFollower']);
 Route::post('/deleteFollows',[CustomerController::class,'deleteFollows']);
-
-
-
-
-
-
-
 
 /* Contact Support */
 Route::post('/contactSupport',[RatingController::class,'contactSupport']);
@@ -229,9 +228,19 @@ Route::post('/trafficByLocation',[DashboardController::class,'trafficByLocation'
 Route::post('/advertisementChart',[DashboardController::class,'advertisementChart']); 
 Route::post('/currentWeekReport',[DashboardController::class,'currentWeekReport']); 
 
+//Subscribers
+Route::post('/sendSubscribersEmail',[AdsController::class,'sendSubscribersEmail']);
+Route::post('/sendSubscriberMail',[AdsController::class,'sendSubscriberMail']);
+
+
 Auth::routes();
 
 });
 
 
+//webView
+Route::get('/termCondition',[CustomerController::class, 'term_condition']);
+Route::get('/privacyPolicy',[CustomerController::class, 'privacy_policy']);
+Route::get('/followersGraph/{userId}',[CustomerController::class, 'followers_graph']);
+Route::post('/socialMediaFollower',[CustomerController::class, 'social_media_follower']);
 

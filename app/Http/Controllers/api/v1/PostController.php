@@ -403,7 +403,7 @@ class postController extends Controller
           return $this->errorResponse($validatedData->errors()->first(), 401);
         }
 
-        if($request->sponserId==0){
+        if($request->sponserId=='other'){
           $validatedData = Validator::make($request->all(),[ 
             "sponser_title"=>'required|unique:sponser,name',
             "sponser_icon"=>'required'
@@ -479,6 +479,23 @@ class postController extends Controller
           }else{
             return array(); 
           }
+   }
+   
+   public function ads_sponser_list(Request $request){
+    
+    $userId = authguard()->id ;
+    $imagePath = config('constants.sponser_image');    
+     //$list=DB::select('CALL GetAllSponsers("'.$imagePath.'")');
+     $sponserList=DB::table('sponser')->select('id','name')->where('status',1)->whereIn('createdBy',array('0',$userId))->get();
+     $spList=array();
+     if(!empty($sponserList)){
+      foreach($sponserList as $val){
+        $spList[]=array("id"=>(string)$val->id,"name"=>$val->name);
+      }
+     }
+     $spList[]=array("id"=>"other","name"=>"Other");
+     return $this->successResponse($spList,'Sponser list',200);  
+
    }
 
 }

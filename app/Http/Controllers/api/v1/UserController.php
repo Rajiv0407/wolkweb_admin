@@ -1022,24 +1022,25 @@ public function resetPassword(Request $request){
 
  public function sponser_detail(Request $request){
 
-   $validator = Validator::make($request->all(), [
-      'advertisementId' => 'required'
-     ]);
+  $validator = Validator::make($request->all(), [
+     'advertisementId' => 'required'
+    ]);
 
-    
-    if($validator->fails()){       
-      return $this->errorResponse($validator->errors()->first(), 401);
-    }
-    $sponserImg = config('constants.sponser_image');
-    $advImg = config('constants.advertisement_image');
+   
+   if($validator->fails()){       
+     return $this->errorResponse($validator->errors()->first(), 401);
+   }
+   $sponserImg = config('constants.sponser_image');
+   $advImg = config('constants.advertisement_image');
+// DB::enableQueryLog();
+   $advertisementDetail = DB::table("advertisements")->select(DB::raw('advertisements.id as advertiserId'),DB::raw('case when sponser.image is null then "" else concat("'.$sponserImg.'",sponser.image) end as sponserImg'),DB::raw('case when advertisements.image is null then 0 else concat("'.$advImg.'",advertisements.image) end as advImage'),'sponser.name','advertisements.title',DB::raw('concat(Date_Format(advertisements.start_date,"%d %M %Y")," to ",Date_Format(advertisements.end_date,"%d %M %Y")) as duration'),'advertisements.introduction','advertisements.objectives',
+     'advertisements.target_audience','advertisements.media_mix','advertisements.conclusion','advertisements.media_sample')->where('advertisements.id',$request->advertisementId)
+  ->join('sponser','sponser.id','=','advertisements.sponser_id')
+   ->first();
+// print_r(DB::getQueryLog());
+   return $this->successResponse($advertisementDetail,'Advertisement Detail',200);
+}
 
-    $advertisementDetail = DB::table("advertisements")->select(DB::raw('advertisements.id as advertiserId'),DB::raw('case when sponser.image is null then "" else concat("'.$sponserImg.'",sponser.image) end as sponserImg'),DB::raw('case when advertisements.image is null then 0 else concat("'.$advImg.'",advertisements.image) end as advImage'),'sponser.name','advertisements.title',DB::raw('concat(Date_Format(advertisements.start_date,"%d %M %Y")," to ",Date_Format(advertisements.end_date,"%d %M %Y")) as duration'),'advertisements.introduction','advertisements.objectives',
-      'advertisements.target_audience','advertisements.media_mix','advertisements.conclusion','advertisements.media_sample')->where('sponser_id',$request->advertisementId)
-   ->join('sponser','sponser.id','=','advertisements.sponser_id')
-    ->first();
-
-    return $this->successResponse($advertisementDetail,'Advertisement Detail',200);
- }
 
  public function social_connect(Request $request){
     // $response = 
@@ -1215,19 +1216,45 @@ public function resetPassword(Request $request){
         
  }     
 
+ public function host_user(Request $request){
 
-   public function host_user_list(Request $request){
+  $userId = authguard()->id ;
+  $userImgPath = config('constants.user_image');      
+  $userName = isset($request->username)?$request->username:'' ;
+  $searchCond='' ;
+
+  if($userName!=''){
+   $searchCond=" and u.username='".$userName."'" ;
+  }
+
+  $query1="select u.id as userId,u.name,u.username,case when bio is null then '' else bio end as bio,case when image is null then '' else concat('".$userImgPath."',image) end as image,rank_type,rank_,case when uf.isAccept=1 then 1 else 0 end as isFollowing,case when uh.isAccept is null then 2 else uh.isAccept end as isUserHost from user_follows as uf inner join users as u on u.id=uf.follower_user_id left join user_host as uh on uh.userId=u.id where u.isTrash=0 and uf.isAccept=0 and followed_user_id=".$userId.$searchCond;
+
+  $query2="select u.id as userId,u.name,u.username,case when bio is null then '' else bio end as bio,case when image is null then '' else concat('".$userImgPath."',image) end as image,rank_type,rank_,case when uf.isAccept=1 then 1 else 0 end as isFollowing,case when uh.isAccept is null then 2 else uh.isAccept end as isUserHost from user_follows as uf inner join users as u on u.id=uf.follower_user_id left join user_host as uh on uh.userId=u.id where u.isTrash=0 and uf.isAccept=1 and follower_user_id=".$userId.$searchCond;
+
+  $query=$query1.' union '.$query2;
+   $userHostList = DB::select($query);
+   return $this->successResponse($userHostList,'Follower List',200);
+
+}
+
+
+   public function user_host_list(Request $request){
 
        $userId = authguard()->id ;
        $userImgPath = config('constants.user_image');      
-      
-       $query1="select u.id as userId,u.name,u.username,case when bio is null then '' else bio end as bio,case when image is null then '' else concat('".$userImgPath."',image) end as image,rank_type,rank_,case when uf.isAccept=1 then 1 else 0 end as isFollowing,case when uh.isAccept is null then 2 else uh.isAccept end as isUserHost from user_follows as uf inner join users as u on u.id=uf.follower_user_id left join user_host as uh on uh.userId=u.id where u.isTrash=0 and uf.isAccept=0 and followed_user_id=".$userId;
+       $userName = isset($request->username)?$request->username:'' ;
+       $searchCond='' ;
 
-       $query2="select u.id as userId,u.name,u.username,case when bio is null then '' else bio end as bio,case when image is null then '' else concat('".$userImgPath."',image) end as image,rank_type,rank_,case when uf.isAccept=1 then 1 else 0 end as isFollowing,case when uh.isAccept is null then 2 else uh.isAccept end as isUserHost from user_follows as uf inner join users as u on u.id=uf.follower_user_id left join user_host as uh on uh.userId=u.id where u.isTrash=0 and uf.isAccept=1 and follower_user_id=".$userId;
+       if($userName!=''){
+        $userName=" and u.username='".$userName."'" ;
+       }
 
-       $query=$query1.' union '.$query2;
-        $userHostList = DB::select($query);
-        return $this->successResponse($userHostList,'Follower List',200);
+       $starImg = config('constants.star_image');   
+
+       $query1="select u.id as userId,u.name,u.username,case when bio is null then '' else bio end as bio,case when image is null then '' else concat('".$userImgPath."',image) end as image,concat('".$starImg."',rt.star_img) as starImg,rank_type,rank_ from user_host as uh inner join users as u on u.id=uh.host_user_id left join rank_types as rt on rt.id=u.rank_type where u.isTrash=0 and uh.userId=".$userId;
+
+        $userHostList = DB::select($query1);
+        return $this->successResponse($userHostList,'Host List',200);
 
    }
 
@@ -1337,8 +1364,8 @@ public function resetPassword(Request $request){
 
    public function advertisement_listing(Request $request){
     $userId = authguard()->id ;
-    $advImage = config('constants.advertisement_image');
-    $qry="select adv.id,sp.name,case when sp.image is null then '' else concat('".$advImage."',sp.image) end as sponserIcon,adv.introduction, case when CURDATE()  > Date(adv.end_date) then 'Expired' when adv.isAccept=0 then 'Pending' when adv.isAccept=1 then 'Approve' when adv.isAccept=2 then 'Rejected' else '' end as status,adv.isAccept as isAccept from advertisements as adv inner join sponser as sp on sp.id=adv.id where adv.createdBy=1"  ; //.$userId ;
+    $advImage = config('constants.sponser_image');
+    $qry="select adv.id,sp.name,case when sp.image is null then '' else concat('".$advImage."',sp.image) end as sponserIcon,adv.introduction, case when CURDATE()  > Date(adv.end_date) then 'Expired' when adv.isAccept=0 then 'Pending' when adv.isAccept=1 then 'Approve' when adv.isAccept=2 then 'Rejected' else 'Expired' end as ads_status,case when CURDATE()  > Date(adv.end_date) then 3 else adv.isAccept end as isAccept from advertisements as adv left join sponser as sp on sp.id=adv.sponser_id where adv.createdBy in (1,".$userId.")  and adv.isAccept!=4"  ; //.$userId ;
     
     $data=DB::Select($qry) ;
     return $this->successResponse($data,'Advertisement List',200);
@@ -1369,5 +1396,76 @@ public function resetPassword(Request $request){
     return $this->successResponse([],'Successfully Remove Cover Image',200);
   }
 
+  public function advertisement_delete(Request $request){
+      
+      $validator = Validator::make($request->all(), [
+        'id' => 'required'
+       ]);
   
+      
+      if($validator->fails()){       
+        return $this->errorResponse($validator->errors()->first(), 401);
+      }
+
+      $updatedId = $request->id ;
+
+      DB::table('advertisements')->where('id',$updatedId)->update(['isAccept'=>4]);
+      return $this->successResponse([],'Successfully Deleted',200);
+  }
+  
+  public function advertisement_edit(Request $request){
+    $validator = Validator::make($request->all(), [
+      'updatedId' => 'required',
+      'ads_title' => 'required',
+      'introduction'=>'required',
+      'objectives' => 'required',
+      'media_mix' => 'required',
+      'conclusion'=> 'required',
+      'target_audience'=>'required'
+     ]);
+
+    
+    if($validator->fails()){       
+      return $this->errorResponse($validator->errors()->first(), 401);
+    }
+
+    $updatedId = $request->updatedId ;
+    $upatedData=array(
+      "title"=>$request->ads_title,
+      "introduction"=>$request->introduction,
+      "objectives"=>$request->objectives,
+      "media_mix"=>$request->media_mix,
+      "conclusion"=>$request->conclusion,
+      "target_audience"=>$request->target_audience
+    );
+    
+    DB::table('advertisements')->where('id',$updatedId)->update($upatedData);
+    return $this->successResponse([],'Successfully Updated',200);
+
+  }
+
+  public function is_private_account(Request $request){
+    $validator = Validator::make($request->all(), [
+      'isPrivate' => 'required'     
+     ]);
+
+    
+    if($validator->fails()){       
+      return $this->errorResponse($validator->errors()->first(), 401);
+    }
+
+    $isPrivate = $request->isPrivate ;    
+    $userId = authguard()->id ;
+    $qry="update users set isPrivate=".$isPrivate." where id=".$userId ;
+    DB::select($qry);
+    return $this->successResponse([],'Successfully Updated',200);
+  }
+
+  public function check_private_account(Request $request){
+    $userId = authguard()->id ;
+    $checkPrivateAcount = DB::table('users')->select('isPrivate')->where('id',$userId)->first();
+    return $this->successResponse($checkPrivateAcount,'User Info',200);
+  }
+ 
+
 }

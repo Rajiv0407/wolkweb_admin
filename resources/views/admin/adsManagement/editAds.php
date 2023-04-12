@@ -56,6 +56,18 @@
                          <span id="err_edit_adsFile" class="err" style="color:red"></span>
                     </div>
                 </div>
+                <div class="form modal-form">
+                    <div class="form-group">
+                        <label for="Manufacture">Ads Status</label>
+                        <select name="is_accept" id="is_accept" class="form-control" >
+                            <option value="0">Select</option>
+                            <option value="1" <?php echo ($advertisement->isAccept==1)?'selected':'' ; ?> >Approved</option>
+                            <option value="2" <?php echo ($advertisement->isAccept==2)?'selected':'' ; ?> >Rejected</option>
+                        </select>
+                         <span id="err_is_accept" class="err" style="color:red"></span>
+                        
+                    </div>
+                </div>
                 
     <div class="mt-4">
         <a href="javascript:void(0);"  onclick="updateNFor()" class="search-btn">Update</a>

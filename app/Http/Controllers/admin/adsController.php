@@ -29,8 +29,8 @@ class adsController extends Controller
         $adsImg = config('constants.advertisement_image'); 
         $carQry="select ads.id,s.name,case when s.image is null then '' else concat('".$sponserImg."',s.image) end as sponserIcon,ads.title,
         case when ads.ad_type=1 then 'image' when ads.ad_type=2 then 'video' else '' end as adType,
-        case when ads.image is null then '' else concat('".$adsImg."',ads.image) end as ads,ads.start_date,ads.end_date,case when ads.createdBy=1 then 'Admin' else 'User' end as createdBy,case when ads.status=1 then 'Active' else 'Inactive' end as status_,ads.status 
-                from advertisements as ads left join sponser as s on s.id=ads.sponser_id where ads.start_date is not null and ads.end_date is not null" ;   
+        case when (ads.image is null || ads.image='') then '' else concat('".$adsImg."',ads.image) end as ads,ads.start_date,ads.end_date,case when ads.createdBy=1 then 'Admin' else 'User' end as createdBy,case when CURDATE()  > Date(ads.end_date) then 'Expired' when isAccept=0 then 'Pending' when isAccept=1 then 'Approved' when isAccept=2 then 'Rejected' else 'Expired' end as isAccept,case when ads.status=1 then 'Active' else 'Inactive' end as status_, ads.status from advertisements as ads left join sponser as s on s.id=ads.sponser_id where ads.start_date is not null and ads.end_date is not null" ;   
+                
         $carData = DB::select($carQry); 
         $tableData = Datatables::of($carData)->make(true);  
         return $tableData; 
@@ -76,6 +76,7 @@ class adsController extends Controller
         $adsType = isset($request->edit_ads_type)?$request->edit_ads_type:'' ;
         $startDate = isset($request->edit_startDate)?$request->edit_startDate:'' ;
         $endDate = isset($request->edit_endDate)?$request->edit_endDate:'' ;
+        $isAccept = isset($request->is_accept)?$request->is_accept:0 ;
         $filenametostore='';
         
 
@@ -97,7 +98,8 @@ class adsController extends Controller
             'title'=>$adsTitle,
             'ad_type'=>$adsType ,  
             'start_date'=>$startDate ,  
-            'end_date'=>$endDate         
+            'end_date'=>$endDate ,
+            'isAccept'=>$is_accept        
         );
         
         if($type==1){
@@ -220,17 +222,55 @@ class adsController extends Controller
 
 public function advertisementDetail(Request $request){
 
-    $data['title']=siteTitle();
-   
+    $data['title']=siteTitle();   
     $updatedId = isset($request->id)?$request->id:0 ;
     $advertisement = DB::table('advertisements')->where('id',$updatedId)->first() ;
     $data['sponser']=DB::table('sponser')->where('status',1)->get();
     $data['advertisement'] = $advertisement ;
     $data['updatedId']=$updatedId ;
-
     echo view('admin/adsManagement/advertisementDetail',$data);
 
 }
+
+public function sendSubscribersEmail(Request $request){
+
+    $updatedId = isset($request->updatedId)?$request->updatedId:0 ;
+    $subscriber = DB::table('user_subscriber')->where('id',$updatedId)->first() ;  
+    $data['subscriber']=$subscriber ;
+   echo view('admin/subscriptions/mailSubscribers',$data);
+
+}
+
+public function sendSubscriberMail(Request $request){
+
+    $id=$request->updatedId ;
+    $sName=$request->subscriberName ;
+    $sMessage = $request->subscriber_message ;
+    $sSubject = $request->subscriber_subject ;
+    $sEmail = $request->subscriberEmail ;
+
+    $insertData=array(
+        "subscriberId"=>$id,
+        "subject"=>$sSubject,
+    	"message"=>$sMessage            
+    );
+    DB::table('subscriber_mail')->insert($insertData);
+
+    $data=array(
+        'email' => $sEmail,
+        'subject' => $sSubject,
+        'message' => $sMessage,
+        'type'=>'user_subscribers'
+       );
+        
+    $data=sendPasswordToEmail($data);
+
+    echo successResponse([],'Successfully sent E-mail to subscribers.'); 
+
+}
+
+
+
 
 }
 

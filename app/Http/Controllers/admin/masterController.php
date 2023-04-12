@@ -506,4 +506,36 @@ public function createThumbnail($path, $width, $height)
          
         }
   }
+
+  public function importView(Request $request){
+    return view('import');
+}
+
+public function import(Request $request){
+    //
+    try{
+         Excel::import(new ImportUser,$request->file('file')->store('files'));
+          //echo successResponse([],'Data Successfully Imported.'); 
+         return redirect()->back()->with('success', 'Employees Successfully Imported.');
+    }catch(\Exception $e){
+            echo $e ;
+    }
+   
+}
+
+public function exportUsers(Request $request){
+    return Excel::download(new ExportUser, 'users.xlsx');
+}
+public function generatePDF()
+{
+    $data = [
+        'title' => 'Welcome to ItSolutionStuff.com',
+        'date' => date('m/d/Y')
+    ];
+      
+    $pdf = PDF::loadView('myPDF', $data);
+
+    return $pdf->download('itsolutionstuff.pdf');
+}
+
 }

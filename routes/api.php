@@ -96,7 +96,8 @@ Route::middleware([Cors::class,EnsureTokenIsValid::class])->group(function () {
 
     //user profile video
     Route::post('/addProfileVideo',[UserController::class,'profile_video']); 
-    Route::post('/addHostUserList',[UserController::class,'host_user_list']);  
+    Route::post('/hostUser',[UserController::class,'host_user']);  
+    Route::post('/userHostList',[UserController::class,'user_host_list']);  
 
     //user dashboard api
     Route::post('/dashboard',[UserController::class, 'user_dashboard']); 
@@ -107,12 +108,21 @@ Route::middleware([Cors::class,EnsureTokenIsValid::class])->group(function () {
     Route::post('/saveAdvertisement',[PostController::class, 'save_advertisement']); 
     Route::post('/advertisement_listing',[UserController::class, 'advertisement_listing']);
     Route::post('/advertisementDetail',[UserController::class, 'sponser_detail']); 
+    Route::post('/adsSponserList',[PostController::class, 'ads_sponser_list']);
     
     //user 05-April-2023
     Route::post('/removeProfileImage',[UserController::class, 'removeProfileImage']);
     Route::post('/updateCoverImage',[UserController::class, 'updateCoverImage']);
     Route::post('/removeCoverImage',[UserController::class, 'removeCoverImage']);
-     
+    
+    // Advertisement Delete and Edit API
+    Route::post('/advsDelete',[UserController::class, 'advertisement_delete']);
+    Route::post('/advertisementEdit',[UserController::class, 'advertisement_edit']);
+    Route::post('/isPrivateAccount',[UserController::class, 'is_private_account']);
+
+    //Check Private User Or Not
+    Route::post('/checkPrivateAccount',[UserController::class, 'check_private_account']);
+    
 });
 
 Route::get('/clear', function() {

@@ -68,7 +68,7 @@
                                 <th scope="col" >Start Date</th>
                                 <th scope="col">End Date</th>
                                 <th scope="col">CreatedBy</th>
-                                <!-- <th scope="col">Ads Created Date</th>                             -->
+                                <th scope="col">Ads Status</th>                            
                                 <th scope="col" width="10%">status</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -233,7 +233,7 @@
                     }
                 },
                 {
-                    "aTargets": [11],
+                    "aTargets": [12],
                     "visible":false
                 },
                 {
@@ -270,7 +270,26 @@
                 }
                 ,
                 {
-                            "aTargets": [9],
+                    "aTargets": [9],
+                    "mRender" : function(data, type, full){ 
+                              var action='' ;
+                               var className='' ;
+
+                            if(full['isAccept']=='Approved'){
+                              className='activeNFor' ;
+                            }else if(full['isAccept']=='Rejected'){
+                              className='inactiveNFor' ;
+                            }else if(full['isAccept']=='Pending'){
+                              className='' ;
+                            }
+
+                            action+='<span class="'+className+'">'+full['isAccept']+'</span>';
+
+                            return action ;
+                            }
+                },
+                {
+                            "aTargets": [10],
                             "mRender" : function(data, type, full){ 
                               var action='' ;
                                var className='' ;
@@ -287,7 +306,7 @@
                             }
                         } ,
                 {
-                    "aTargets": [10],
+                    "aTargets": [11],
                      "mRender": function(data, type, full){
                         var response ='<td><div class="align-items-center d-flex"><div class="more_n"> <i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"><li><a class="dropdown-item" href="javascript:void(0);"  onclick="editNFor('+full["id"]+')" >Edit</a></li> <li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')">Delete</a></li>  </ul> </div>  <div> <label class="switch">' ;
                         
@@ -306,7 +325,7 @@
                     }
                 }
                 ,   {
-                    "aTargets": [11],
+                    "aTargets": [12],
                      "mRender": function(data, type, full){
                        
 
@@ -329,6 +348,7 @@
                         { data: 'start_date'},  
                         { data: 'end_date'},
                         { data: 'createdBy'},
+                        { data: 'isAccept'},
                         { data: 'status_'},                      
                         { data: 'status' }
                        

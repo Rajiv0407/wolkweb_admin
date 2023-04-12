@@ -188,7 +188,7 @@ $('#letsgo_sidebar').find('li a').click(function(){
     <!-- <i class="ri-notification-3-line"></i> -->
     <img src="<?php echo e(URL::to('/')); ?>/public/admin/images/sitebar_icon/IdentificationBadge.png" alt="">
         <span class="too ltip_nav">
- User Subscription
+ User Subscribers
         </span>
     </a></li>
     <li>
