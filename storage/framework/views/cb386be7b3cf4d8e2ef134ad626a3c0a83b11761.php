@@ -51,6 +51,8 @@
                                             <th scope="col">IsAccept</th>
                                             <th scope="col">CreatedOn</th>
                                             <th scope="col">IsAccept_</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Status_</th>
                                             <th scope="col">Adv_type</th>
                                             <th scope="col">Action</th>
                                         </tr>
@@ -101,24 +103,28 @@
                 "visible":false
             },
             {
-                "aTargets": [10],
+                "aTargets": [11],
                 "visible":false
             },
             {
-                            "aTargets": [7],
+                "aTargets": [12],
+                "visible":false
+            },
+            {
+                            "aTargets": [10],
                             "mRender" : function(data, type, full){ 
                               var action='' ;
                                var className='' ;
 
-                            if(full['isAccept_']==1){
+                            if(full['status_']==1){
                               className='activeNFor' ;
-                            }else if(full['isAccept_']==2){
+                            }else if(full['status_']==0){
                               className='inactiveNFor' ;
                             }else{
                               className='' ;
                             }
 
-                            action+='<span class="'+className+'">'+full['isAccept']+'</span>';
+                            action+='<span class="'+className+'">'+full['status']+'</span>';
 
                             return action ;
                             }
@@ -127,9 +133,9 @@
                     "aTargets": [4],
                      "mRender": function(data, type, full){
                        var response='' ;
-                        if(full['adv_type_']==1){
+                        if(full['adv_type_']==1 && full['image']!=''){
                             response='<img src="'+full['image']+'" width="60px" height="60px" />' ;
-                        }else if(full['adv_type_']==2){
+                        }else if(full['adv_type_']==2 && full['image']!=''){
                             response='<a href="'+full['image']+'" download>Dwonload</a>' ;
                         }
                        
@@ -137,12 +143,12 @@
                     }
                 },
                         {
-                    "aTargets": [11],
+                    "aTargets": [13],
                      "mRender": function(data, type, full){
                         var response ='<td><div class="align-items-center d-flex"><div class="more_n"> <i class="bi bi-three-dots-vertical" type="button" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"></i> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"><li><a class="dropdown-item" href="javascript:void(0);"  onclick="editNFor('+full["id"]+')" >Edit</a></li><li><a class="dropdown-item" href="javascript:void(0);" onclick="ConfirmDelete('+full['id']+')">Delete</a></li>  </ul> </div>  <div> <label class="switch">' ;
                         
                                   
-                        if(full['isAccept_']=='1'){
+                        if(full['status_']=='1'){
                              response +='<input type="checkbox" onclick="changeUsrStatus('+full['id']+')" checked>' ;                            
                         }else{
                              response +='<input type="checkbox" onclick="changeUsrStatus('+full['id']+')" >' ;                           
@@ -171,6 +177,8 @@
                         {data: 'isAccept'},
                         { data: 'createdOn' },
                         { data: 'isAccept_' },
+                        { data: 'status' },
+                        { data: 'status_' },
                         { data: 'adv_type_' }
           ],
         				

@@ -169,17 +169,13 @@ public function userPointStatus(Request $request)
       ->where('us.user_id',$userId)
       ->first();
      $data['user_point']=$user_point ;
-     $user=(array)$user_point ;
-    
+     $user=(array)$user_point ;    
       //facebook data
       $data['user_fb']=(array)DB::table('fb_user_info')->where('userId',$userId)->first();
-
       //insta data
       $data['user_insta']=(array)DB::table('insta_user_info')->where('userId',$userId)->first();
-
       //tiktok data
-      $data['user_titktok']=(array)DB::table('tiktok_user_info')->where('userId',$userId)->first();
-          
+      $data['user_titktok']=(array)DB::table('tiktok_user_info')->where('userId',$userId)->first();          
       $data['social_weightage']=DB::table('social_media_weightage')->where('status',1)->get();
       $userPointW=array();
       if(!empty($data['social_weightage'])){
@@ -227,19 +223,14 @@ public function userPointStatus(Request $request)
     {
         //echo $request->id;die;
         $id=$request->id ;
-
         $qry="update user_subscriber set status=(case when status=1 then 0 else 1 end) where id=".$id;
-
         try{
-
            DB::select($qry);    
-            echo successResponse([],'changed status successfully'); 
-         
+            echo successResponse([],'changed status successfully');          
         }
          catch(\Exception $e)
         {
-          echo errorResponse('error occurred'); 
-         
+          echo errorResponse('error occurred');          
         }
 
     }    

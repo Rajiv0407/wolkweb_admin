@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\v1\UserController;
 use App\Http\Controllers\api\v1\PostController;
+use App\Http\Controllers\api\v1\NotificationController;
 use App\Http\Controllers\api\v1\SocialController;
 use App\Http\Middleware\EnsureTokenIsValid;
 use App\Http\Middleware\Cors;
@@ -29,6 +30,8 @@ Route::get('/apiDetail',function(Request $request){
 
 Route::group(['prefix' => 'v1'], function () {
 
+    Route::post('/getUserInfo',[UserController::class, 'getUserInfo']);
+
  Route::post('/socialPointCalculation',[SocialController::class, 'social_point_calculation']);
 
  Route::get('/test',[UserController::class, 'testData']);
@@ -41,12 +44,14 @@ Route::post('/verifyOTP',[UserController::class, 'verifyOTP']);
 Route::post('/resetPassword',[UserController::class, 'resetPassword']); 
 
 Route::get('/updateEncryptionKey',[UserController::class, 'update_encryption']); 
-Route::post('/saveContactus',[PostController::class, 'save_contactus']);  
+
 
 Route::post('/sendContactUsEmail',[UserController::class,'sendContactUsEmail']);
-
+Route::get('/countryList',[UserController::class, 'country_list']);
 Route::middleware([Cors::class,EnsureTokenIsValid::class])->group(function () {    
     
+    
+    Route::post('/saveContactus',[PostController::class, 'save_contactus']);  
     Route::post('/updateSocialInfo',[UserController::class, 'updateSocialInfo']);
     Route::post('/user_interest',[UserController::class, 'user_interest']);
     Route::post('/logout',[UserController::class, 'logout']);
@@ -57,13 +62,13 @@ Route::middleware([Cors::class,EnsureTokenIsValid::class])->group(function () {
     Route::post('/updateUserProfile',[UserController::class, 'updateUserProfile']);
     Route::post('/updateProfileImage',[UserController::class, 'updateProfileImage']);
     Route::post('/changePassword',[UserController::class, 'changePassword']);
-
+    Route::post('/updateCountry',[UserController::class, 'updateUserProfile']);
     
     Route::post('/userList',[UserController::class, 'user_list']);
     Route::get('/user_filter',[UserController::class, 'user_filter']);
     Route::post('/userDetail',[UserController::class, 'user_detail']);
     Route::post('/userProfileDetail',[UserController::class, 'profile_detail']);
-    Route::get('/countryList',[UserController::class, 'country_list']);
+
     
     //post
     Route::post('/savePost',[PostController::class, 'save_post']);  
@@ -122,9 +127,14 @@ Route::middleware([Cors::class,EnsureTokenIsValid::class])->group(function () {
 
     //Check Private User Or Not
     Route::post('/checkPrivateAccount',[UserController::class, 'check_private_account']);
+    //Test data with Procedure
     
+    //Notification Controller
+    Route::post('/saveToken',[NotificationController::class, 'save_token']);  
+    
+   
 });
-
+Route::get('/getSocialData',[SocialController::class, 'getSocialDataByCron']);  
 Route::get('/clear', function() {
      \Artisan::call('route:cache');
      \Artisan::call('config:cache');

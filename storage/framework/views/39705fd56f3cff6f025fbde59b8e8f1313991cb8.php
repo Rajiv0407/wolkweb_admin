@@ -48,7 +48,8 @@
                         </div>
                         
                     </div>
-                </div></form>
+                </div>
+            </form>
                 <div class="table-area">
                     <table class="table" id="dataTable">
                         <thead>
@@ -68,15 +69,9 @@
                         <p><span>Total Record</span>:<span>10</span></p>
                     </div> -->
                 </div>
-        
-
-
-
 <script type="text/javascript">
-
      $(document).ready(function($k){
-
-
+        
         datatablePagination($k); 
 
  $('#dataTable').DataTable({
@@ -107,9 +102,7 @@
                         //      action +='<input type="checkbox" onclick="changeNStatus('+full['id']+')" >' ;
                            
                         // }<span class="slider"></span> </label> </div>
-                       
                        action+=' </div> </td>'  ;
-
                        return action ;
                     }
 
@@ -127,11 +120,8 @@
                         { data: 'email' },
                          { data: 'subject'},
                           { data: 'message' },
-                                 
-                
           ],
-
-        });
+         });
       $k('.input-group-addon').click(function() {
         $k(this).prev('input').focus();
     });
@@ -157,9 +147,7 @@ function ConfirmDelete(id) {
         },
         success:function(res)
         {
-
              ajax_success() ;
-
         if(res.status==1){
         //carManagement();
           $('#dataTable').DataTable().ajax.reload();                
@@ -168,7 +156,7 @@ function ConfirmDelete(id) {
            statusMesage('something went wrong','error');
         }
         }
-
+        
         });
 
     }
@@ -182,38 +170,29 @@ function resetSearchForm(){
   
 }
 
-
-
   function searchNType(){
         var name=$('#name').val();
         var phoneNumber=$('#phoneNumber').val();
         var email=$("#email").val();
         var subject=$("#subject").val();
-        var message=$("#message").val();
-       
-
+        var message=$("#message").val();  
        if(name){
-     
           $('#dataTable').DataTable().column(1).search(name).draw();
     }
 
     if(phoneNumber){
-     
           $('#dataTable').DataTable().column(2).search(phoneNumber).draw();
     }
     
      if(email){
-     
           $('#dataTable').DataTable().column(3).search(email).draw();
     }
 
-     if(subject){
-   
+     if(subject){   
           $('#dataTable').DataTable().column(4).search(subject).draw();
     }
    
-     if(message){
-   
+     if(message){   
           $('#dataTable').DataTable().column(5).search(message).draw();
     }
   

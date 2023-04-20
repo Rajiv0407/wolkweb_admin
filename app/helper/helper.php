@@ -188,5 +188,21 @@ function uploadImage($image_key,$path,$request){
          }
   }
 
+  function getMultiResultProc($proc){
+    $conn = DB::connection()->getPdo();   
+    //$sql = 'CALL sp_getUserDetail(@total)';
+    $sql=$proc ;
+    $stmt = $conn->query($sql);
+    $response = array();
+    do {
+    $rows = $stmt->fetchAll(PDO::FETCH_OBJ);
+    if ($rows) {
+      $response[]=$rows ;
+    }
+   
+    } while ($stmt->nextRowset());
+   
+    return $response ;
+  }
   
  ?>

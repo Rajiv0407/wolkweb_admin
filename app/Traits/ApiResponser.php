@@ -26,7 +26,7 @@ trait ApiResponser{
 		return response()->json([
 			'status'=>0,
 			'message' => $message,
-			'data' => []
+			'data' => (object)array()
 		], $code);
 	}
 

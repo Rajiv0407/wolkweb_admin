@@ -234,10 +234,10 @@ public function userAdv_datatable(Request $request){
   $userId=$request->userId ;
   $type=$request->type ;
   $sponserImg = config('constants.advertisement_image');     
-  $carQry="select adv.id,sp.name,adv.title,case when adv.ad_type=1 then 'image' when adv.ad_type=2 then 'video' else '' end as adv_type,case when adv.image is null then '' else concat('".$sponserImg."',adv.image) end as image,Date_format(adv.start_date,'%d %b %Y') as start_date,Date_format(adv.end_date,'%d %b %Y') as end_date,case when adv.isAccept=0 then 'Pending'
-  when adv.isAccept=1 then 'Approve' when adv.isAccept=2 then 'Rejected' else '' end as isAccept
-  ,Date_format(adv.createdOn,'%d %b %Y') as createdOn,isAccept as isAccept_,ad_type as adv_type_ from advertisements as adv
-  inner join sponser as sp on sp.id=adv.Sponser_id where adv.start_date is not null and adv.end_date is not null" ; 
+  $carQry="select adv.id,sp.name,adv.title,case when adv.ad_type=1 then 'image' when adv.ad_type=2 then 'video' else '' end as adv_type,case when (adv.image is null || adv.image='') then '' else concat('".$sponserImg."',adv.image) end as image,Date_format(adv.start_date,'%d %b %Y') as start_date,Date_format(adv.end_date,'%d %b %Y') as end_date,case when adv.isAccept=0 then 'Pending'
+  when adv.isAccept=1 then 'Approved' when adv.isAccept=2 then 'Rejected' else '' end as isAccept
+  ,Date_format(adv.createdOn,'%d %b %Y') as createdOn,isAccept as isAccept_,ad_type as adv_type_,case when adv.status=1 then 'Active' else 'Inactive' end  as status, adv.status as status_ from advertisements as adv  inner join sponser as sp on sp.id=adv.Sponser_id where adv.start_date
+  is not null and adv.end_date is not null and adv.createdBy=".$userId." and adv.isAccept!=4" ; 
 //where createdBy=".$userId
   $carData = DB::select($carQry); 
   $tableData = Datatables::of($carData)->make(true);  
@@ -261,7 +261,7 @@ public function userAdvStatus(Request $request)
 {
   $table=$request->table_name ;
   $id=$request->id ;
-  $qry="update advertisements set isAccept=(case when isAccept=1 then 2 else 1 end) where id=".$id;
+  $qry="update advertisements set status=(case when status=1 then 0 else 1 end) where id=".$id;
   try{
        DB::select($qry);	
         return $this->successResponse([],'changed status successfully');      

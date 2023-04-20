@@ -13,7 +13,7 @@ $appImg = isset($userInfo->image)?$userInfo->image:'' ;
 $imgPath = url('/').'/public/admin/images/avtar_i.png';
 
 if($appImg!=''){
-    $imgPath_=$appImg ;
+    $imgPath_=url('/').'/public/storage/profile_image/'.$appImg ;
 }else{
     $imgPath_ = $imgPath ;
 }
@@ -34,7 +34,7 @@ if($appImg!=''){
                 <div class="carDetail__wrapper">
                     <div class="cd_if_1 filterWrapper">
                         <div>
-                        @if($appImg!=''):
+                        @if($appImg!='')
                             <img src="{{$imgPath_}}" alt="">
                             @else
                             <img src="{{URL::to('/')}}/public/admin/images/avtar_i.png" alt="">

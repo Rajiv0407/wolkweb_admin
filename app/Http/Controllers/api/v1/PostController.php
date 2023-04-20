@@ -310,10 +310,7 @@ class postController extends Controller
    
    public function save_contactus(Request $request){
       $validatedData = Validator::make($request->all(),
-        [
-        "name"=>'required',       
-        "phoneNumber"=>'required',
-        "email"=>'required',
+        [       
         "subject"=>'required',
         "message"=>'required'
       ]); 
@@ -321,52 +318,44 @@ class postController extends Controller
      if($validatedData->fails()){       
       return $this->errorResponse($validatedData->errors()->first(), 401);
      }
-
+    //  "name"=>'required',       
+    //  "phoneNumber"=>'required',
+    //  "email"=>'required',
+    $userId=authguard()->id;
+    $userInfo=DB::table('users')->where('id',$userId)->first();
+    $name=isset($userInfo->name)?$userInfo->name:'' ;
+    $email=isset($userInfo->email)?$userInfo->email:'' ;
+    $phoneNumber =isset($userInfo->email)?$userInfo->email:'' ;
      $insertData = array(
-      "name"=>$request->name,       
-      "phone_number"=>$request->phoneNumber,
-      "email"=>$request->email,
+      "userId"=>$userId,
+      "name"=>$name,       
+      "phone_number"=>$phoneNumber,
+      "email"=>$email,
       "subject"=>$request->subject,
       "message"=>$request->message
      );
      
-     $last_id = DB::table('contactus')->insertGetId($insertData);
-     
-    
-
+     $last_id = DB::table('contactus')->insertGetId($insertData);  
      if($request->hasfile('image')){
-
      $insert=[];
-    $allowedfileExtension=['jpg', 'jpeg', 'gif', 'png', 'bmp', 'svg', 'svgz', 'cgm', 'djv', 'djvu', 'ico', 'ief','jpe', 'pbm', 'pgm', 'pnm', 'ppm', 'ras', 'rgb', 'tif', 'tiff', 'wbmp', 'xbm', 'xpm', 'xwd','flv','mp4','m3u8','ts','3gp','mov','avi','wmv','mp3'];
-
-    $files = $request->file('image'); 
-    $errors = [];
-
-      foreach($files as $file)
+     $allowedfileExtension=['jpg', 'jpeg', 'gif', 'png', 'bmp', 'svg', 'svgz', 'cgm', 'djv', 'djvu', 'ico', 'ief','jpe', 'pbm', 'pgm', 'pnm', 'ppm', 'ras', 'rgb', 'tif', 'tiff', 'wbmp', 'xbm', 'xpm', 'xwd','flv','mp4','m3u8','ts','3gp','mov','avi','wmv','mp3'];
+     $files = $request->file('image'); 
+     $errors = [];
+    foreach($files as $file)
       {
        
-        $fileType=0 ;
-
-      $mimeType=$file->getMimeType() ;
-        
-       
-        
+         $fileType=0 ;
+         $mimeType=$file->getMimeType() ;
          $filenamewithextension = $file->getClientOriginalName(); 
-         $extension = $file->getClientOriginalExtension();  
-       
+         $extension = $file->getClientOriginalExtension();        
          $check = in_array($extension,$allowedfileExtension);
-         //$fileType = $this->checkFileType($filenamewithextension);
-         
-           if($check){
-         
+         //$fileType = $this->checkFileType($filenamewithextension);         
+           if($check){         
             $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
               $filename=str_replace(' ', '_', $filename);
               $filenametostore = $filename.'_'.time().'.'.$extension;       
-              $smallthumbnail = $filename.'_100_100_'.time().'.'.$extension;    
-             
-              
+              $smallthumbnail = $filename.'_100_100_'.time().'.'.$extension; 
               $file->storeAs('public/contactus_image/', $filenametostore);
-
               $insert[]=array(
                     'contact_id'=>$last_id,
                     'image'=>$filenametostore                   
@@ -397,7 +386,6 @@ class postController extends Controller
         "end_date"=>'required',
         "description"=>'required'
       ]); 
-
    
         if($validatedData->fails()){       
           return $this->errorResponse($validatedData->errors()->first(), 401);
@@ -415,8 +403,8 @@ class postController extends Controller
         }
 
         $userId=authguard()->id;
-        if($request->sponserId==0){
-          $sponserIcon=$this->uploadImage('sponser_icon','sponser_image',$request);         
+        if($request->sponserId=='other'){
+          $sponserIcon=$this->uploadImage('sponser_icon','sponser_img',$request);         
           $sp_img=isset($sponserIcon['fileName'])?$sponserIcon['fileName']:'' ;
           $insertSponser=array(
             "name"=>$request->sponser_title,
@@ -429,18 +417,20 @@ class postController extends Controller
           $sponserId = $request->sponserId ;
         }
 
+        $start_date=(date('Y-m-d', strtotime($request->start_date)));
+        $end_date=(date('Y-m-d', strtotime($request->end_date)));
         $advData=array(
           'sponser_id'=>$sponserId ,
           'title'=>$request->adv_title ,         
-          'start_date'=>$request->start_date ,
-          'end_date'=>$request->end_date ,
+          'start_date'=>$start_date ,
+          'end_date'=>$end_date ,
           'introduction'=>$request->description,
           'createdBy'=>$userId
         );
                
         // Start
             $advImage=$this->uploadImage('adv_image','sponser_image',$request);            
-            $advData['ad_type']=isset($sponserIcon['fileType'])?$sponserIcon['fileType']:'' ;
+            $advData['ad_type']=isset($advImage['fileType'])?$advImage['fileType']:1 ;
             $advData['image']=isset($advImage['fileName'])?$advImage['fileName']:'' ;
         // End
         DB::table('advertisements')->insert($advData);
@@ -462,17 +452,14 @@ class postController extends Controller
           $check = in_array($extension,$allowedfileExtension);
           $fileType = $this->checkFileType($filenamewithextension);
           
-            if($check){
-          
+            if($check){          
              $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
              $filename=str_replace(' ', '_', $filename);
              $filenametostore = $filename.'_'.time().'.'.$extension;       
              $smallthumbnail = $filename.'_100_100_'.time().'.'.$extension;    
-              
-               
-               $files->storeAs('public/'.$path.'/', $filenametostore);
-               $file_path= url('/').'/public/storage/'.$path.'/'.$filenametostore;              
-              return $response=array('fileType'=>$fileType,"fileName"=>$filenametostore);
+             $files->storeAs('public/'.$path.'/', $filenametostore);
+             $file_path= url('/').'/public/storage/'.$path.'/'.$filenametostore;              
+             return $response=array('fileType'=>$fileType,"fileName"=>$filenametostore);
             }else{
               return array(); 
             }

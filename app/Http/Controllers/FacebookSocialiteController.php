@@ -121,9 +121,13 @@ class FacebookSocialiteController extends Controller
 
 
       public function fbSuccessResp(){
-         echo "Facebook page and instagram bussiness account details successfully have been added" ;
+         echo "Facebook page and instagram bussiness account details successfully has been added" ;
       }
 
+      public function fbProfileSuccessResp(){
+        echo "Facebook profile details successfully has been added" ;
+     }
+      
      public function fbLogin(){
         $config = array( // instantiation config params
         'app_id' => '2972423753060577', // facebook app id
@@ -328,13 +332,10 @@ class FacebookSocialiteController extends Controller
                   'media_count'=>$instaData->media_count ,
                   'username'=>$instaData->username
                 );  
-                 DB::table('user_instagram_info')->insert($insta_insertData);
-                 
+                 DB::table('user_instagram_info')->insert($insta_insertData);                 
                  }
-
                  //Get Instagram Media Data
-                  $instaMediaData=isset($instaData->media->data)?$instaData->media->data:[];
-                  
+                  $instaMediaData=isset($instaData->media->data)?$instaData->media->data:[];                  
                   if(!empty($instaMediaData)){
                     $mediaInfo=$this->getInstaMediaInfo($instaData->media->data,$accessToken,$userId);
                   }                
@@ -354,12 +355,10 @@ class FacebookSocialiteController extends Controller
            if($mediaId!=0){
              $mediaUrl="https://graph.facebook.com/v15.0/".$mediaId."?fields=id,like_count,comments_count&access_token={$accessToken}";
              $mediaData = $this->getDataFromFb($mediaUrl) ;
-             $mediaData =json_decode($mediaData);
-            
+             $mediaData =json_decode($mediaData);            
              $mediaId = isset($mediaData->id)?$mediaData->id:0;
              $mediaLikeCount=isset($mediaData->like_count)?$mediaData->like_count:0;
              $mediaCommentCount=isset($mediaData->comments_count)?$mediaData->comments_count:0;
-
              $insertData[]=array("userId"=>$userId,"media_id"=>$mediaId,"like_count"=>$mediaLikeCount ,"comment_count"=>$mediaCommentCount );
            }
          
@@ -605,8 +604,7 @@ class FacebookSocialiteController extends Controller
       }
 
       public function user_list(Request $request){
-        $userList=DB::table('users')->where('user_type','!=',1)->where('isTrash',0)->orderBy('id', 'DESC')->get();
-        
+       $userList=DB::table('users')->where('user_type','!=',1)->where('isTrash',0)->orderBy('id', 'DESC')->get();
        return view('fb_review.index',["userList"=>$userList]);
      }
 

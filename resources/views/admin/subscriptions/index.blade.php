@@ -296,15 +296,13 @@ $.ajax({
          modalHide_('edit_body'); 
         // $('.modal-backdrop').hide();   
         //$('#dataTable').DataTable().ajax.reload();
-        echo successResponse([],'Successfully sent E-mail to subscribers.');
+       // echo successResponse([],'Successfully sent E-mail to subscribers.');
         // $('#edit_fuel').modal('hide');  
                    
      }else{
          statusMesage('Something went wrong','error');
      }
-      
-    
-            }
+       }
     });      
 
 

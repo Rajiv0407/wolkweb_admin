@@ -234,8 +234,8 @@ class SocialController extends Controller
     }
 
     public function updateTotalPoint($userId){
-        $checkSocialPoint = DB::table('user_social_point')->where('user_id',$userId)->first();
-        
+
+        $checkSocialPoint = DB::table('user_social_point')->where('user_id',$userId)->first();    
         $fb_friends_count=$checkSocialPoint->fb_friends_count ;
         $fb_page_followers_count=$checkSocialPoint->fb_page_followers_count ;
         $fb_page_likes_count=$checkSocialPoint->fb_page_likes_count ;
@@ -255,8 +255,7 @@ class SocialController extends Controller
         $tiktok_video_likes_count=$checkSocialPoint->tiktok_video_likes_count ;
         $tiktok_video_shares_count=$checkSocialPoint->tiktok_video_shares_count ;
         $tiktok_video_comments_count=$checkSocialPoint->tiktok_video_comments_count ;
-        $tiktok_video_view_count=$checkSocialPoint->tiktok_video_view_count ;
-        
+        $tiktok_video_view_count=$checkSocialPoint->tiktok_video_view_count ;        
 
         $fbTotalPoint = ($fb_friends_count+$fb_page_followers_count+$fb_page_likes_count+$fb_post_comment+$fb_post_likes+$fb_post_count);	
         $instaTotalPoint = ($insta_followers_count+$insta_follows_count+$insta_total_post_count+$insta_post_comment_count+$insta_post_likes_count)	;
@@ -303,8 +302,12 @@ class SocialController extends Controller
                 if($point >=$val->range_from && $point <=$val->range_to){
                     return $val->id ;
                 }
-
            }  
         }
+    }
+
+    public function getSocialDataByCron(Request $request){
+      $log=DB::table('users')->where('id',8)->get();
+      print_r($log);
     }
 }

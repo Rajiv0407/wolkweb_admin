@@ -76,26 +76,19 @@ class notificationController extends Controller
     }
 
     public function notify_datatable(){
-
     	$data['title']=siteTitle();
-
-
         $carQry="select al.id as id ,al.title,content , deviceType,case when al.type is null then '' else (select title from notification_type where id=al.type) end as nType , case when al.status=1 then 'Active' else 'Inactive' end as status_ , al.status from pe_announcement_list as al" ;
-
         $carData = DB::select($carQry); 
         $tableData = Datatables::of($carData)->make(true);  
         return $tableData; 
     }
 
     public function editNotify(Request $request){
-
         $updatedId = isset($request->updatedId)?$request->updatedId:0 ;
         $announcementList = announcement_lists::find($updatedId) ;
         $data['announceInfo'] = $announcementList ;
-
        	$nType = notification_types::all() ;
      	//$nFor = notification_fors::all() ;
-
      	$data['nType'] = $nType ;
      	//$data['nFor'] = $nFor ;
      	$data['updatedId']=$updatedId ;
@@ -209,8 +202,7 @@ class notificationController extends Controller
         }
          catch(\Exception $e)
         {
-          echo errorResponse('error occurred'); 
-         
+          echo errorResponse('error occurred');          
         }
     }
 
@@ -263,15 +255,12 @@ class notificationController extends Controller
         $qry="update notification_type  set status=(case when status=1 then 0 else 1 end) where id=".$id;
 
         try{
-
            DB::select($qry);    
-            echo successResponse([],'changed status successfully'); 
-         
+          echo successResponse([],'changed status successfully');          
         }
          catch(\Exception $e)
         {
-          echo errorResponse('error occurred'); 
-         
+          echo errorResponse('error occurred');          
         }
 
     }
@@ -292,34 +281,23 @@ class notificationController extends Controller
         $filenametostore='';
         try{
             
-            if($request->hasFile('sImage')) {
-        
+            if($request->hasFile('sImage')) {        
        
                 $imgPath='app/public/star_type_img/' ;
-                
-              
-                 $filenamewithextension = $request->file('sImage')->getClientOriginalName();
-           
+                $filenamewithextension = $request->file('sImage')->getClientOriginalName();
                  //get filename without extension
                  $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
-           
                  //get file extension
                  $extension = $request->file('sImage')->getClientOriginalExtension();
-           
                  $filename=str_replace(' ', '_', $filename);
                  $filenametostore = $filename.'_'.time().'.'.$extension;       
-                 $smallthumbnail = $filename.'_100_100_'.time().'.'.$extension;    
-                
+                 $smallthumbnail = $filename.'_100_100_'.time().'.'.$extension;  
                  //Upload File
                  $request->file('sImage')->storeAs('public/star_type_img', $filenametostore);
                 // $request->file('sImage')->storeAs('public/star_type_img/thumb', $smallthumbnail);
-                
-                  
                  //create small thumbnail
                 // $smallthumbnailpath = public_path('storage/star_type_img/thumb/'.$smallthumbnail);
-                // $this->createThumbnail($smallthumbnailpath, 100, 100);                 
-                   
-          
+                // $this->createThumbnail($smallthumbnailpath, 100, 100); 
                 }
 
                 $insertData=array(
@@ -399,55 +377,41 @@ class notificationController extends Controller
     $rangeTo = isset($request->editRangeTo)?$request->editRangeTo:'' ;
     $updatedId = isset($request->updatedId)?$request->updatedId:'' ;
     $filenametostore='';
-    try{
-          
+    try{    
+
         $insertData=array(
             'rank_title'=>$title ,
             'range_from'=>$rangeFrom,
             'range_to'=>$rangeTo
         );
-       
-       
-        if($request->hasFile('editSImage')) {
-    
-   
-            $imgPath='app/public/star_type_img/' ;
-            
-          
+
+        if($request->hasFile('editSImage')) {  
+            $imgPath='app/public/star_type_img/' ;   
              $filenamewithextension = $request->file('editSImage')->getClientOriginalName();
-       
              //get filename without extension
              $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
-       
              //get file extension
              $extension = $request->file('editSImage')->getClientOriginalExtension();
-       
              $filename=str_replace(' ', '_', $filename);
              $filenametostore = $filename.'_'.time().'.'.$extension;       
-             $smallthumbnail = $filename.'_100_100_'.time().'.'.$extension;    
-            
+             $smallthumbnail = $filename.'_100_100_'.time().'.'.$extension;   
              //Upload File
              $request->file('editSImage')->storeAs('public/star_type_img', $filenametostore);
-            // $request->file('sImage')->storeAs('public/star_type_img/thumb', $smallthumbnail);
-            
+            // $request->file('sImage')->storeAs('public/star_type_img/thumb', $smallthumbnail);         
               
              //create small thumbnail
             // $smallthumbnailpath = public_path('storage/star_type_img/thumb/'.$smallthumbnail);
-            // $this->createThumbnail($smallthumbnailpath, 100, 100);                 
-               
+            // $this->createThumbnail($smallthumbnailpath, 100, 100); 
             $insertData['star_img']=$filenametostore ;
-            }
 
-           
-         
+            }
+        
         DB::table('rank_types')->where('id',$updatedId)->update($insertData);
        echo successResponse([],'saved successfully'); 
-
     }
      catch(\Exception $e)
     {
-      echo errorResponse('error occurred'); 
-     
+      echo errorResponse('error occurred');      
     }
 }
 

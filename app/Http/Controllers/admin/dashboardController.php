@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use DB , session ;
 use Carbon\Carbon;
 use DateTime;
+use App;
 
 class dashboardController extends Controller
 {
@@ -38,9 +39,7 @@ class dashboardController extends Controller
      $data['active_user']=$activeUser_ ;
      $data['deactive_user']=$deactiveUser_ ;
      $data['new_user'] = $newUser_ ;
-     $data['total_app_download'] = 0  ;  
-
-    
+     $data['total_app_download'] = 0  ;      
     //  $date = "01 April 2023";
     //  dd(date('Y-m-d', strtotime($date)));
       echo view('admin/admin_dashboard',$data);
@@ -97,7 +96,7 @@ class dashboardController extends Controller
     
     public function currentWeekReport(){
 
-        $yearWiseUser=DB::select("select Year(u.created_at) as year_ from users as u where u.isTrash=0 and u.user_type!=1 group by Year(u.created_at)");
+        $yearWiseUser=DB::select("select Year(u.created_at) as year_ from users as u where u.isTrash=0 and u.user_type!=1 and Year(u.created_at) is not null group by Year(u.created_at)");
 
         $dTResponse=array();
 
@@ -122,4 +121,13 @@ class dashboardController extends Controller
         return json_encode($dTResponse);
     }
 
+    public function changeLang($langcode){
+     
+      App::setLocale($langcode);
+      session()->put("lang_code",$langcode);
+      return true ;
+      //return redirect('/administrator/dashboard#index');
+      //return redirect()->previous();
+      //return back();
+   }  
 }

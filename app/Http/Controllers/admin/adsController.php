@@ -29,7 +29,7 @@ class adsController extends Controller
         $adsImg = config('constants.advertisement_image'); 
         $carQry="select ads.id,s.name,case when s.image is null then '' else concat('".$sponserImg."',s.image) end as sponserIcon,ads.title,
         case when ads.ad_type=1 then 'image' when ads.ad_type=2 then 'video' else '' end as adType,
-        case when (ads.image is null || ads.image='') then '' else concat('".$adsImg."',ads.image) end as ads,ads.start_date,ads.end_date,case when ads.createdBy=1 then 'Admin' else 'User' end as createdBy,case when CURDATE()  > Date(ads.end_date) then 'Expired' when isAccept=0 then 'Pending' when isAccept=1 then 'Approved' when isAccept=2 then 'Rejected' else 'Expired' end as isAccept,case when ads.status=1 then 'Active' else 'Inactive' end as status_, ads.status from advertisements as ads left join sponser as s on s.id=ads.sponser_id where ads.start_date is not null and ads.end_date is not null" ;   
+        case when (ads.image is null || ads.image='') then '' else concat('".$adsImg."',ads.image) end as ads,ads.start_date,ads.end_date,case when ads.createdBy=1 then 'Admin' else 'User' end as createdBy,case when CURDATE()  > Date(ads.end_date) then 'Expired' when isAccept=0 then 'Pending' when isAccept=1 then 'Approved' when isAccept=2 then 'Rejected' else 'Expired' end as isAccept,case when ads.status=1 then 'Active' else 'Inactive' end as status_, ads.status from advertisements as ads left join sponser as s on s.id=ads.sponser_id where ads.start_date is not null and ads.end_date is not null and ads.isAccept!=4" ;   
                 
         $carData = DB::select($carQry); 
         $tableData = Datatables::of($carData)->make(true);  
@@ -160,7 +160,7 @@ class adsController extends Controller
   public function SaveAdvertisement(Request $request){
 
     $data['title']=siteTitle();
-    
+
     $sponser_=isset($request->sponser_)?$request->sponser_:'' ;
     $adsTitle = isset($request->ads_title)?$request->ads_title:'' ;
     $adsType = isset($request->ads_type)?$request->ads_type:'' ;
@@ -175,7 +175,17 @@ class adsController extends Controller
         'start_date'=>$startDate ,  
         'end_date'=>$endDate         
     );
-    		
+    	if($adsType==1){
+            $validatedData = Validator::make($request->all(),[ "adsFile"=>'file|mimes:jpg,png']);            
+        }else if($adsType==2){
+            $validatedData = Validator::make($request->all(),[ "adsFile"=>'file|mimes:mp4']);
+        }
+
+        if($validatedData->fails()){       
+            return $this->errorResponse($validatedData->errors()->first(), 200);
+          }
+  
+
     try{
         
         if($request->hasFile('adsFile')) {
@@ -209,8 +219,7 @@ class adsController extends Controller
     $deleteId=isset($request->id)?$request->id:'' ;
     try{
             DB::table('advertisements')->where('id', $deleteId)->delete();
-
-          echo successResponse([],'successfully deleted'); 
+            echo successResponse([],'successfully deleted'); 
     }
      catch(\Exception $e){
          echo errorResponse('error occurred'); 
@@ -254,6 +263,7 @@ public function sendSubscriberMail(Request $request){
         "subject"=>$sSubject,
     	"message"=>$sMessage            
     );
+    
     DB::table('subscriber_mail')->insert($insertData);
 
     $data=array(
@@ -268,9 +278,6 @@ public function sendSubscriberMail(Request $request){
     echo successResponse([],'Successfully sent E-mail to subscribers.'); 
 
 }
-
-
-
 
 }
 

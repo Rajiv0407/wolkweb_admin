@@ -123,4 +123,4 @@
         <a href="javascript:void(0);"  class="search-btn clear-btn" data-bs-dismiss="modal">Cancel</a>
     </div>
 
-</form>
+</form><?php /**PATH D:\xampp\htdocs\walkofwebAdmin\walkofweb_admin\resources\views/admin/customerManagement/editAds.blade.php ENDPATH**/ ?>

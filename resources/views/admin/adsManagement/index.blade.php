@@ -573,7 +573,7 @@ $.ajax({
    
      if(status){
    
-          $('#dataTable').DataTable().column(9).search(status).draw();
+          $('#dataTable').DataTable().column(11).search(status).draw();
     }
    
      if(createdBy){

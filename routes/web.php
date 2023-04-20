@@ -24,6 +24,11 @@ use App\Http\Controllers\admin\SocialController;
 |
 */
 
+Route::group(['middleware'=>'Language'],function(){
+    Route::get('/message',[DashboardController::class,'index']);
+	Route::get('/change-language/{lang}',[DashboardController::class,'changeLang']);    
+});
+
 
 Route::get('exportExcel',[MasterController::class,'exportUsers'])->name('exportUsers');
 Route::post('importExcel',[MasterController::class,'import'])->name('import');
@@ -34,33 +39,30 @@ Route::get('/', function () {
    return '<h3>Coming Soon.............</h3>';
 });
 
-// Route::get('auth/facebook', [FacebookSocialiteController::class,'redirectToFB']);
-// Route::get('callback/facebook', [FacebookSocialiteController::class,'handleCallback']);
 
-Route::get('insta/login',[FacebookSocialiteController::class,'redirectToInstagramProvider'])->name('insta.login');
+//Soical Media
+Route::get('insta/login/{userId}',[FacebookSocialiteController::class,'redirectToInstagramProvider'])->name('insta.login');
 Route::get('insta/callback',[FacebookSocialiteController::class,'instagramProviderCallback'])->name('insta.login.callback');
 
-
 Route::get('/facebookLogin',[FacebookSocialiteController::class,'fbLogin']);
-
 Route::get('/fbBasicInfo',[FacebookSocialiteController::class,'fbProfileDataResponse']);
+Route::get('fbSuccess',[FacebookSocialiteController::class,'fbSuccessResp'])->name('fbSuccess');
+Route::get('fbProfileSuccess',[FacebookSocialiteController::class,'fbProfileSuccessResp'])->name('fbProfileSuccess');
+Route::get('fbError',[FacebookSocialiteController::class,'fb_error'])->name('fbError');
 
-//facebook page account and intagram bussiness account 
-
-Route::get('fbSuccess',[FacebookSocialiteController::class,'fbSuccessResp'])->name('fbSuccess');;
-Route::get('fbError',[FacebookSocialiteController::class,'fb_error'])->name('fbError');;
-
-//working
-Route::get('/fbConnect',[FacebookSocialiteController::class,'fb_connect']);
+Route::get('/fbConnect/{userId}',[FacebookSocialiteController::class,'fb_connect']);
 Route::get('/fbCallback',[FacebookSocialiteController::class,'fbResponse']);
 
+Route::get('/fbProfileConnect/{userId}',[FacebookSocialiteController::class,'fb_Profile_Data']);
+Route::get('/userList/{encryption}',[FacebookSocialiteController::class,'user_list']);
 
+Route::post('/userPoints',[FacebookSocialiteController::class,'user_points']);
 Route::get('/userList',[FacebookSocialiteController::class,'user_list']);
 
-Route::get('swagger', function () {
+// Route::get('swagger', function () {
 	
-    return view('swagger');
-});
+//     return view('swagger');
+// });
 
 
 
@@ -68,7 +70,7 @@ Route::get('/administrator',[AdministratorController::class,'login']);
 Route::post('/administrator/do_login',[AdministratorController::class,'do_login']);
 Route::get('/administrator/logout',[AdministratorController::class,'logout']);
 
-Route::group(['middleware'=>'PreventBackHistory'],function(){
+Route::group(['middleware'=>'PreventBackHistory','middleware'=>'Language'],function(){
 
 /* Car dashboard */
  Route::get('/administrator/dashboard',[DashboardController::class,'index']);

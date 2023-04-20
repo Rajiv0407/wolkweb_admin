@@ -296,7 +296,7 @@ $.ajax({
          modalHide_('edit_body'); 
         // $('.modal-backdrop').hide();   
         //$('#dataTable').DataTable().ajax.reload();
-        statusMesage('Update successfully','success');
+       // echo successResponse([],'Successfully sent E-mail to subscribers.');
         // $('#edit_fuel').modal('hide');  
                    
      }else{

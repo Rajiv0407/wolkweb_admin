@@ -14,6 +14,19 @@
                              </ul>
                          </div>
                      </div> -->
+                     <!-- Testing -->
+                    
+    <!-- <div>
+        Langauge : <select onchange="changeLanguage(this.value)" >
+            <option {{session()->has('lang_code')?(session()->get('lang_code')=='en'?'selected':''):''}} value="en">English</option>
+            <option {{session()->has('lang_code')?(session()->get('lang_code')=='fr'?'selected':''):''}} value="fr">French</option>
+            <option {{session()->has('lang_code')?(session()->get('lang_code')=='es'?'selected':''):''}} value="es">Spanish</option>
+        </select>
+    </div> -->
+
+    <!-- <h2>{{__("messages.title")}}</h2> -->
+
+                     <!-- End -->
                      <ul class="list_bx">
                          <li>
                              <div class="card_bx">
@@ -376,6 +389,25 @@ function currentWeekReport_(){
         }
         });
 }
+function changeLanguage(lang){
+        //window.location='{{url("change-language")}}/'+lang;
+
+        ajaxCsrf();
+        $.ajax({
+        type: "GET",
+        url: '{{url("change-language")}}/'+lang,
+        cache: 'FALSE',
+        dataType:'json',
+        beforeSend: function () {
+        ajax_before();
+        },
+        success: function(data){
+        ajax_success() ;
+        dashboard();
+        
+        }
+        });
+    }
 </script>
 
  

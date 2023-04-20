@@ -23,7 +23,7 @@ use DB ;
 use Image ;
 use File ;
 use Mail ;
-
+use PDO ;
 class UserController extends Controller
 {
      public function testData(){
@@ -156,9 +156,10 @@ class UserController extends Controller
     	try{
 
        $validator = Validator::make($request->all(), [        
-        'insta_username' => 'required|string',
-        'fb_username' => 'required|string',
-        'tiktok_username' => 'required|string'
+        'insta_username' => 'string',
+        'fb_username' => 'string',
+        'tiktok_username' => 'string',
+        'user_interest' => 'array'
         ]);
 
         if($validator->fails())
@@ -168,6 +169,16 @@ class UserController extends Controller
            
           $userId = authguard()->id ;
           User::where('id', $userId)->update(['instagram_username'=>$request->insta_username,'facebook_username'=>$request->fb_username,'tiktok_username'=>$request->tiktok_username]);
+          DB::table('user_interests_map')->where('user_id',$userId)->delete();
+          $uInterest=array();
+          if(!empty($request->user_interest)){
+            foreach($request->user_interest as $val){
+              $uInterest[]=array('user_id'=>$userId,'interest_id'=>$val,'status'=>1);
+            }
+          }
+          if(!empty($uInterest)){
+            DB::table('user_interests_map')->insert($uInterest);
+          }
           $message='Successfull updated';
           return $this->successResponse([],$message,200);   
 
@@ -367,13 +378,8 @@ class UserController extends Controller
        try{
 
       if($request->hasFile('image')) {
-        
-       
         $imgPath='app/public/profile_image/' ;
-       
-     
-        $filenamewithextension = $request->file('image')->getClientOriginalName();
-  
+        $filenamewithextension = $request->file('image')->getClientOriginalName();  
         //get filename without extension
         $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
   
@@ -400,17 +406,13 @@ class UserController extends Controller
 
         $file_path = url('/').'/public/storage/profile_image/'.$filenametostore;
         return $this->successResponse(['image_url'=>$file_path],'successfull update user profile image',200);
-
         }else{
             return $this->errorResponse('Invalid request.', 422);
         }
-
       }catch(\Exception $e)
         {
            return $this->errorResponse('Error occurred.'.$e, 422);
         }
-    
-
     }
 
     public function termCondition(Request $request){
@@ -430,8 +432,7 @@ class UserController extends Controller
         "password"=>"required|confirmed"
        ];
 
-      $validator=Validator::make($request->all(),$rules);
-      
+      $validator=Validator::make($request->all(),$rules);      
       if($validator->fails())
       {
          return response(['errors'=>$validator->errors()->first()], 422);
@@ -477,15 +478,11 @@ class UserController extends Controller
                 'created_at' => Carbon::now()
             ]); 
 
-            $this->sendPwdEmail($request->email,$password,3);
-         
+            $this->sendPwdEmail($request->email,$password,3);         
             $message='Your otp has been sent to your email.' ;
             return $this->successResponse([],$message,200);
 
     }
-
-
-
 
     public function sendPwdEmail($email,$otp=123456,$type=0){
 
@@ -541,22 +538,17 @@ public function resetPassword(Request $request){
     if($validator->fails()){       
         return $this->errorResponse($validator->errors()->first(), 401);
     }else{
-
          $password = $request->password;
          $tokenData = DB::table('password_resets')->where(array('token'=>$request->otp,'email'=>$request->email))->first();
-
          if(empty($tokenData)){
            return $this->errorResponse('Invalid OTP', 401);
          }
-
         $user = User::where('email', $tokenData->email)->first();
         if(!$user){
              return $this->errorResponse('Email not found', 401);
         }
-
         $user->password = \Hash::make($password);
         $user->update();
-
         return $this->successResponse([],'Password change successfully',200);
     
     }
@@ -583,6 +575,12 @@ public function resetPassword(Request $request){
     if($validator->fails()){       
         return $this->errorResponse($validator->errors()->first(), 401);
     }
+    //view more
+    $page = $request->has('page') ? $request->get('page') : 1;
+    $limit = 10;
+    $offset = ($page - 1) * $limit ;
+
+
       $searchKey=$request->input('search_keyword') ;
       $searchKeyword='';
       if($searchKey!=''){
@@ -647,7 +645,11 @@ public function resetPassword(Request $request){
       }
             
       $countryCode = DB::raw('case when country_code is null then "" else country_code end as country_code');
-      $list=DB::select("select id,name,rank_,rank_type,case when image is null then '' else concat('".$filePath."',image) end as image,countryId,$countryCode from users where id!=".$userId." and isTrash=0 and isFeatured=0".$filter.$searchKeyword);
+
+   
+      $list=DB::select("select id,name,rank_,rank_type,case when image is null then '' else concat('".$filePath."',image) end as image,countryId,$countryCode from users where id!=".$userId." and isTrash=0 and isFeatured=0".$filter.$searchKeyword." order by rank_type desc limit ".$limit." offset ".$offset);
+
+      $totalRecord=DB::select("select id from users where id!=".$userId." and isTrash=0 and isFeatured=0".$filter.$searchKeyword." order by rank_type desc");
 
       $image = DB::raw('case when concat("'.$filePath.'",image) is null then "" else concat("'.$filePath.'",image) end as image') ;
       $featureUser = DB::table('users')->select('id','name','rank_','rank_type',$image)->Where('isFeatured',1)->where('isTrash',0)->get() ;
@@ -655,17 +657,7 @@ public function resetPassword(Request $request){
       $totalFeatureUser=count($featureUser);
       $totalLoginUsrFollowers = User::getFollowersCount($userId);
       $loginUsrRank = User::getUserRank($userId);
-      //$fUser = (object)array() ;
-       
-      // if(!empty($featureUser->toArray())){    
-        
-      //   $totalFeatureUser = count($featureUser); 
-      //   $featureUserId = isset($featureUser[0]->id)?$featureUser[0]->id:0 ;
-      //   $fUsr_ = DB::select("select case when s.image is null then '' else concat('".$sPath."',s.image) end as s_image from sponser as s inner join user_sponsers as us on us.sponser_id=s.id where us.user_id=".$featureUserId);
-      //   $fUser=$featureUser[0] ;
-      //   $fUser->sponser = $fUsr_ ;        
-      // }
-
+    
       $data['featured_user']=array('total_followers'=>$totalLoginUsrFollowers,'rank_'=>$loginUsrRank) ;
       $data['total_feature']=$totalFeatureUser ;
       $advertisement=User::advertisement();
@@ -678,30 +670,33 @@ public function resetPassword(Request $request){
       }
       
       $star_imgPath=config('constants.star_image') ;
+      $data['list']=array();
       if(!empty($rankType)){
 
         foreach ($rankType as $key => $value) {
           if($key!=0){
-
+          
           $rankInfo = DB::table('rank_types')->select('id','rank_title',DB::raw('concat("'.$star_imgPath.'",star_img) as starImg'))->where('id',$key)->first();
          // $value->starImg = 'rankInfostarImg ';
-          $value[0]->star_img = $rankInfo->starImg;
-          $rankInfo->user_list =  $value ; 
-          $data['list'][]= $rankInfo;
-        }
-          
+          if(!empty($rankInfo)){
+            $value[0]->star_img = $rankInfo->starImg;  
+            $rankInfo->user_list =  $value ; 
+          $data['list'][]= $rankInfo;           
+          }          
+        }        
           
         }
       }
 
-      $data['advertisement']=$advertisement ;     
-      //quic filter table
-      // rank_types
-      // pe_countries
-      // user_interests
-      // social_media    
-      // $quickFilter=DB::select('select id, rank_title as title, "1" as type from rank_types where quick_filter=1 and status=1 union select i_id as id, v_title as title,"2" as type from pe_countries where quick_filter=1 and i_status=1 union select id as id, title as title,"3" as type from social_media where quick_filter=1 and status=1 union select id as id, title as title,"4" as type from user_interests where quick_filter=1 and status=1 ') ;
-      // $data['quickFilter']=$quickFilter ;
+      $data['advertisement']=$advertisement ; 
+      $totalRecord=count($totalRecord) ;
+      if(($offset+$limit) < $totalRecord){
+        $data['isShowMore']=true ;  
+      }else{
+        $data['isShowMore']=false ;  
+      }
+
+      $data['page']=$page ;       
       return $this->successResponse($data,'User List',200);
       // DB::enableQueryLog();
       //        $query = DB::getQueryLog();
@@ -881,9 +876,7 @@ public function resetPassword(Request $request){
       }else{
         $checkFollowing=DB::table('user_follows')->where('followed_user_id',$request->following_userId)->where('follower_user_id',$userId)->update(['isAccept'=>$type]);
       }
-      
-
-      return $this->successResponse([],'Successfull updated request',200);
+        return $this->successResponse([],'Successfull updated request',200);
    }
 
    public function following_list(Request $request){
@@ -1330,10 +1323,7 @@ public function resetPassword(Request $request){
        $phoneNumber = $request->phone;
        $email=$request->email ;
        $subject= $request->subject;
-       $message=$request->message ;
-
-
-   
+       $message=$request->message ;   
     $data = array(
       'baseUrl'=>URL('/')."/public/contactUs/visitorq.png",
       'name'=>$name,
@@ -1365,7 +1355,7 @@ public function resetPassword(Request $request){
    public function advertisement_listing(Request $request){
     $userId = authguard()->id ;
     $advImage = config('constants.sponser_image');
-    $qry="select adv.id,sp.name,case when sp.image is null then '' else concat('".$advImage."',sp.image) end as sponserIcon,adv.introduction, case when CURDATE()  > Date(adv.end_date) then 'Expired' when adv.isAccept=0 then 'Pending' when adv.isAccept=1 then 'Approve' when adv.isAccept=2 then 'Rejected' else 'Expired' end as ads_status,case when CURDATE()  > Date(adv.end_date) then 3 else adv.isAccept end as isAccept from advertisements as adv left join sponser as sp on sp.id=adv.sponser_id where adv.createdBy in (1,".$userId.")  and adv.isAccept!=4"  ; //.$userId ;
+    $qry="select adv.id,sp.name,case when sp.image is null then '' else concat('".$advImage."',sp.image) end as sponserIcon,adv.introduction, case when CURDATE()  > Date(adv.end_date) then 'Expired' when adv.isAccept=0 then 'Pending' when adv.isAccept=1 then 'Approve' when adv.isAccept=2 then 'Rejected' else 'Expired' end as ads_status,case when CURDATE()  > Date(adv.end_date) then 3 else adv.isAccept end as isAccept from advertisements as adv left join sponser as sp on sp.id=adv.sponser_id where adv.createdBy in (1,".$userId.")  and adv.isAccept!=4 and sp.name is not null"  ; //.$userId ;
     
     $data=DB::Select($qry) ;
     return $this->successResponse($data,'Advertisement List',200);
@@ -1414,6 +1404,7 @@ public function resetPassword(Request $request){
   }
   
   public function advertisement_edit(Request $request){
+
     $validator = Validator::make($request->all(), [
       'updatedId' => 'required',
       'ads_title' => 'required',
@@ -1423,7 +1414,6 @@ public function resetPassword(Request $request){
       'conclusion'=> 'required',
       'target_audience'=>'required'
      ]);
-
     
     if($validator->fails()){       
       return $this->errorResponse($validator->errors()->first(), 401);
@@ -1447,13 +1437,10 @@ public function resetPassword(Request $request){
   public function is_private_account(Request $request){
     $validator = Validator::make($request->all(), [
       'isPrivate' => 'required'     
-     ]);
-
-    
+     ]);    
     if($validator->fails()){       
       return $this->errorResponse($validator->errors()->first(), 401);
     }
-
     $isPrivate = $request->isPrivate ;    
     $userId = authguard()->id ;
     $qry="update users set isPrivate=".$isPrivate." where id=".$userId ;
@@ -1467,5 +1454,13 @@ public function resetPassword(Request $request){
     return $this->successResponse($checkPrivateAcount,'User Info',200);
   }
  
+  public function getUserInfo(Request $request){
+      $userId = $request->userId ;        
+      [$user,$totalUser ]= getMultiResultProc("CALL sp_getUserDetail(@total)") ;
+      $data['totalUser']=$totalUser[0] ;
+      $data['userList']=$user ;
+      return $this->successResponse($data,'User Info',200);      
+  }
 
+  
 }
